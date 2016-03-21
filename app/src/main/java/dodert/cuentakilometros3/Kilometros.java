@@ -25,6 +25,7 @@ public class Kilometros extends AppCompatActivity {
     private MyLocationListener _gpsListener;
     private LocationManager _lm;
     private boolean _isProvderEnable;
+    final float _metersLisener = 5;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,7 +55,6 @@ public class Kilometros extends AppCompatActivity {
         // }
     }
 
-
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
@@ -64,6 +64,13 @@ public class Kilometros extends AppCompatActivity {
 
 
         int test;
+    }
+
+    @Override
+    protected  void onResume()
+    {
+        super.onResume();
+
     }
 
     @Override
@@ -136,7 +143,7 @@ public class Kilometros extends AppCompatActivity {
                 // for ActivityCompat#requestPermissions for more details.
                 return;
             }
-            _lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 3, _gpsListener);
+            _lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, _metersLisener, _gpsListener);
             _isProvderEnable = true;
             //textViewTestView.append("\nsuccess on requestLocationUpdates");
             textViewTestView.setText("success on requestLocationUpdates" + "\n" + textViewTestView.getText());
