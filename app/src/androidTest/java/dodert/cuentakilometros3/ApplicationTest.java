@@ -1,4 +1,4 @@
-package com.example.doder.cuentakilometros3;
+package dodert.cuentakilometros3;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;

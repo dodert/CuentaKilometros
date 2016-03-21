@@ -1,4 +1,4 @@
-package com.example.doder.cuentakilometros3;
+package dodert.cuentakilometros3;
 
 import org.junit.Test;
 
