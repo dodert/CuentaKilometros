@@ -31,37 +31,16 @@
         android:layout_below="@+id/VelocityLabel"
         android:layout_toStartOf="@+id/textView" />
 
-    <ImageButton
-        android:background="@drawable/minusbutton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/imageButton"
-        android:contentDescription="Menos"
-        android:onClick="onMinusDistanceByOne"
-        android:layout_alignTop="@+id/plusButton"
-        android:layout_alignStart="@+id/Plus200m" />
-
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceSmall"
-        android:text="aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
         android:id="@+id/textViewTest"
-        android:layout_marginTop="22dp"
         android:maxLines = "300"
         android:scrollbars = "vertical"
         android:layout_below="@+id/Plus500m"
-        android:layout_alignParentEnd="true" />
-
-    <ImageButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/plusButton"
-        android:background="@drawable/plusbutton"
-        android:onClick="onPlusDistanceByOne"
-        android:layout_marginStart="26dp"
-        android:layout_alignBottom="@+id/resetButton"
-        android:layout_alignStart="@+id/textClock" />
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="26dp" />
 
     <Button
         android:layout_width="wrap_content"
@@ -82,17 +61,16 @@
         android:gravity="right"
         android:numeric="decimal"
         android:layout_alignParentTop="true"
-        android:layout_alignEnd="@+id/resetButton" />
+        android:layout_toStartOf="@+id/textView2" />
 
     <TextClock
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/textClock"
-        android:layout_alignTop="@+id/VelocityLabel"
-        android:layout_toStartOf="@+id/resetButton"
-        android:layout_marginEnd="19dp"
         android:enabled="true"
-        android:textSize="40dp" />
+        android:textSize="40dp"
+        android:layout_above="@+id/DistanceLabel"
+        android:layout_alignEnd="@+id/Minus100m" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -100,9 +78,9 @@
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:text="Km"
         android:id="@+id/textView"
-        android:layout_alignBaseline="@+id/DistanceLabel"
-        android:layout_alignBottom="@+id/DistanceLabel"
-        android:layout_alignEnd="@+id/textView2" />
+        android:layout_below="@+id/textView2"
+        android:layout_alignEnd="@+id/resetButton"
+        android:layout_marginTop="61dp" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -111,15 +89,15 @@
         android:text="Km/h"
         android:id="@+id/textView2"
         android:layout_alignBottom="@+id/VelocityLabel"
-        android:layout_toEndOf="@+id/VelocityLabel" />
+        android:layout_alignEnd="@+id/textView" />
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="+ 100m"
         android:id="@+id/Plus100m"
-        android:layout_below="@+id/imageButton"
-        android:layout_toStartOf="@+id/Minus100m"
-        android:onClick="onPlusDistance100"/>
+        android:onClick="onPlusDistance100"
+        android:layout_alignTop="@+id/resetButton"
+        android:layout_alignParentStart="true" />
 
     <Button
         android:layout_width="wrap_content"

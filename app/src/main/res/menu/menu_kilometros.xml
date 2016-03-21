@@ -14,10 +14,6 @@
         android:title="Recent Location"
         android:onClick="onRecentLocation"
         android:icon="@android:drawable/ic_menu_preferences"  />
-    <item android:id="@+id/menuSingleLocation"
-        android:title="Single Location"
-        android:onClick="onSingleLocation"
-        android:icon="@android:drawable/ic_menu_rotate"  />
     <item android:id="@+id/menuExit"
         android:showAsAction="always"
         android:title="Exit"

@@ -189,31 +189,6 @@ public class Kilometros extends AppCompatActivity {
 
     }
 
-    public void onSingleLocation(MenuItem item) {
-        Log.d(_logTag, "Monitor - Single Location");
-        textViewTestView.append("\nMonitor - Single Location");
-        textViewTestView.setText("Monitor - Single Location" + "\n" + textViewTestView.getText());
-       // LocationManager lm = (LocationManager) getSystemService(LOCATION_SERVICE);
-        //_networkListener = new MyLocationListener();
-        //lm.requestSingleUpdate(LocationManager.NETWORK_PROVIDER, _networkListener, null);
-
-      // _gpsListener = new MyLocationListener();
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
-            return;
-        }
-
-        _lm.requestSingleUpdate(LocationManager.GPS_PROVIDER, _gpsListener, null);
-
-
-    }
-
     public void onExit(MenuItem item) {
         Log.d(_logTag, "Monitor Location Exit");
 
