@@ -5,8 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context="dodert.cuentakilometros3.Kilometros"
-    tools:showIn="@layout/content_kilometros">
+    tools:context="dodert.cuentakilometros3.Kilometros">
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"

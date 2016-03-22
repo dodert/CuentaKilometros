@@ -46,13 +46,11 @@ public class Kilometros extends AppCompatActivity {
 
         if(savedInstanceState != null)
         {
-            //savedInstanceState.get
             if(savedInstanceState.getBoolean("IsProviderEnable"))
             {
                 onStartListening(null);
             }
         }
-        // }
     }
 
     @Override
@@ -108,31 +106,14 @@ public class Kilometros extends AppCompatActivity {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-     /*   if (id == R.id.action_settings) {
-            return true;
-        }*/
-
         return super.onOptionsItemSelected(item);
     }
 
     public void onStartListening(MenuItem item) {
         Log.d(_logTag, "Monitor Location - Start Listening");
-        //textViewTestView.append("\nMonitor Location - Start Listening");
         textViewTestView.setText("Start Listening: " + "\n" + textViewTestView.getText());
-        //_gpsListener = new MyLocationListener(DistanceTetxView, textViewTestView, VelTestView);
-        //MyLocationListener.Instance(DistanceTetxView, textViewTestView, VelTestView);
-        //_gpsListener = MyLocationListener.GetInstance();
-        //_lm = (LocationManager) getSystemService(LOCATION_SERVICE);
         try {
             _lm = (LocationManager) getSystemService(LOCATION_SERVICE);
-
-            // _networkListener = new MyLocationListener();
-            //lm.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, _networkListener);
-
-
             if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                 // TODO: Consider calling
                 //    ActivityCompat#requestPermissions
@@ -145,10 +126,8 @@ public class Kilometros extends AppCompatActivity {
             }
             _lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, _metersLisener, _gpsListener);
             _isProvderEnable = true;
-            //textViewTestView.append("\nsuccess on requestLocationUpdates");
             textViewTestView.setText("success on requestLocationUpdates" + "\n" + textViewTestView.getText());
         } catch (Exception e) {
-            //textViewTestView.append("\nError on requestLocationUpdates" + e.getMessage());
             textViewTestView.setText("Error on requestLocationUpdates" + e.getMessage() + "\n" + textViewTestView.getText());
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
         }
@@ -158,40 +137,24 @@ public class Kilometros extends AppCompatActivity {
 
     public void onStopListening(MenuItem item) {
         Log.d(_logTag, "Monitor Location - Stop Listening");
-        //textViewTestView.append("\nMonitor Location - Stop Listening");
         textViewTestView.setText("Monitor Location - Stop Listenings" + "\n" + textViewTestView.getText());
         doStopListening();
     }
 
     public void onRecentLocation(MenuItem item) {
         Log.d(_logTag, "Monitor - Recent Location");
-        //textViewTestView.append("\nMonitor - Recent Location");
         textViewTestView.setText("Monitor - Recent Location" + "\n" + textViewTestView.getText());
-
 
         Location gpsLocation;
 
-       // _lm = (LocationManager) getSystemService(LOCATION_SERVICE);
-
-        //networkLocation = lm.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
             return;
         }
         gpsLocation = _lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
 
-        //String networkLogMessage = LogHelper.FormatLocationInfo(networkLocation);
         String gpsLogMessage = LogHelper.FormatLocationInfo(gpsLocation);
 
-        //Log.d(_logTag, "Monitor Location" + networkLogMessage);
         Log.d(_logTag, "Monitor Location" + gpsLogMessage);
-        //textViewTestView.append("\n Monitor Location" + gpsLogMessage);
         textViewTestView.setText("Monitor Location" + gpsLogMessage + "\n" + textViewTestView.getText());
 
     }
@@ -205,35 +168,14 @@ public class Kilometros extends AppCompatActivity {
     }
 
     void doStopListening() {
-
-
-        /*if (_networkListener != null) {
-            lm.removeUpdates(_networkListener);
-            _networkListener = null;
-        }*/
         if (_gpsListener != null) {
             if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                // TODO: Consider calling
-                //    ActivityCompat#requestPermissions
-                // here to request the missing permissions, and then overriding
-                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                //                                          int[] grantResults)
-                // to handle the case where the user grants the permission. See the documentation
-                // for ActivityCompat#requestPermissions for more details.
                 return;
             }
             _lm.removeUpdates(_gpsListener);
             _isProvderEnable = false;
             //_gpsListener = null;
         }
-    }
-
-    public void onMinusDistanceByOne(View view) {
-        onMinusDistanceBy(500F);
-    }
-
-    public void onPlusDistanceByOne(View view) {
-        onPlusDistance(500F);
     }
 
     private void onMinusDistanceBy(float meters) {
