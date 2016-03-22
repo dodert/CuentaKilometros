@@ -1,7 +1,7 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
     <SwitchPreference
-        android:defaultValue="true"
+        android:defaultValue="false"
         android:key="enable_log"
         android:summary="Enable logs in the main window to see waht is happeing."
         android:title="Enable Log" />
