@@ -1,8 +1,11 @@
 package dodert.cuentakilometros3;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.location.Location;
 import android.location.LocationListener;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.widget.TextView;
 
@@ -19,15 +22,17 @@ public class MyLocationListener implements LocationListener{
     public float _totalMeters = 0.0F;
     Location previous;
     TextView textView, logTextView, velTextView;
-    private boolean _isProvderEnable;
+    Context _context;
 
-    private void Initialize(TextView tv, TextView log, TextView vel)
+    private void Initialize(TextView tv, TextView log, TextView vel, Context context)
     {
         textView = tv;
         logTextView = log;
         velTextView = vel;
+        _context = context;
     }
-    public static void Instance(TextView  tv, TextView log, TextView vel)
+
+    public static void Instance(TextView tv, TextView log, TextView vel, Context context)
     {
         if (instance == null)
         {
@@ -35,8 +40,7 @@ public class MyLocationListener implements LocationListener{
             instance = new MyLocationListener();
 
         }
-        instance.Initialize(tv, log, vel);
-
+        instance.Initialize(tv, log, vel, context);
     }
 
     public static MyLocationListener GetInstance()
@@ -44,16 +48,6 @@ public class MyLocationListener implements LocationListener{
         // Return the instance
         return instance;
     }
-
-    public boolean IsProviderEnable()
-    {
-        return _isProvderEnable;
-    }
-    /*private MyLocationListener (TextView  tv, TextView log, TextView vel){
-        textView = tv;
-        logTextView = log;
-        velTextView = vel;
-    }*/
 
     @Override
     public void onLocationChanged(Location location) {
@@ -76,12 +70,8 @@ public class MyLocationListener implements LocationListener{
         previous = currentLocation;
 
         String logMessage = LogHelper.FormatLocationInfo(provider, lat, lng, accuracy, time);
-        Log.d(_logTag, "Monitor Locatio: " + logMessage);
-       // logTextView.append("\nMonitor Locatio: " + logMessage);
-        logTextView.setText("Monitor Locatio: " + logMessage + "\n" + logTextView.getText());
+        Log("Monitor Locatio: " + logMessage);
 
-
-        //DistanceTetxView.setText(String.format(Float.toString(5.1234F), "#"));
         textView.setText(df.format(_totalMeters/1000));
     }
 
@@ -92,14 +82,12 @@ public class MyLocationListener implements LocationListener{
 
     @Override
     public void onProviderEnabled(String provider) {
-        Log.d(_logTag, "Monitor Location - Provider enabled: " + provider);
-        _isProvderEnable = true;
+        Log("Monitor Location - Provider enabled: " + provider);
     }
 
     @Override
     public void onProviderDisabled(String provider) {
-        Log.d(_logTag, "Monitor Location - Provider Disabled: " + provider);
-        _isProvderEnable = false;
+        Log("Monitor Location - Provider Disabled: " + provider);
     }
 
     public void ResetTotalMeters (){
@@ -108,19 +96,28 @@ public class MyLocationListener implements LocationListener{
 
     public void SubstractTotalMeters(float meters)
     {
-        logTextView.setText("Restado - Current"  +_totalMeters + "\n" + logTextView.getText());
+        Log("Restado - Current" + _totalMeters);
         //meters <= _totalMeters &&
         if( _totalMeters - meters >= 0) {
             _totalMeters -= meters;
-            logTextView.setText("Restado " + meters + " after " + _totalMeters + "\n" + logTextView.getText());
+            Log("Restado " + meters + " after " + _totalMeters);
 
         }
     }
 
     public void SumTotalMeters(float meters)
     {
-        logTextView.setText("Sumado - Current"  + _totalMeters + "\n" + logTextView.getText());
+        Log("Sumado - Current" + _totalMeters);
         _totalMeters += meters;
-        logTextView.setText("Sumado " + meters + " after " + _totalMeters + "\n" + logTextView.getText());
+        Log("Sumado " + meters + " after " + _totalMeters);
+    }
+
+    private void Log(String logText) {
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(_context);
+        boolean logEnabled = settings.getBoolean("enable_log", false);
+        if (logEnabled) {
+            Log.d(_logTag, logText);
+            logTextView.setText(logText + "\n" + logTextView.getText());
+        }
     }
 }

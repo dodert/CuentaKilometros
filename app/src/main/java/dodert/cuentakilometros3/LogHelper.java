@@ -38,4 +38,5 @@ public class LogHelper {
         return LogHelper.FormatLocationInfo(provider, lat, lng, accuracy, time);
     }
 
+
 }

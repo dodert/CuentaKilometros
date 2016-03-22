@@ -10,9 +10,10 @@
         android:title="Stop Listening"
         android:onClick="onStopListening"
         android:icon="@android:drawable/ic_menu_close_clear_cancel"  />
-    <item android:id="@+id/menuRecentLocation"
-        android:title="Recent Location"
-        android:onClick="onRecentLocation"
+    <item
+        android:id="@+id/menuSettings"
+        android:title="Settings"
+        android:onClick="onSettings"
         android:icon="@android:drawable/ic_menu_preferences"  />
     <item android:id="@+id/menuExit"
         android:showAsAction="always"
