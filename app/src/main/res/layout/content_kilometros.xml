@@ -17,7 +17,7 @@
     android:keepScreenOn="true">
 
     <!--<data>
-        <variable android:name="_totalMeters" android:type="dodert.cuentakilometros3.MyLocationListener"/>
+        <variable name="asdfsad" type="dodert.cuentakilometros3.MyLocation"/>
     </data>-->
 
     <TextView

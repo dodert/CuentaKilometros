@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.databinding.DataBindingUtil;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -30,6 +31,8 @@ public class Kilometros extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        //MyLocation binding = DataBindingUtil.inflate(
 
         setContentView(R.layout.activity_kilometros);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);

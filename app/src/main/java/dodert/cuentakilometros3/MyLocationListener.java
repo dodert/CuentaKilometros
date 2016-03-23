@@ -24,6 +24,7 @@ public class MyLocationListener implements LocationListener{
     private TextView _distanceTextView, _logTextView, _speedTextView;
     private Context _context;
 
+
     private void Initialize(TextView tv, TextView log, TextView vel, Context context)
     {
         _distanceTextView = tv;
