@@ -188,8 +188,10 @@ public class Kilometros extends AppCompatActivity {
     }
 
     public void onResetDistance(View view) {
-        if (_gpsListener!= null)
+        if (_gpsListener!= null) {
             _gpsListener.ResetTotalMeters();
+            Log("Reseted");
+        }
         else
             Log("gpsListener null");
     }

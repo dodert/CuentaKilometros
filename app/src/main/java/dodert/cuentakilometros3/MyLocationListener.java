@@ -64,13 +64,15 @@ public class MyLocationListener implements LocationListener{
         String provider = currentLocation.getProvider();
         double lat = currentLocation.getLatitude();
         double lng = currentLocation.getLongitude();
+        double alt = currentLocation.getAltitude();
         float accuracy = currentLocation.getAccuracy();
         long time = currentLocation.getTime();
 
         previous = currentLocation;
 
-        String logMessage = LogHelper.FormatLocationInfo(provider, lat, lng, accuracy, time);
-        Log("Monitor Locatio: " + logMessage);
+        String logMessage = LogHelper.FormatLocationInfo(provider, lat, lng, alt, accuracy, time);
+        //Log("Monitor Locatio: " + logMessage);
+        Log("Monitor Locatio: " + currentLocation.hasAltitude() + alt);
 
         textView.setText(df.format(_totalMeters/1000));
     }
