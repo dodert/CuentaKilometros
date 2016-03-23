@@ -6,6 +6,12 @@
         android:summary="Enable logs in the main window to see waht is happeing."
         android:title="Enable Log" />
 
+    <SwitchPreference
+        android:defaultValue="true"
+        android:key="keep_enable_gps_when_background"
+        android:summary="Keep the gps enabled even when the app is in background."
+        android:title="Keep GPS enabled when background" />
+
     <!-- NOTE: EditTextPreference accepts EditText attributes. -->
     <!-- NOTE: EditTextPreference's summary should be set to its value by the activity code. -->
     <EditTextPreference
