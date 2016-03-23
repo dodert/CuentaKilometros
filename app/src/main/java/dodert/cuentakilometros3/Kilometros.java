@@ -20,13 +20,11 @@ import android.widget.TextView;
 public class Kilometros extends AppCompatActivity {
 
     final String _logTag = "Monitor Location";
-    public TextView DistanceTetxView;
-    public TextView textViewTestView;
-    public TextView VelTestView;
+    public TextView _distanceTextView, _logTextView, _speedTextView;
     private MyLocationListener _gpsListener;
     private LocationManager _lm;
-    private boolean _areLocaiontUpdatesEnabled;
-    final float _metersLisener = 5;
+    private boolean _areLocationUpdatesEnabled;
+    final float _metersListener = 5;
 
 
     @Override
@@ -37,12 +35,12 @@ public class Kilometros extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        DistanceTetxView = (TextView) findViewById(R.id.DistanceLabel);
-        textViewTestView = (TextView) findViewById(R.id.textViewTest);
-        VelTestView = (TextView) findViewById(R.id.VelocityLabel);
-        textViewTestView.setMovementMethod(new ScrollingMovementMethod());
+        _distanceTextView = (TextView) findViewById(R.id.DistanceTextView);
+        _logTextView = (TextView) findViewById(R.id.LogTextView);
+        _speedTextView = (TextView) findViewById(R.id.VelocityTextView);
+        _logTextView.setMovementMethod(new ScrollingMovementMethod());
 
-        MyLocationListener.Instance(DistanceTetxView, textViewTestView, VelTestView, getApplicationContext());
+        MyLocationListener.Instance(_distanceTextView, _logTextView, _speedTextView, getApplicationContext());
         _gpsListener = MyLocationListener.GetInstance();
 
         if(savedInstanceState != null)
@@ -58,7 +56,7 @@ public class Kilometros extends AppCompatActivity {
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putBoolean("IsProviderEnable", false);
-        outState.putBoolean("IsProviderEnable", _areLocaiontUpdatesEnabled);
+        outState.putBoolean("IsProviderEnable", _areLocationUpdatesEnabled);
     }
 
     @Override
@@ -76,7 +74,7 @@ public class Kilometros extends AppCompatActivity {
         boolean keepEnableGpsWhenBackground = settings.getBoolean("keep_enable_gps_when_background", true);
         if(!keepEnableGpsWhenBackground) {
             if (_lm != null) {
-                if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                     // TODO: Consider calling
                     //    ActivityCompat#requestPermissions
                     // here to request the missing permissions, and then overriding
@@ -112,7 +110,7 @@ public class Kilometros extends AppCompatActivity {
         Log("Monitor Location - Start Listening");
         try {
             _lm = (LocationManager) getSystemService(LOCATION_SERVICE);
-            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                 // TODO: Consider calling
                 //    ActivityCompat#requestPermissions
                 // here to request the missing permissions, and then overriding
@@ -122,8 +120,8 @@ public class Kilometros extends AppCompatActivity {
                 // for ActivityCompat#requestPermissions for more details.
                 return;
             }
-            _lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, _metersLisener, _gpsListener);
-            _areLocaiontUpdatesEnabled = true;
+            _lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, _metersListener, _gpsListener);
+            _areLocationUpdatesEnabled = true;
             Log("success on requestLocationUpdates");
         } catch (Exception e) {
             Log("Error on requestLocationUpdates" + e.getMessage());
@@ -137,32 +135,15 @@ public class Kilometros extends AppCompatActivity {
     }
 
     public void onSettings(MenuItem item) {
-        // startActivityForResult(new Intent(SettingsActivity), 0);
         Intent intent = new Intent(this, SettingsActivity.class);
         startActivity(intent);
-        //Intent launchNewIntent = new Intent(CurrentClass.this,SettingsActivity.class);
-        //startActivityForResult(launchNewIntent, 0);
-       /* Log.d(_logTag, "Monitor - Recent Location");
-        textViewTestView.setText("Monitor - Recent Location" + "\n" + textViewTestView.getText());
-
-        Location gpsLocation;
-
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            return;
-        }
-        gpsLocation = _lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-
-        String gpsLogMessage = LogHelper.FormatLocationInfo(gpsLocation);
-
-        Log.d(_logTag, "Monitor Location" + gpsLogMessage);
-        textViewTestView.setText("Monitor Location" + gpsLogMessage + "\n" + textViewTestView.getText());
-*/
     }
 
     public void onExit(MenuItem item) {
         Log("Monitor Location Exit");
 
         doStopListening();
+        _gpsListener = null;
 
         finish();
     }
@@ -173,7 +154,7 @@ public class Kilometros extends AppCompatActivity {
                 return;
             }
             _lm.removeUpdates(_gpsListener);
-            _areLocaiontUpdatesEnabled = false;
+            _areLocationUpdatesEnabled = false;
             //_gpsListener = null;
         }
     }
@@ -231,7 +212,7 @@ public class Kilometros extends AppCompatActivity {
         getApplicationContext();
         if (logEnabled) {
             Log.d(_logTag, logText);
-            textViewTestView.setText(logText + "\n" + textViewTestView.getText());
+            _logTextView.setText(logText + "\n" + _logTextView.getText());
         }
     }
 }

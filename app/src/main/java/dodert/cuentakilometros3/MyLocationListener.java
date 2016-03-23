@@ -20,15 +20,15 @@ public class MyLocationListener implements LocationListener{
 
     final String _logTag = "Monitor Location";
     public float _totalMeters = 0.0F;
-    Location previous;
-    TextView textView, logTextView, velTextView;
-    Context _context;
+    private Location _previousLocation;
+    private TextView _distanceTextView, _logTextView, _speedTextView;
+    private Context _context;
 
     private void Initialize(TextView tv, TextView log, TextView vel, Context context)
     {
-        textView = tv;
-        logTextView = log;
-        velTextView = vel;
+        _distanceTextView = tv;
+        _logTextView = log;
+        _speedTextView = vel;
         _context = context;
     }
 
@@ -36,30 +36,26 @@ public class MyLocationListener implements LocationListener{
     {
         if (instance == null)
         {
-            // Create the instance
             instance = new MyLocationListener();
-
         }
         instance.Initialize(tv, log, vel, context);
     }
 
     public static MyLocationListener GetInstance()
     {
-        // Return the instance
         return instance;
     }
 
     @Override
     public void onLocationChanged(Location location) {
-       //float meters = 0.0F;
         DecimalFormat df = new DecimalFormat("000.00");
         df.setRoundingMode(RoundingMode.CEILING);
         Location currentLocation = location;
-        if(previous != null)
+        if (_previousLocation != null)
         {
-            _totalMeters += previous.distanceTo(currentLocation);
+            _totalMeters += _previousLocation.distanceTo(currentLocation);
         }
-        velTextView.setText(df.format(currentLocation.getSpeed() * 3.6));
+        _speedTextView.setText(df.format(currentLocation.getSpeed() * 3.6));
 
         String provider = currentLocation.getProvider();
         double lat = currentLocation.getLatitude();
@@ -68,12 +64,12 @@ public class MyLocationListener implements LocationListener{
         float accuracy = currentLocation.getAccuracy();
         long time = currentLocation.getTime();
 
-        previous = currentLocation;
+        _previousLocation = currentLocation;
 
         String logMessage = LogHelper.FormatLocationInfo(provider, lat, lng, alt, accuracy, time);
-        Log("Monitor Locatio: " + logMessage);
+        Log("Monitor Location: " + logMessage);
 
-        textView.setText(df.format(_totalMeters/1000));
+        _distanceTextView.setText(df.format(_totalMeters / 1000));
     }
 
     @Override
@@ -102,7 +98,6 @@ public class MyLocationListener implements LocationListener{
         if( _totalMeters - meters >= 0) {
             _totalMeters -= meters;
             Log("Restado " + meters + " after " + _totalMeters);
-
         }
     }
 
@@ -118,7 +113,7 @@ public class MyLocationListener implements LocationListener{
         boolean logEnabled = settings.getBoolean("enable_log", false);
         if (logEnabled) {
             Log.d(_logTag, logText);
-            logTextView.setText(logText + "\n" + logTextView.getText());
+            _logTextView.setText(logText + "\n" + _logTextView.getText());
         }
     }
 }

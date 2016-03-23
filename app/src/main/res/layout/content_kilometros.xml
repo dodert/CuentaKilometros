@@ -24,19 +24,17 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="000.000"
-        android:id="@+id/DistanceLabel"
-        android:textSize="80dp"
-        android:autoText="false"
-        android:gravity="right"
-        android:numeric="decimal"
-        android:layout_below="@+id/VelocityLabel"
+        android:id="@+id/DistanceTextView"
+        android:textSize="80sp"
+        android:gravity="end"
+        android:layout_below="@+id/VelocityTextView"
         android:layout_toStartOf="@+id/textView" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceSmall"
-        android:id="@+id/textViewTest"
+        android:id="@+id/LogTextView"
         android:maxLines = "300"
         android:scrollbars = "vertical"
         android:layout_below="@+id/Plus500m"
@@ -49,18 +47,16 @@
         android:text="Reset"
         android:id="@+id/resetButton"
         android:onClick="onResetDistance"
-        android:layout_below="@+id/DistanceLabel"
+        android:layout_below="@+id/DistanceTextView"
         android:layout_alignParentEnd="true" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="000"
-        android:id="@+id/VelocityLabel"
-        android:textSize="40dp"
-        android:autoText="false"
-        android:gravity="right"
-        android:numeric="decimal"
+        android:id="@+id/VelocityTextView"
+        android:textSize="40sp"
+        android:gravity="end"
         android:layout_alignParentTop="true"
         android:layout_toStartOf="@+id/textView2" />
 
@@ -69,8 +65,8 @@
         android:layout_height="wrap_content"
         android:id="@+id/textClock"
         android:enabled="true"
-        android:textSize="40dp"
-        android:layout_above="@+id/DistanceLabel"
+        android:textSize="40sp"
+        android:layout_above="@+id/DistanceTextView"
         android:layout_alignEnd="@+id/Minus100m" />
 
     <TextView
@@ -89,7 +85,7 @@
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:text="Km/h"
         android:id="@+id/textView2"
-        android:layout_alignBottom="@+id/VelocityLabel"
+        android:layout_alignBottom="@+id/VelocityTextView"
         android:layout_alignEnd="@+id/textView" />
     <Button
         android:layout_width="wrap_content"
