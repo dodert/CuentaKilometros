@@ -1,10 +1,12 @@
 package dodert.cuentakilometros3;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.LocationManager;
+import android.media.AudioManager;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.ActivityCompat;
@@ -12,6 +14,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -22,10 +25,9 @@ public class Kilometros extends AppCompatActivity {
     final String _logTag = "Monitor Location";
     public TextView _distanceTextView, _logTextView, _speedTextView;
     private MyLocationListener _gpsListener;
-    private LocationManager _lm;
+    protected LocationManager _lm;
     private boolean _areLocationUpdatesEnabled;
     final float _metersListener = 5;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,8 +41,11 @@ public class Kilometros extends AppCompatActivity {
         _logTextView = (TextView) findViewById(R.id.LogTextView);
         _speedTextView = (TextView) findViewById(R.id.VelocityTextView);
         _logTextView.setMovementMethod(new ScrollingMovementMethod());
-
+        Context mContext = getApplicationContext();
         MyLocationListener.Instance(_distanceTextView, _logTextView, _speedTextView, getApplicationContext());
+
+        _lm = (LocationManager) mContext.getSystemService(LOCATION_SERVICE);
+
         _gpsListener = MyLocationListener.GetInstance();
 
         if(savedInstanceState != null)
@@ -49,6 +54,25 @@ public class Kilometros extends AppCompatActivity {
             {
                 onStartListening(null);
             }
+        }
+
+        setVolumeControlStream(AudioManager.STREAM_MUSIC);
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        switch (keyCode) {
+            case KeyEvent.KEYCODE_VOLUME_UP:
+                Log("Volumne UP");
+                _gpsListener.SumTotalMeters(100);
+                return true;
+            case KeyEvent.KEYCODE_VOLUME_DOWN:
+                Log("Volumne Down");
+                _gpsListener.SumTotalMeters(-100);
+                return true;
+            default:
+                Log("Other" + keyCode);
+                return false;
         }
     }
 
@@ -69,7 +93,7 @@ public class Kilometros extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
         //SharedPreferences preferences = getPreferences(MODE_PRIVATE);
-        //preferences.
+
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
         boolean keepEnableGpsWhenBackground = settings.getBoolean("keep_enable_gps_when_background", true);
         if(!keepEnableGpsWhenBackground) {
@@ -109,7 +133,7 @@ public class Kilometros extends AppCompatActivity {
     public void onStartListening(MenuItem item) {
         Log("Monitor Location - Start Listening");
         try {
-            _lm = (LocationManager) getSystemService(LOCATION_SERVICE);
+            //_lm = (LocationManager) getSystemService(LOCATION_SERVICE);
             if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                 // TODO: Consider calling
                 //    ActivityCompat#requestPermissions
@@ -150,10 +174,11 @@ public class Kilometros extends AppCompatActivity {
 
     void doStopListening() {
         if (_gpsListener != null && _lm != null) {
-            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                 return;
             }
-            _lm.removeUpdates(_gpsListener);
+            _lm.removeUpdates(MyLocationListener.GetInstance());
+
             _areLocationUpdatesEnabled = false;
             //_gpsListener = null;
         }
@@ -176,7 +201,6 @@ public class Kilometros extends AppCompatActivity {
     public void onResetDistance(View view) {
         if (_gpsListener!= null) {
             _gpsListener.ResetTotalMeters();
-            Log("Reseted");
         }
         else
             Log("gpsListener null");
