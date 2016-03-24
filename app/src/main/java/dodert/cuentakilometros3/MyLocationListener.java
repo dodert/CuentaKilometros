@@ -107,8 +107,9 @@ public class MyLocationListener implements LocationListener{
 
     private void SetDistanceToView(float meters) {
         String number = String.format("%.2f", (float) (meters / 1000));
-        number += _maskForKilometers;
-        _distanceTextView.setText(number.substring(number.length() - _maxLengthForKilometers));
+        String mask = _maskForKilometers;
+        mask += number;
+        _distanceTextView.setText(mask.substring(mask.length() - _maxLengthForKilometers));
     }
 
     private void Log(String logText) {
