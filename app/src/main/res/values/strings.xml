@@ -60,4 +60,35 @@
     <string name="pref_ringtone_silent">Silent</string>
 
     <string name="pref_title_vibrate">Vibrate</string>
+
+    <!-- Values for meter -->
+    <string name="pref_title_meters_steps">Steps in meter to used when click in volume keys</string>
+    <string-array name="pref_meters_steps_titles">
+        <item>100 meters</item>
+        <item>200 meters</item>
+        <item>300 meters</item>
+        <item>400 meters</item>
+        <item>500 meters</item>
+        <item>700 meters</item>
+        <item>800 meters</item>
+        <item>900 meters</item>
+        <item>1 kilometer</item>
+        <item>1.5 kilometer</item>
+        <item>2 kilometer</item>
+        <item>5 kilometer</item>
+    </string-array>
+    <string-array name="pref_meters_steps_values">
+        <item>100</item>
+        <item>200</item>
+        <item>300</item>
+        <item>400</item>
+        <item>500</item>
+        <item>700</item>
+        <item>800</item>
+        <item>900</item>
+        <item>1000</item>
+        <item>1500</item>
+        <item>2000</item>
+        <item>5000</item>
+    </string-array>
 </resources>

@@ -8,8 +8,6 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.widget.TextView;
-import java.math.RoundingMode;
-import java.text.DecimalFormat;
 
 /**
  * Created by dodert on 19/03/2016.
@@ -18,18 +16,19 @@ public class MyLocationListener implements LocationListener{
     private static MyLocationListener instance;
 
     final String _logTag = "Monitor Location";
+    final int _maxLengthForKilometers = 7;
+    final String _maskForKilometers = "0000000000000000000000";
     public float _totalMeters = 0.0F;
     private Location _previousLocation;
     private TextView _distanceTextView, _logTextView, _speedTextView;
     private Context _context;
-    private final DecimalFormat _df = new DecimalFormat("000.00");
+
     private void Initialize(TextView tv, TextView log, TextView vel, Context context)
     {
         _distanceTextView = tv;
         _logTextView = log;
         _speedTextView = vel;
         _context = context;
-        _df.setRoundingMode(RoundingMode.CEILING);
     }
 
     public static void Instance(TextView tv, TextView log, TextView vel, Context context)
@@ -53,8 +52,7 @@ public class MyLocationListener implements LocationListener{
         {
             SumTotalMeters(_previousLocation.distanceTo(currentLocation));
         }
-
-        _speedTextView.setText(_df.format(currentLocation.getSpeed() * 3.6));
+        _speedTextView.setText(String.format("%.2f", (currentLocation.getSpeed() * 3.6)));
 
         String provider = currentLocation.getProvider();
         double lat = currentLocation.getLatitude();
@@ -108,7 +106,9 @@ public class MyLocationListener implements LocationListener{
     }
 
     private void SetDistanceToView(float meters) {
-        _distanceTextView.setText(_df.format(meters / 1000));
+        String number = String.format("%.2f", (float) (meters / 1000));
+        number += _maskForKilometers;
+        _distanceTextView.setText(number.substring(number.length() - _maxLengthForKilometers));
     }
 
     private void Log(String logText) {

@@ -61,14 +61,17 @@ public class Kilometros extends AppCompatActivity {
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
+        String pref_meters_step = settings.getString("meters_steps", "100");
+        Float metersToSet = Float.parseFloat(pref_meters_step);
         switch (keyCode) {
             case KeyEvent.KEYCODE_VOLUME_UP:
                 Log("Volumne UP");
-                _gpsListener.SumTotalMeters(100);
+                _gpsListener.SumTotalMeters(metersToSet);
                 return true;
             case KeyEvent.KEYCODE_VOLUME_DOWN:
                 Log("Volumne Down");
-                _gpsListener.SumTotalMeters(-100);
+                _gpsListener.SumTotalMeters(-metersToSet);
                 return true;
             default:
                 Log("Other" + keyCode);
@@ -207,27 +210,27 @@ public class Kilometros extends AppCompatActivity {
     }
 
     public void onPlusDistance100(View view) {
-        onPlusDistance(100F);
+        onPlusDistance(100.0F);
     }
 
     public void onPlusDistance200(View view) {
-        onPlusDistance(200F);
+        onPlusDistance(200.0F);
     }
 
     public void onPlusDistance500(View view) {
-        onPlusDistance(500F);
+        onPlusDistance(500.0F);
     }
 
     public void onMinusDistance100(View view) {
-        onMinusDistanceBy(100F);
+        onMinusDistanceBy(100.0F);
     }
 
     public void onMinusDistance200(View view) {
-        onMinusDistanceBy(200F);
+        onMinusDistanceBy(200.0F);
     }
 
     public void onMinusDistance500(View view) {
-        onMinusDistanceBy(500F);
+        onMinusDistanceBy(500.0F);
     }
 
     private void Log(String logText) {

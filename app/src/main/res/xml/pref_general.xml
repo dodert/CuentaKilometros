@@ -3,7 +3,7 @@
     <SwitchPreference
         android:defaultValue="false"
         android:key="enable_log"
-        android:summary="Enable logs in the main window to see waht is happeing."
+        android:summary="Enable logs in the main window to see what is happening."
         android:title="Enable Log" />
 
     <SwitchPreference
@@ -11,6 +11,16 @@
         android:key="keep_enable_gps_when_background"
         android:summary="Keep the gps enabled even when the app is in background."
         android:title="Keep GPS enabled when background" />
+
+    <ListPreference
+        android:defaultValue="100"
+        android:entries="@array/pref_meters_steps_titles"
+        android:entryValues="@array/pref_meters_steps_values"
+        android:key="meters_steps"
+        android:negativeButtonText="@null"
+        android:positiveButtonText="@null"
+        android:summary="%s"
+        android:title="@string/pref_title_meters_steps" />
 
     <!-- NOTE: EditTextPreference accepts EditText attributes. -->
     <!-- NOTE: EditTextPreference's summary should be set to its value by the activity code. -->
