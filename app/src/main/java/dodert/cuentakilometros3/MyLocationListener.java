@@ -89,6 +89,7 @@ public class MyLocationListener implements LocationListener{
 
     public void ResetTotalMeters (){
         SumTotalMeters(0.0F);
+        SumTotalHistoryMeters(0.0F);
     }
 
     public void SubstractTotalMeters(float meters)
@@ -112,7 +113,8 @@ public class MyLocationListener implements LocationListener{
 
     public void SumTotalHistoryMeters(float meters) {
         Log("TotalHistoryMeters");
-        _totalHistoryMeters += meters;
+        if(meters == 0) _totalHistoryMeters = 0;
+        else _totalHistoryMeters += meters;
         SetDistanceToView(_totalHistoryMeters, _distanceTotalHistoryTextView);
     }
 

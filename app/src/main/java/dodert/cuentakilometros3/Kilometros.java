@@ -55,6 +55,7 @@ public class Kilometros extends AppCompatActivity {
             {
                 onStartListening(null);
             }
+            _distanceTextView.setText(savedInstanceState.getString("TotalDistance"));
         }
 
         setVolumeControlStream(AudioManager.STREAM_MUSIC);
@@ -85,6 +86,8 @@ public class Kilometros extends AppCompatActivity {
         super.onSaveInstanceState(outState);
         outState.putBoolean("IsProviderEnable", false);
         outState.putBoolean("IsProviderEnable", _areLocationUpdatesEnabled);
+        outState.putString("TotalDistance", _distanceTextView.getText().toString());
+
     }
 
     @Override
@@ -97,8 +100,8 @@ public class Kilometros extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
         //SharedPreferences preferences = getPreferences(MODE_PRIVATE);
-
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
+
         boolean keepEnableGpsWhenBackground = settings.getBoolean("keep_enable_gps_when_background", true);
         if(!keepEnableGpsWhenBackground) {
             if (_lm != null) {
