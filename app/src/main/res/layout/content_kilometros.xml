@@ -17,7 +17,7 @@
     android:keepScreenOn="true">
 
     <!--<data>
-        <variable android:name="_totalMeters" android:type="dodert.cuentakilometros3.MyLocationListener"/>
+        <variable android:name="_currentTotalMeters" android:type="dodert.cuentakilometros3.MyLocationListener"/>
     </data>-->
 
     <TextView
@@ -29,6 +29,15 @@
         android:gravity="end"
         android:layout_below="@+id/VelocityTextView"
         android:layout_toStartOf="@+id/textView" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="0000.00"
+        android:id="@+id/DistanceTotalTextView"
+        android:textSize="40sp"
+        android:gravity="end"
+        android:layout_above="@+id/Minus100m"
+        android:layout_alignEnd="@+id/DistanceTextView" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -48,7 +57,8 @@
         android:id="@+id/resetButton"
         android:onClick="onResetDistance"
         android:layout_below="@+id/DistanceTextView"
-        android:layout_alignParentEnd="true" />
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="41dp" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -140,5 +150,15 @@
         android:layout_below="@+id/Minus200m"
         android:layout_toEndOf="@+id/Plus200m"
         android:onClick="onMinusDistance500"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="Km"
+        android:id="@+id/textView3"
+        android:layout_alignBaseline="@+id/DistanceTotalTextView"
+        android:layout_alignBottom="@+id/DistanceTotalTextView"
+        android:layout_toEndOf="@+id/DistanceTotalTextView" />
 
 </RelativeLayout>

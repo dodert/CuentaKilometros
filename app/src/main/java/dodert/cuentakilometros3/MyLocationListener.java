@@ -18,26 +18,28 @@ public class MyLocationListener implements LocationListener{
     final String _logTag = "Monitor Location";
     final int _maxLengthForKilometers = 7;
     final String _maskForKilometers = "0000000000000000000000";
-    public float _totalMeters = 0.0F;
+    private float _currentTotalMeters = 0.0F;
+    private float _totalHistoryMeters = 0.0F;
     private Location _previousLocation;
-    private TextView _distanceTextView, _logTextView, _speedTextView;
+    private TextView _distanceTextView, _logTextView, _speedTextView, _distanceTotalHistoryTextView;
     private Context _context;
 
-    private void Initialize(TextView tv, TextView log, TextView vel, Context context)
+    private void Initialize(TextView tv, TextView log, TextView vel, TextView distanceHistory, Context context)
     {
         _distanceTextView = tv;
+        _distanceTotalHistoryTextView = distanceHistory;
         _logTextView = log;
         _speedTextView = vel;
         _context = context;
     }
 
-    public static void Instance(TextView tv, TextView log, TextView vel, Context context)
+    public static void Instance(TextView tv, TextView log, TextView vel, TextView distanceHistory, Context context)
     {
         if (instance == null)
         {
             instance = new MyLocationListener();
         }
-        instance.Initialize(tv, log, vel, context);
+        instance.Initialize(tv, log, vel, distanceHistory, context);
     }
 
     public static MyLocationListener GetInstance()
@@ -47,10 +49,13 @@ public class MyLocationListener implements LocationListener{
 
     @Override
     public void onLocationChanged(Location location) {
+        float distanceTo;
         Location currentLocation = location;
         if (_previousLocation != null)
         {
-            SumTotalMeters(_previousLocation.distanceTo(currentLocation));
+            distanceTo = _previousLocation.distanceTo(currentLocation);
+            SumTotalMeters(distanceTo);
+            SumTotalHistoryMeters(distanceTo);
         }
         _speedTextView.setText(String.format("%.2f", (currentLocation.getSpeed() * 3.6)));
 
@@ -93,23 +98,29 @@ public class MyLocationListener implements LocationListener{
 
     public void SumTotalMeters(float meters)
     {
-        float current = _totalMeters;
+        float current = _currentTotalMeters;
         if (meters == 0) {
-            _totalMeters = 0.0F;
+            _currentTotalMeters = 0.0F;
             Log("Reseted");
-        } else if (_totalMeters + meters >= 0) {
-            _totalMeters += meters;
-            Log(meters + " Before " + current + " after " + _totalMeters);
+        } else if (_currentTotalMeters + meters >= 0) {
+            _currentTotalMeters += meters;
+            Log(meters + " Before " + current + " after " + _currentTotalMeters);
         }
 
-        SetDistanceToView(_totalMeters);
+        SetDistanceToView(_currentTotalMeters, _distanceTextView);
     }
 
-    private void SetDistanceToView(float meters) {
+    public void SumTotalHistoryMeters(float meters) {
+        Log("TotalHistoryMeters");
+        _totalHistoryMeters += meters;
+        SetDistanceToView(_totalHistoryMeters, _distanceTotalHistoryTextView);
+    }
+
+    private void SetDistanceToView(float meters, TextView textView) {
         String number = String.format("%.2f", (float) (meters / 1000));
         String mask = _maskForKilometers;
         mask += number;
-        _distanceTextView.setText(mask.substring(mask.length() - _maxLengthForKilometers));
+        textView.setText(mask.substring(mask.length() - _maxLengthForKilometers));
     }
 
     private void Log(String logText) {

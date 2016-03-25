@@ -23,7 +23,7 @@ import android.widget.TextView;
 public class Kilometros extends AppCompatActivity {
 
     final String _logTag = "Monitor Location";
-    public TextView _distanceTextView, _logTextView, _speedTextView;
+    public TextView _distanceTextView, _logTextView, _speedTextView, _distanceHistoryTextView;
     private MyLocationListener _gpsListener;
     protected LocationManager _lm;
     private boolean _areLocationUpdatesEnabled;
@@ -38,11 +38,12 @@ public class Kilometros extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         _distanceTextView = (TextView) findViewById(R.id.DistanceTextView);
+        _distanceHistoryTextView = (TextView) findViewById(R.id.DistanceTotalTextView);
         _logTextView = (TextView) findViewById(R.id.LogTextView);
         _speedTextView = (TextView) findViewById(R.id.VelocityTextView);
         _logTextView.setMovementMethod(new ScrollingMovementMethod());
         Context mContext = getApplicationContext();
-        MyLocationListener.Instance(_distanceTextView, _logTextView, _speedTextView, getApplicationContext());
+        MyLocationListener.Instance(_distanceTextView, _logTextView, _speedTextView, _distanceHistoryTextView,  getApplicationContext());
 
         _lm = (LocationManager) mContext.getSystemService(LOCATION_SERVICE);
 
