@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_horizontal_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_horizontal_margin"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context="dodert.cuentakilometros3.Kilometros"
+    tools:showIn="@layout/activity_kilometros"
+    android:keepScreenOn="true">
+
+    <!--<data>
+        <variable android:name="_currentTotalMeters" android:type="dodert.cuentakilometros3.MyLocationListener"/>
+    </data>-->
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="0000.00"
+        android:id="@+id/DistanceTextView"
+        android:textSize="80sp"
+        android:gravity="end"
+        android:layout_below="@+id/VelocityTextView"
+        android:layout_toStartOf="@+id/textView" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="0000.00"
+        android:id="@+id/DistanceTotalTextView"
+        android:textSize="40sp"
+        android:gravity="end"
+        android:layout_above="@+id/DistanceTextView"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:id="@+id/LogTextView"
+        android:maxLines = "300"
+        android:scrollbars = "vertical"
+        android:layout_below="@+id/Plus500m"
+        android:layout_alignParentStart="true" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Reset"
+        android:id="@+id/resetButton"
+        android:onClick="onResetDistance"
+        android:layout_above="@+id/LogTextView"
+        android:layout_alignParentEnd="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="000"
+        android:id="@+id/VelocityTextView"
+        android:textSize="40sp"
+        android:gravity="end"
+        android:layout_alignParentTop="true"
+        android:layout_toStartOf="@+id/textView2" />
+
+    <TextClock
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/textClock"
+        android:enabled="true"
+        android:textSize="40sp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="Km"
+        android:id="@+id/textView"
+        android:layout_below="@+id/textView2"
+        android:layout_alignEnd="@+id/resetButton"
+        android:layout_marginTop="61dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="Km/h"
+        android:id="@+id/textView2"
+        android:layout_alignBottom="@+id/VelocityTextView"
+        android:layout_alignEnd="@+id/textView" />
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="+ 100m"
+        android:id="@+id/Plus100m"
+        android:onClick="onPlusDistance100"
+        android:layout_below="@+id/textClock"
+        android:layout_alignParentStart="true" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="+ 200m"
+        android:id="@+id/Plus200m"
+        android:layout_below="@+id/Plus100m"
+        android:layout_alignParentStart="true"
+        android:onClick="onPlusDistance200"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="+ 500m"
+        android:id="@+id/Plus500m"
+        android:layout_alignTop="@+id/Minus500m"
+        android:layout_alignParentStart="true"
+        android:onClick="onPlusDistance500"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="- 100m"
+        android:id="@+id/Minus100m"
+        android:layout_alignTop="@+id/Plus100m"
+        android:layout_toEndOf="@+id/Plus200m"
+        android:onClick="onMinusDistance100"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="- 200m"
+        android:id="@+id/Minus200m"
+        android:layout_alignTop="@+id/Plus200m"
+        android:layout_toEndOf="@+id/Plus200m"
+        android:onClick="onMinusDistance200"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="- 500m"
+        android:id="@+id/Minus500m"
+        android:layout_below="@+id/Minus200m"
+        android:layout_toEndOf="@+id/Plus200m"
+        android:onClick="onMinusDistance500"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="Km"
+        android:id="@+id/textView3"
+        android:layout_alignBaseline="@+id/DistanceTotalTextView"
+        android:layout_alignBottom="@+id/DistanceTotalTextView"
+        android:layout_toEndOf="@+id/DistanceTotalTextView" />
+
+</RelativeLayout>
