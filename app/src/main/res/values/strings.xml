@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Cuenta Kilometros</string>
+    <string name="app_name">Distance tracker</string>
     <string name="action_settings">Settings</string>
     <string name="title_activity_settings">Settings</string>
 
@@ -63,6 +63,10 @@
 
     <!-- Values for meter -->
     <string name="pref_title_meters_steps">Steps in meter to used when click in volume keys</string>
+    <string name="button_reset">Reset</string>
+    <string name="menu_start_listening">Start/Resume Trip</string>
+    <string name="menu_stop_istening">Pause Trip</string>
+    <string name="messages_GPS_disabled">Your GPS seems to be disabled, do you want to enable it?</string>
     <string-array name="pref_meters_steps_titles">
         <item>100 meters</item>
         <item>200 meters</item>

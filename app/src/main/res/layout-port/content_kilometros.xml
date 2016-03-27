@@ -53,7 +53,7 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Reset"
+        android:text="@string/button_reset"
         android:id="@+id/resetButton"
         android:onClick="onResetDistance"
         android:layout_below="@+id/DistanceTextView"

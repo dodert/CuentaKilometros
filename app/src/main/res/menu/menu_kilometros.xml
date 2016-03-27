@@ -3,16 +3,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".DistanceActivity">
     <item android:id="@+id/menuStartListening"
-        android:title="Start Listening"
+        android:title="@string/menu_start_listening"
         android:onClick="onStartListening"
         android:icon="@android:drawable/ic_menu_mapmode"  />
     <item android:id="@+id/menuStopListening"
-        android:title="Stop Listening"
+        android:title="@string/menu_stop_istening"
         android:onClick="onStopListening"
         android:icon="@android:drawable/ic_menu_close_clear_cancel"  />
     <item
         android:id="@+id/menuSettings"
-        android:title="Settings"
+        android:title="@string/title_activity_settings"
         android:onClick="onSettings"
         android:icon="@android:drawable/ic_menu_preferences"  />
     <item android:id="@+id/menuExit"

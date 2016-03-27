@@ -11,6 +11,7 @@ import android.location.LocationManager;
 import android.media.AudioManager;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -31,7 +32,8 @@ public class DistanceActivity extends AppCompatActivity {
     protected LocationManager _lm;
     private boolean _areLocationUpdatesEnabled;
     final float _metersListener = 5;
-    float _valueToAddorsubtract = 100;
+    float _valueToAddOrSubtract = 100;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,7 +75,7 @@ public class DistanceActivity extends AppCompatActivity {
         Button test2 = (Button) findViewById(R.id.Minus100m);
         test.setText("+ " + pref_meters_step + "m");
         test2.setText("- " + pref_meters_step + "m");
-        _valueToAddorsubtract = Float.parseFloat(pref_meters_step);
+        _valueToAddOrSubtract = Float.parseFloat(pref_meters_step);
 
     }
 
@@ -177,6 +179,7 @@ public class DistanceActivity extends AppCompatActivity {
             else {
                 _lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, _metersListener, _gpsListener);
                 _areLocationUpdatesEnabled = true;
+                this.setTitle(this.getTitle());
                 Log("success on requestLocationUpdates");
             }
 
@@ -240,10 +243,10 @@ public class DistanceActivity extends AppCompatActivity {
     }
 
     public void onPlusDistance100(View view) {
-        onPlusDistance(_valueToAddorsubtract);
+        onPlusDistance(_valueToAddOrSubtract);
     }
     public void onMinusDistance100(View view) {
-        onMinusDistanceBy(_valueToAddorsubtract);
+        onMinusDistanceBy(_valueToAddOrSubtract);
     }
 
     private void Log(String logText) {
@@ -258,11 +261,11 @@ public class DistanceActivity extends AppCompatActivity {
 
     private void buildAlertMessageNoGps() {
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage("Your GPS seems to be disabled, do you want to enable it?")
+        builder.setMessage(R.string.messages_GPS_disabled)
                 .setCancelable(false)
                 .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     public void onClick(@SuppressWarnings("unused") final DialogInterface dialog, @SuppressWarnings("unused") final int id) {
-                        startActivity(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS));
+                        startActivity(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS));
                     }
                 })
                 .setNegativeButton("No", new DialogInterface.OnClickListener() {
