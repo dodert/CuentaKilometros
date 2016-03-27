@@ -1,7 +1,9 @@
 package dodert.cuentakilometros3;
 
 import android.Manifest;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -151,9 +153,18 @@ public class Kilometros extends AppCompatActivity {
                 // for ActivityCompat#requestPermissions for more details.
                 return;
             }
-            _lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, _metersListener, _gpsListener);
-            _areLocationUpdatesEnabled = true;
-            Log("success on requestLocationUpdates");
+            //check if the GPS is enabled
+
+            if ( !_lm.isProviderEnabled( LocationManager.GPS_PROVIDER ) ) {
+                buildAlertMessageNoGps();
+
+            }
+            else {
+                _lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, _metersListener, _gpsListener);
+                _areLocationUpdatesEnabled = true;
+                Log("success on requestLocationUpdates");
+            }
+
         } catch (Exception e) {
             Log("Error on requestLocationUpdates" + e.getMessage());
             e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
@@ -245,5 +256,23 @@ public class Kilometros extends AppCompatActivity {
             Log.d(_logTag, logText);
             _logTextView.setText(logText + "\n" + _logTextView.getText());
         }
+    }
+
+    private void buildAlertMessageNoGps() {
+        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("Your GPS seems to be disabled, do you want to enable it?")
+                .setCancelable(false)
+                .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    public void onClick(@SuppressWarnings("unused") final DialogInterface dialog, @SuppressWarnings("unused") final int id) {
+                        startActivity(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS));
+                    }
+                })
+                .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    public void onClick(final DialogInterface dialog, @SuppressWarnings("unused") final int id) {
+                        dialog.cancel();
+                    }
+                });
+        final AlertDialog alert = builder.create();
+        alert.show();
     }
 }
