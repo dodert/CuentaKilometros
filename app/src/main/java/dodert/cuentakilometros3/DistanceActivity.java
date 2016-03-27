@@ -20,9 +20,10 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
-public class Kilometros extends AppCompatActivity {
+public class DistanceActivity extends AppCompatActivity {
 
     final String _logTag = "Monitor Location";
     public TextView _distanceTextView, _logTextView, _speedTextView, _distanceHistoryTextView;
@@ -30,11 +31,13 @@ public class Kilometros extends AppCompatActivity {
     protected LocationManager _lm;
     private boolean _areLocationUpdatesEnabled;
     final float _metersListener = 5;
+    float _valueToAddorsubtract = 100;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        Context mContext = getApplicationContext();
         setContentView(R.layout.activity_kilometros);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -44,11 +47,10 @@ public class Kilometros extends AppCompatActivity {
         _logTextView = (TextView) findViewById(R.id.LogTextView);
         _speedTextView = (TextView) findViewById(R.id.VelocityTextView);
         _logTextView.setMovementMethod(new ScrollingMovementMethod());
-        Context mContext = getApplicationContext();
-        MyLocationListener.Instance(_distanceTextView, _logTextView, _speedTextView, _distanceHistoryTextView,  getApplicationContext());
+
+        MyLocationListener.Instance(_distanceTextView, _logTextView, _speedTextView, _distanceHistoryTextView, mContext);
 
         _lm = (LocationManager) mContext.getSystemService(LOCATION_SERVICE);
-
         _gpsListener = MyLocationListener.GetInstance();
 
         if(savedInstanceState != null)
@@ -58,9 +60,21 @@ public class Kilometros extends AppCompatActivity {
                 onStartListening(null);
             }
             _distanceTextView.setText(savedInstanceState.getString("TotalDistance"));
+            _distanceHistoryTextView.setText(savedInstanceState.getString("TotalHistoryDistance"));
+
         }
 
         setVolumeControlStream(AudioManager.STREAM_MUSIC);
+
+
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(mContext);
+        String pref_meters_step = settings.getString("meters_steps", "100");
+        Button test = (Button) findViewById(R.id.Plus100m);
+        Button test2 = (Button) findViewById(R.id.Minus100m);
+        test.setText("+ " + pref_meters_step + "m");
+        test2.setText("- " + pref_meters_step + "m");
+        _valueToAddorsubtract = Float.parseFloat(pref_meters_step);
+
     }
 
     @Override
@@ -89,6 +103,7 @@ public class Kilometros extends AppCompatActivity {
         outState.putBoolean("IsProviderEnable", false);
         outState.putBoolean("IsProviderEnable", _areLocationUpdatesEnabled);
         outState.putString("TotalDistance", _distanceTextView.getText().toString());
+        outState.putString("TotalHistoryDistance", _distanceHistoryTextView.getText().toString());
 
     }
 
@@ -225,27 +240,10 @@ public class Kilometros extends AppCompatActivity {
     }
 
     public void onPlusDistance100(View view) {
-        onPlusDistance(100.0F);
+        onPlusDistance(_valueToAddorsubtract);
     }
-
-    public void onPlusDistance200(View view) {
-        onPlusDistance(200.0F);
-    }
-
-    public void onPlusDistance500(View view) {
-        onPlusDistance(500.0F);
-    }
-
     public void onMinusDistance100(View view) {
-        onMinusDistanceBy(100.0F);
-    }
-
-    public void onMinusDistance200(View view) {
-        onMinusDistanceBy(200.0F);
-    }
-
-    public void onMinusDistance500(View view) {
-        onMinusDistanceBy(500.0F);
+        onMinusDistanceBy(_valueToAddorsubtract);
     }
 
     private void Log(String logText) {

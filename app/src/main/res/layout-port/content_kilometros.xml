@@ -11,7 +11,7 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="dodert.cuentakilometros3.Kilometros"
+    tools:context=".DistanceActivity"
     tools:showIn="@layout/activity_kilometros"
     android:keepScreenOn="true">
 
@@ -46,9 +46,9 @@
         android:id="@+id/LogTextView"
         android:maxLines="300"
         android:scrollbars="vertical"
-        android:layout_below="@+id/Plus500m"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="26dp" />
+        android:layout_marginTop="13dp"
+        android:layout_below="@+id/Plus100m"
+        android:layout_alignParentStart="true" />
 
     <Button
         android:layout_width="wrap_content"
@@ -105,52 +105,20 @@
         android:id="@+id/Plus100m"
         android:onClick="onPlusDistance100"
         android:layout_alignTop="@+id/resetButton"
-        android:layout_alignParentStart="true" />
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="+ 200m"
-        android:id="@+id/Plus200m"
-        android:layout_below="@+id/Plus100m"
         android:layout_alignParentStart="true"
-        android:onClick="onPlusDistance200" />
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="+ 500m"
-        android:id="@+id/Plus500m"
-        android:layout_alignTop="@+id/Minus500m"
-        android:layout_alignParentStart="true"
-        android:onClick="onPlusDistance500" />
+        android:height="120dp"
+        android:width="120dp" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="- 100m"
         android:id="@+id/Minus100m"
-        android:layout_alignTop="@+id/Plus100m"
-        android:layout_toEndOf="@+id/Plus200m"
-        android:onClick="onMinusDistance100" />
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="- 200m"
-        android:id="@+id/Minus200m"
-        android:layout_alignTop="@+id/Plus200m"
-        android:layout_toEndOf="@+id/Plus200m"
-        android:onClick="onMinusDistance200" />
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="- 500m"
-        android:id="@+id/Minus500m"
-        android:layout_below="@+id/Minus200m"
-        android:layout_toEndOf="@+id/Plus200m"
-        android:onClick="onMinusDistance500" />
+        android:onClick="onMinusDistance100"
+        android:height="120dp"
+        android:width="120dp"
+        android:layout_alignTop="@+id/resetButton"
+        android:layout_toStartOf="@+id/resetButton" />
 
     <TextView
         android:layout_width="wrap_content"
