@@ -12,6 +12,12 @@
         android:summary="Keep the gps enabled even when the app is in background."
         android:title="Keep GPS enabled when background" />
 
+    <SwitchPreference
+        android:defaultValue="false"
+        android:key="enable_track"
+        android:summary="Enable traking to kml file."
+        android:title="Enable track to KML" />
+
     <ListPreference
         android:defaultValue="100"
         android:entries="@array/pref_meters_steps_titles"

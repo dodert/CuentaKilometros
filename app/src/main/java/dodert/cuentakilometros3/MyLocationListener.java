@@ -9,6 +9,15 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 import android.widget.TextView;
 
+import org.xml.sax.SAXException;
+
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.TransformerException;
+
 /**
  * Created by dodert on 19/03/2016.
  */
@@ -23,6 +32,7 @@ public class MyLocationListener implements LocationListener{
     private Location _previousLocation;
     private TextView _distanceTextView, _logTextView, _speedTextView, _distanceTotalHistoryTextView;
     private Context _context;
+    private TrakingSaver _trakingFile;
 
     private void Initialize(TextView tv, TextView log, TextView vel, TextView distanceHistory, Context context)
     {
@@ -31,6 +41,12 @@ public class MyLocationListener implements LocationListener{
         _logTextView = log;
         _speedTextView = vel;
         _context = context;
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(_context);
+        boolean trackEnabled = settings.getBoolean("enable_track", false);
+        if (trackEnabled) {
+            _trakingFile = new TrakingSaver("BENJABENJA");
+            _trakingFile.CreateAndInitilizaFile();
+        }
     }
 
     public static void Instance(TextView tv, TextView log, TextView vel, TextView distanceHistory, Context context)
@@ -45,6 +61,10 @@ public class MyLocationListener implements LocationListener{
     public static MyLocationListener GetInstance()
     {
         return instance;
+    }
+
+    public MyLocationListener() {
+
     }
 
     @Override
@@ -67,9 +87,30 @@ public class MyLocationListener implements LocationListener{
         long time = currentLocation.getTime();
 
         _previousLocation = currentLocation;
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(_context);
+        boolean trackEnabled = settings.getBoolean("enable_track", false);
 
+        if (trackEnabled) {
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
+            Date outputDate = new Date(time);
+            String timeFormated = format.format(outputDate);
+
+            try {
+                String coor = String.format("%f %f %f", lng, lat, alt);
+                _trakingFile.addLine(coor, timeFormated);
+            } catch (ParserConfigurationException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (SAXException e) {
+                e.printStackTrace();
+            } catch (TransformerException e) {
+                e.printStackTrace();
+            }
+        }
         String logMessage = LogHelper.FormatLocationInfo(provider, lat, lng, alt, accuracy, time);
         Log("Monitor Location: " + logMessage);
+
     }
 
     @Override
@@ -85,6 +126,10 @@ public class MyLocationListener implements LocationListener{
     @Override
     public void onProviderDisabled(String provider) {
         Log("Monitor Location - Provider Disabled: " + provider);
+    }
+
+
+    private void AddLinesToFile() {
     }
 
     public void ResetTotalMeters (){
