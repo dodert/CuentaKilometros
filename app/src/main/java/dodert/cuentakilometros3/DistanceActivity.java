@@ -22,12 +22,15 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.NumberPicker;
 import android.widget.TextView;
 
-public class DistanceActivity extends AppCompatActivity {
+public class DistanceActivity extends AppCompatActivity implements DistanceChangeListener {
 
     final String _logTag = "Monitor Location";
-    public TextView _distanceTextView, _logTextView, _speedTextView, _distanceHistoryTextView;
+    public TextView _logTextView, _speedTextView, _distanceHistoryTextView;
+    public NumberPicker _npHundreds, _npThousands, _npDozen, _npUnit, _npTenth, _npHundredth;
+    // public SeekBar _seekBar;
     private MyLocationListener _gpsListener;
     protected LocationManager _lm;
     private boolean _areLocationUpdatesEnabled;
@@ -44,16 +47,41 @@ public class DistanceActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        _distanceTextView = (TextView) findViewById(R.id.DistanceTextView);
+        //   _seekBar = (SeekBar) findViewById(R.id.seekBar);
+        _npHundreds = (NumberPicker) findViewById(R.id.npHundreds);
+        _npThousands = (NumberPicker) findViewById(R.id.npThousands);
+        _npDozen = (NumberPicker) findViewById(R.id.npDozens);
+        _npUnit = (NumberPicker) findViewById(R.id.npUnits);
+        _npTenth = (NumberPicker) findViewById(R.id.npTenths);
+        _npHundredth = (NumberPicker) findViewById(R.id.npHundredth);
+
+        _npHundreds.setMinValue(0);
+        _npHundreds.setMaxValue(9);
+        _npThousands.setMinValue(0);
+        _npThousands.setMaxValue(9);
+        _npDozen.setMinValue(0);
+        _npDozen.setMaxValue(9);
+        _npUnit.setMinValue(0);
+        _npUnit.setMaxValue(9);
+        _npTenth.setMinValue(0);
+        _npTenth.setMaxValue(9);
+        _npHundredth.setMinValue(0);
+        _npHundredth.setMaxValue(9);
+
         _distanceHistoryTextView = (TextView) findViewById(R.id.DistanceTotalTextView);
         _logTextView = (TextView) findViewById(R.id.LogTextView);
         _speedTextView = (TextView) findViewById(R.id.VelocityTextView);
         _logTextView.setMovementMethod(new ScrollingMovementMethod());
+        //  _textView4 = (TextView) findViewById(R.id.textView4);
 
-        MyLocationListener.Instance(_distanceTextView, _logTextView, _speedTextView, _distanceHistoryTextView, mContext);
+        MyLocationListener.Instance(_logTextView, _speedTextView, _distanceHistoryTextView, mContext);
 
         _lm = (LocationManager) mContext.getSystemService(LOCATION_SERVICE);
         _gpsListener = MyLocationListener.GetInstance();
+
+
+        _gpsListener.addListener(this);
+
 
         if(savedInstanceState != null)
         {
@@ -61,21 +89,43 @@ public class DistanceActivity extends AppCompatActivity {
             {
                 onStartListening(null);
             }
-            _distanceTextView.setText(savedInstanceState.getString("TotalDistance"));
+            //_distanceTextView.setText(savedInstanceState.getString("TotalDistance"));  //TODO pensar para la nueva representacion
             _distanceHistoryTextView.setText(savedInstanceState.getString("TotalHistoryDistance"));
 
         }
 
         setVolumeControlStream(AudioManager.STREAM_MUSIC);
 
-
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(mContext);
         String pref_meters_step = settings.getString("meters_steps", "100");
-        Button test = (Button) findViewById(R.id.Plus100m);
-        Button test2 = (Button) findViewById(R.id.Minus100m);
-        test.setText("+ " + pref_meters_step + "m");
-        test2.setText("- " + pref_meters_step + "m");
+
         _valueToAddOrSubtract = Float.parseFloat(pref_meters_step);
+
+        // _seekBar.setProgress((int)_valueToAddOrSubtract);
+        //_seekBar.setMax((int)_valueToAddOrSubtract);
+        /*_seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener(){
+            int progress = 0;
+
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progresValue, boolean fromUser) {
+                //_textView4.made( getApplicationContext(),progress);
+                progress = progresValue;
+                Toast.makeText(getApplicationContext(), "Changing seekbar's progress", Toast.LENGTH_SHORT).show();
+                _textView4.setText("Covered: " + progress + "/" + seekBar.getMax());
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+                _textView4.setText("Covered: " + progress + "/" + seekBar.getMax());
+
+            }
+        });
+*/
 
     }
 
@@ -104,7 +154,7 @@ public class DistanceActivity extends AppCompatActivity {
         super.onSaveInstanceState(outState);
         outState.putBoolean("IsProviderEnable", false);
         outState.putBoolean("IsProviderEnable", _areLocationUpdatesEnabled);
-        outState.putString("TotalDistance", _distanceTextView.getText().toString());
+        //outState.putString("TotalDistance", _distanceTextView.getText().toString()); //TODO pensar para la nueva representacion
         outState.putString("TotalHistoryDistance", _distanceHistoryTextView.getText().toString());
 
     }
@@ -140,7 +190,6 @@ public class DistanceActivity extends AppCompatActivity {
         }
     }
 
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -157,6 +206,11 @@ public class DistanceActivity extends AppCompatActivity {
     }
 
     public void onStartListening(MenuItem item) {
+        if (_areLocationUpdatesEnabled) {
+            Log("Already started.");
+            return;
+        }
+
         Log("Monitor Location - Start Listening");
         try {
             //_lm = (LocationManager) getSystemService(LOCATION_SERVICE);
@@ -174,9 +228,9 @@ public class DistanceActivity extends AppCompatActivity {
 
             if ( !_lm.isProviderEnabled( LocationManager.GPS_PROVIDER ) ) {
                 buildAlertMessageNoGps();
-
             }
             else {
+
                 _lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, _metersListener, _gpsListener);
                 _areLocationUpdatesEnabled = true;
                 this.setTitle(this.getTitle());
@@ -213,7 +267,10 @@ public class DistanceActivity extends AppCompatActivity {
             if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                 return;
             }
-            _lm.removeUpdates(MyLocationListener.GetInstance());
+            MyLocationListener test = MyLocationListener.GetInstance();
+
+            _lm.removeUpdates(test);
+            test.Stop();
 
             _areLocationUpdatesEnabled = false;
             //_gpsListener = null;
@@ -275,5 +332,26 @@ public class DistanceActivity extends AppCompatActivity {
                 });
         final AlertDialog alert = builder.create();
         alert.show();
+    }
+
+    @Override
+    public void onChangeDistance(float totalDistance, float previousDistance, String totalDistanceFormatted) {
+        System.out.println("test benja - " + totalDistanceFormatted);
+        Log("test benja - " + totalDistanceFormatted);
+        //_distanceTextView.setText(totalDistanceFormatted);
+        updateCounter(totalDistance, totalDistanceFormatted);
+    }
+
+    private void updateCounter(float distance, String distanceString) {
+        String hundredthPart = "0";
+        hundredthPart = distanceString.substring(distanceString.length() - 1);
+        int distanceLenght = distanceString.length();
+        _npHundredth.setValue(Integer.parseInt(distanceString.substring(distanceLenght - 1)));
+        _npTenth.setValue(Integer.parseInt(distanceString.substring(distanceLenght - 2, distanceLenght - 1)));
+        _npUnit.setValue(Integer.parseInt(distanceString.substring(distanceLenght - 4, distanceLenght - 3)));
+        _npDozen.setValue(Integer.parseInt(distanceString.substring(distanceLenght - 5, distanceLenght - 4)));
+        _npHundreds.setValue(Integer.parseInt(distanceString.substring(distanceLenght - 6, distanceLenght - 5)));
+        _npThousands.setValue(Integer.parseInt(distanceString.substring(distanceLenght - 7, distanceLenght - 6)));
+
     }
 }

@@ -11,9 +11,11 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 import org.xmlpull.v1.XmlSerializer;
 
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.StringWriter;
@@ -30,29 +32,29 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
 /**
- * Created by doder on 27/03/2016.
+ * Created by dodert on 27/03/2016.
  */
-public class TrakingSaver {
+public class TrackingSaver {
+    private static TrackingSaver instance = null;
+
     final String _folderName = "DistanceTracker";
     final String _fileNamePrefix = "DT_";
     private String _fileNameFull = "";
     private File _file;
 
-    public TrakingSaver(String fileName) {
+    public static TrackingSaver GetInstance() {
+        if (instance == null) {
+            instance = new TrackingSaver();
+        }
+        return instance;
+    }
 
+    public TrackingSaver() {
         SimpleDateFormat format = new SimpleDateFormat("yyyyMMdd_HHmmssSSS");
         Date outputDate = new Date();
-        String adsasd = format.format(outputDate);
+        String timeString = format.format(outputDate);
+        _fileNameFull = _fileNamePrefix + timeString;
 
-        _fileNameFull = _fileNamePrefix + adsasd + "_" + fileName;
-
-    }
-
-    public File getFile() {
-        return _file;
-    }
-
-    public void CreateAndInitilizaFile() {
         if (isExternalStorageWritable()) {
             _file = getAlbumStorageDir();
             CreateKMLFIle(_file);
@@ -60,8 +62,20 @@ public class TrakingSaver {
         }
     }
 
+    public File getFile() {
+        return _file;
+    }
+
+    /*public void CreateAndInitilizaFile() {
+        if (isExternalStorageWritable()) {
+            _file = getAlbumStorageDir();
+            CreateKMLFIle(_file);
+
+        }
+    }*/
+
     /* Checks if external storage is available for read and write */
-    public boolean isExternalStorageWritable() {
+    private boolean isExternalStorageWritable() {
         String state = Environment.getExternalStorageState();
         if (Environment.MEDIA_MOUNTED.equals(state)) {
             return true;
@@ -69,7 +83,7 @@ public class TrakingSaver {
         return false;
     }
 
-    public File getAlbumStorageDir() {
+    private File getAlbumStorageDir() {
         // Get the directory for the user's public pictures directory.
         File file = new File(Environment.getExternalStoragePublicDirectory(
                 Environment.DIRECTORY_DOCUMENTS), _folderName);
@@ -78,7 +92,6 @@ public class TrakingSaver {
         }
 
         File newfile = new File(file, _fileNameFull + ".kml");
-
 
         return newfile;
     }
@@ -107,7 +120,21 @@ public class TrakingSaver {
         transformer.transform(source, result);
 
     }
-   /* private void CreateKMLFIle2(File file)
+
+    public void addComment(String text) {
+        FileWriter fw = null;
+        try {
+            fw = new FileWriter(_file);
+            BufferedWriter bw = new BufferedWriter(fw);
+            bw.write("<!--" + text + "-->");
+            bw.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
+    }
+    /* private void CreateKMLFIle2(File file)
     {
         Document doc = new Document();
         LocalSocketAddress.Namespace sNS = Namespace.getNamespace("someNS", "someNamespace");
@@ -119,9 +146,8 @@ public class TrakingSaver {
         doc.addContent(element);
     }*/
 
-
     private void CreateKMLFIle(File file) {
-        //TrakingSaver asd = new TrakingSaver();
+        //TrackingSaver asd = new TrackingSaver();
         //File file = asd.getAlbumStorageDir("traks");
         try {
 
@@ -188,5 +214,7 @@ public class TrakingSaver {
             e.printStackTrace();
         }
     }
+
+
 }
 

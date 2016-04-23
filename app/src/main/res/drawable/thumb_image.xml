@@ -1,0 +1,14 @@
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item>
+        <shape>
+            <size
+                android:height="@dimen/scrubber_dim"
+                android:width="@dimen/scrubber_dim" />
+
+            <solid android:color="@android:color/transparent" />
+        </shape>
+    </item>
+    <item android:drawable="@drawable/scrubber_control_selector_holo" />
+
+</layer-list>

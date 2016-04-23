@@ -12,8 +12,8 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context=".DistanceActivity"
-    tools:showIn="@layout/activity_kilometros"
-    android:keepScreenOn="true">
+    android:keepScreenOn="true"
+    tools:showIn="@layout/activity_kilometros">
 
     <!--<data>
         <variable android:name="_currentTotalMeters" android:type="dodert.cuentakilometros3.MyLocationListener"/>
@@ -23,21 +23,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="0000.00"
-        android:id="@+id/DistanceTextView"
-        android:textSize="80sp"
-        android:gravity="end"
-        android:layout_below="@+id/VelocityTextView"
-        android:layout_toStartOf="@+id/textView" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="0000.00"
         android:id="@+id/DistanceTotalTextView"
         android:textSize="40sp"
         android:gravity="end"
-        android:layout_above="@+id/Minus100m"
-        android:layout_alignEnd="@+id/DistanceTextView" />
+        android:layout_marginTop="43dp"
+        android:layout_below="@+id/gridLayout"
+        android:layout_alignParentStart="true" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -46,9 +37,9 @@
         android:id="@+id/LogTextView"
         android:maxLines="300"
         android:scrollbars="vertical"
-        android:layout_marginTop="13dp"
-        android:layout_below="@+id/Plus100m"
-        android:layout_alignParentStart="true" />
+        android:layout_below="@+id/DistanceTotalTextView"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="30dp" />
 
     <Button
         android:layout_width="wrap_content"
@@ -56,9 +47,8 @@
         android:text="@string/button_reset"
         android:id="@+id/resetButton"
         android:onClick="onResetDistance"
-        android:layout_below="@+id/DistanceTextView"
-        android:layout_alignParentEnd="true"
-        android:layout_marginTop="41dp" />
+        android:layout_alignBottom="@+id/textView3"
+        android:layout_alignEnd="@+id/gridLayout" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -68,7 +58,8 @@
         android:textSize="40sp"
         android:gravity="end"
         android:layout_alignParentTop="true"
-        android:layout_toStartOf="@+id/textView2" />
+        android:layout_toStartOf="@+id/textView2"
+        android:layout_marginEnd="28dp" />
 
     <TextClock
         android:layout_width="wrap_content"
@@ -76,18 +67,8 @@
         android:id="@+id/textClock"
         android:enabled="true"
         android:textSize="40sp"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:text="Km"
-        android:id="@+id/textView"
-        android:layout_below="@+id/textView2"
-        android:layout_alignEnd="@+id/resetButton"
-        android:layout_marginTop="61dp" />
+        android:layout_above="@+id/gridLayout"
+        android:layout_toStartOf="@+id/textView3" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -96,29 +77,7 @@
         android:text="Km/h"
         android:id="@+id/textView2"
         android:layout_alignBottom="@+id/VelocityTextView"
-        android:layout_alignEnd="@+id/textView" />
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="+ 100m"
-        android:id="@+id/Plus100m"
-        android:onClick="onPlusDistance100"
-        android:layout_alignTop="@+id/resetButton"
-        android:layout_alignParentStart="true"
-        android:height="120dp"
-        android:width="120dp" />
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="- 100m"
-        android:id="@+id/Minus100m"
-        android:onClick="onMinusDistance100"
-        android:height="120dp"
-        android:width="120dp"
-        android:layout_alignTop="@+id/resetButton"
-        android:layout_toStartOf="@+id/resetButton" />
+        android:layout_alignParentEnd="true" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -126,8 +85,80 @@
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:text="Km"
         android:id="@+id/textView3"
-        android:layout_alignBaseline="@+id/DistanceTotalTextView"
         android:layout_alignBottom="@+id/DistanceTotalTextView"
-        android:layout_toEndOf="@+id/DistanceTotalTextView" />
+        android:layout_centerHorizontal="true" />
+
+    <GridLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/gridLayout"
+        android:layout_below="@+id/VelocityTextView"
+        android:layout_toEndOf="@+id/LogTextView">
+
+        <dodert.cuentakilometros3.CustomNumberPicker xmlns:customNS="http://schemas.android.com/apk/res/dodert.cuentakilometros3"
+            customNS:aaaaaatextSize="50dp"
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/npThousands"
+            android:orientation="horizontal"
+            android:layout_row="0"
+            android:layout_column="0" />
+
+        <dodert.cuentakilometros3.CustomNumberPicker xmlns:customNS="http://schemas.android.com/apk/res/dodert.cuentakilometros3"
+            customNS:aaaaaatextSize="50dp"
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/npHundreds"
+            android:orientation="horizontal"
+            android:layout_row="0"
+            android:layout_column="1" />
+
+        <dodert.cuentakilometros3.CustomNumberPicker xmlns:customNS="http://schemas.android.com/apk/res/dodert.cuentakilometros3"
+            customNS:aaaaaatextSize="50dp"
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/npDozens"
+            android:orientation="horizontal"
+            android:layout_row="0"
+            android:layout_column="2" />
+
+        <dodert.cuentakilometros3.CustomNumberPicker xmlns:customNS="http://schemas.android.com/apk/res/dodert.cuentakilometros3"
+            customNS:aaaaaatextSize="50dp"
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/npUnits"
+            android:orientation="horizontal"
+            android:layout_row="0"
+            android:layout_column="3" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="182dp"
+            android:text="."
+            android:id="@+id/textView4"
+            android:layout_row="0"
+            android:layout_column="4"
+            android:textSize="80sp"
+            android:textIsSelectable="false" />
+
+        <dodert.cuentakilometros3.CustomNumberPicker xmlns:customNS="http://schemas.android.com/apk/res/dodert.cuentakilometros3"
+            customNS:aaaaaatextSize="50dp"
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/npTenths"
+            android:orientation="horizontal"
+            android:layout_row="0"
+            android:layout_column="5" />
+
+        <dodert.cuentakilometros3.CustomNumberPicker xmlns:customNS="http://schemas.android.com/apk/res/dodert.cuentakilometros3"
+            customNS:aaaaaatextSize="50dp"
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/npHundredth"
+            android:orientation="horizontal"
+            android:layout_row="0"
+            android:layout_column="6" />
+    </GridLayout>
+
 
 </RelativeLayout>
