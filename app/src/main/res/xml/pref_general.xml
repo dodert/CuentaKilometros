@@ -4,7 +4,7 @@
         android:defaultValue="false"
         android:key="enable_log"
         android:summary="Enable logs in the main window to see what is happening."
-        android:title="Enable Log - Beta" />
+        android:title="Enable Log" />
 
     <SwitchPreference
         android:defaultValue="true"
@@ -16,7 +16,7 @@
         android:defaultValue="false"
         android:key="enable_track"
         android:summary="Enable traking to kml file."
-        android:title="Enable track to KML" />
+        android:title="Enable track to KML - Beta" />
 
     <ListPreference
         android:defaultValue="100"

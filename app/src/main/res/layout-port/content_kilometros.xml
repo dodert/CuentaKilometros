@@ -26,8 +26,7 @@
         android:id="@+id/DistanceTotalTextView"
         android:textSize="40sp"
         android:gravity="end"
-        android:layout_marginTop="43dp"
-        android:layout_below="@+id/gridLayout"
+        android:layout_alignTop="@+id/resetButton"
         android:layout_alignParentStart="true" />
 
     <TextView
@@ -39,7 +38,7 @@
         android:scrollbars="vertical"
         android:layout_below="@+id/DistanceTotalTextView"
         android:layout_alignParentStart="true"
-        android:layout_marginTop="30dp" />
+        android:layout_alignParentEnd="true" />
 
     <Button
         android:layout_width="wrap_content"
@@ -47,8 +46,9 @@
         android:text="@string/button_reset"
         android:id="@+id/resetButton"
         android:onClick="onResetDistance"
-        android:layout_alignBottom="@+id/textView3"
-        android:layout_alignEnd="@+id/gridLayout" />
+        android:layout_marginTop="38dp"
+        android:layout_below="@+id/gridLayout"
+        android:layout_alignParentEnd="true" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -58,8 +58,7 @@
         android:textSize="40sp"
         android:gravity="end"
         android:layout_alignParentTop="true"
-        android:layout_toStartOf="@+id/textView2"
-        android:layout_marginEnd="28dp" />
+        android:layout_toStartOf="@+id/textView2" />
 
     <TextClock
         android:layout_width="wrap_content"
@@ -93,7 +92,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/gridLayout"
         android:layout_below="@+id/VelocityTextView"
-        android:layout_toEndOf="@+id/LogTextView">
+        android:layout_alignEnd="@+id/textView2">
 
         <dodert.cuentakilometros3.CustomNumberPicker xmlns:customNS="http://schemas.android.com/apk/res/dodert.cuentakilometros3"
             customNS:aaaaaatextSize="50dp"

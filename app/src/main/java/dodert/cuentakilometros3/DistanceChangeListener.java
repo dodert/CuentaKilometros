@@ -5,4 +5,11 @@ package dodert.cuentakilometros3;
  */
 public interface DistanceChangeListener {
     void onChangeDistance(float totalDistance, float previousDistance, String totalDistanceFormatted);
+
+    void onChangeHistoryDistance(float totalDistance, float previousDistance, String totalDistanceFormatted);
+
+    void onChangeSpeed(String speed);
+
+    void onLog(String log);
 }
+

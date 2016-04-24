@@ -21,7 +21,6 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.NumberPicker;
 import android.widget.TextView;
 
@@ -74,7 +73,7 @@ public class DistanceActivity extends AppCompatActivity implements DistanceChang
         _logTextView.setMovementMethod(new ScrollingMovementMethod());
         //  _textView4 = (TextView) findViewById(R.id.textView4);
 
-        MyLocationListener.Instance(_logTextView, _speedTextView, _distanceHistoryTextView, mContext);
+        MyLocationListener.Instance(mContext);
 
         _lm = (LocationManager) mContext.getSystemService(LOCATION_SERVICE);
         _gpsListener = MyLocationListener.GetInstance();
@@ -89,7 +88,7 @@ public class DistanceActivity extends AppCompatActivity implements DistanceChang
             {
                 onStartListening(null);
             }
-            //_distanceTextView.setText(savedInstanceState.getString("TotalDistance"));  //TODO pensar para la nueva representacion
+            updateCounter(0, savedInstanceState.getString("TotalDistance"));
             _distanceHistoryTextView.setText(savedInstanceState.getString("TotalHistoryDistance"));
 
         }
@@ -154,7 +153,7 @@ public class DistanceActivity extends AppCompatActivity implements DistanceChang
         super.onSaveInstanceState(outState);
         outState.putBoolean("IsProviderEnable", false);
         outState.putBoolean("IsProviderEnable", _areLocationUpdatesEnabled);
-        //outState.putString("TotalDistance", _distanceTextView.getText().toString()); //TODO pensar para la nueva representacion
+        outState.putString("TotalDistance", GetCurrentDistanceFormatted());
         outState.putString("TotalHistoryDistance", _distanceHistoryTextView.getText().toString());
 
     }
@@ -279,7 +278,7 @@ public class DistanceActivity extends AppCompatActivity implements DistanceChang
 
     private void onMinusDistanceBy(float meters) {
         if (_gpsListener!= null)
-            _gpsListener.SubstractTotalMeters(meters);
+            _gpsListener.SubtractTotalMeters(meters);
         else
             Log("gpsListener null");
     }
@@ -342,7 +341,27 @@ public class DistanceActivity extends AppCompatActivity implements DistanceChang
         updateCounter(totalDistance, totalDistanceFormatted);
     }
 
+    @Override
+    public void onChangeHistoryDistance(float totalDistance, float previousDistance, String totalDistanceFormatted) {
+        _distanceHistoryTextView.setText(totalDistanceFormatted);
+    }
+
+    @Override
+    public void onChangeSpeed(String speed) {
+        _speedTextView.setText(speed);
+    }
+
+    @Override
+    public void onLog(String log) {
+        Log(log);
+    }
+
+    private String GetCurrentDistanceFormatted() {
+        return _gpsListener.GetDistanceFormatted();
+    }
+
     private void updateCounter(float distance, String distanceString) {
+        String test = _gpsListener.GetDistanceFormatted();
         String hundredthPart = "0";
         hundredthPart = distanceString.substring(distanceString.length() - 1);
         int distanceLenght = distanceString.length();
