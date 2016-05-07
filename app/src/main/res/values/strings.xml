@@ -67,6 +67,12 @@
     <string name="menu_start_listening">Start/Resume Trip</string>
     <string name="menu_stop_listening">Pause Trip</string>
     <string name="messages_GPS_disabled">Your GPS seems to be disabled, do you want to enable it?</string>
+    <string name="pref_enable_log">Enable Log</string>
+    <string name="pref_enable_log_summary">Enable logs in the main window to see what is happening.</string>
+    <string name="pref_keep_gps">Keep GPS enabled when background</string>
+    <string name="pref_keep_gps_summary">Keep the gps enabled even when the app is in background.</string>
+    <string name="pref_enable_track_summary">Enable tracking to kml file.</string>
+    <string name="pref_enable_track">Enable track to KML - Beta</string>
     <string-array name="pref_meters_steps_titles" translatable="false">
         <item>100 meters</item>
         <item>200 meters</item>

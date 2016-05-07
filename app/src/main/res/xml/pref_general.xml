@@ -3,20 +3,20 @@
     <SwitchPreference
         android:defaultValue="false"
         android:key="enable_log"
-        android:summary="Enable logs in the main window to see what is happening."
-        android:title="Enable Log" />
+        android:summary="@string/pref_enable_log_summary"
+        android:title="@string/pref_enable_log" />
 
     <SwitchPreference
         android:defaultValue="true"
         android:key="keep_enable_gps_when_background"
-        android:summary="Keep the gps enabled even when the app is in background."
-        android:title="Keep GPS enabled when background" />
+        android:summary="@string/pref_keep_gps_summary"
+        android:title="@string/pref_keep_gps" />
 
     <SwitchPreference
         android:defaultValue="false"
         android:key="enable_track"
-        android:summary="Enable traking to kml file."
-        android:title="Enable track to KML - Beta" />
+        android:summary="@string/pref_enable_track_summary"
+        android:title="@string/pref_enable_track" />
 
     <ListPreference
         android:defaultValue="100"
