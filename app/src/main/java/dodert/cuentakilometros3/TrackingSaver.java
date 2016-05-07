@@ -119,7 +119,7 @@ public class TrackingSaver {
         transformer.transform(source, result);
     }*/
 
-    public void addTrackLine(/*File file, */String coordinates, String time) throws ParserConfigurationException, IOException, SAXException, TransformerException {
+    public void addTrackLine(String coordinates, String time) throws ParserConfigurationException, IOException, SAXException, TransformerException {
         DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
         DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
         Document document = documentBuilder.parse(_file);

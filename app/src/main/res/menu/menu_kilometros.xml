@@ -7,7 +7,7 @@
         android:onClick="onStartListening"
         android:icon="@android:drawable/ic_menu_mapmode"  />
     <item android:id="@+id/menuStopListening"
-        android:title="@string/menu_stop_istening"
+        android:title="@string/menu_stop_listening"
         android:onClick="onStopListening"
         android:icon="@android:drawable/ic_menu_close_clear_cancel"  />
     <item

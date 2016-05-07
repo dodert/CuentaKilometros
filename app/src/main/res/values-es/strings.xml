@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="pref_title_meters_steps">Cuantos metros queires sumar y restar.</string>
+    <string name="pref_title_meters_steps">Pasos en metros para las teclas de volumen</string>
     <string name="title_activity_settings">Opciones</string>
     <string name="pref_header_general">General</string>
     <string name="button_reset">Reiniciar</string>
     <string name="app_name">Cuenta Kilometros</string>
     <string name="action_settings">Opciones</string>
     <string name="menu_start_listening">Iniciar/Continuar Viaje</string>
-    <string name="menu_stop_istening">Pausar Viaje</string>
+    <string name="menu_stop_listening">Pausar Viaje</string>
     <string name="messages_GPS_disabled">El GPS parece deshabilitado, ¿Quieres habilitarlo?</string>
 </resources>

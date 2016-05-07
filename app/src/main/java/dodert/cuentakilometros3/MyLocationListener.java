@@ -6,14 +6,11 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-
 import org.xml.sax.SAXException;
-
 import java.io.IOException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
@@ -41,7 +38,6 @@ public class MyLocationListener implements LocationListener {
         boolean trackEnabled = settings.getBoolean("enable_track", false);
         if (trackEnabled) {
             _trakingFile = TrackingSaver.GetInstance();
-            // _trakingFile.CreateAndInitilizaFile();
         }
     }
 
@@ -86,17 +82,11 @@ public class MyLocationListener implements LocationListener {
         boolean trackEnabled = settings.getBoolean("enable_track", false);
 
         if (trackEnabled) {
-            //_trakingFile.addCommentLine("Inicio");
-
-            /*SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:sszzzzzz");
-            Date outputDate = new Date(time);
-            String timeFormated = format.format(outputDate);*/
-
             String timeFormated = Helpers.FormatDateTimeTo_gxTrack(time);
             Log(timeFormated);
 
             try {
-                String coor = String.format("%f %f %f", lng, lat, alt);
+                String coor = String.format(Locale.US, "%f %f %f", lng, lat, alt);
                 _trakingFile.addTrackLine(coor, timeFormated);
             } catch (ParserConfigurationException e) {
                 e.printStackTrace();
