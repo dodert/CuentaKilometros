@@ -11,11 +11,9 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 import org.xmlpull.v1.XmlSerializer;
 
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.StringWriter;
@@ -37,6 +35,9 @@ import javax.xml.transform.stream.StreamResult;
 public class TrackingSaver {
     private static TrackingSaver instance = null;
 
+    public static final int GEOMETRY_GX_TRACK = 1;
+    public static final int GEOMETRY_GX_MULTYTRACK = 2;
+    //
     final String _folderName = "DistanceTracker";
     final String _fileNamePrefix = "DT_";
     private String _fileNameFull = "";
@@ -57,7 +58,7 @@ public class TrackingSaver {
 
         if (isExternalStorageWritable()) {
             _file = getAlbumStorageDir();
-            CreateKMLFIle(_file);
+            CreateKMLFIle(GEOMETRY_GX_TRACK);
 
         }
     }
@@ -96,7 +97,29 @@ public class TrackingSaver {
         return newfile;
     }
 
-    public void addLine(/*File file, */String coordinates, String time) throws ParserConfigurationException, IOException, SAXException, TransformerException {
+    /*private void AddNewTrack() throws ParserConfigurationException, IOException, SAXException, TransformerException {
+        DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
+        DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
+        Document document = documentBuilder.parse(_file);
+
+        NodeList b = document.getElementsByTagName("gx:MultiTrack");
+        Node a = b.item(0);
+        Element track = document.createElement("gx:Track");
+
+
+        track.appendChild(document.createTextNode(time));
+
+        a.appendChild(track);
+
+        DOMSource source = new DOMSource(document);
+
+        TransformerFactory transformerFactory = TransformerFactory.newInstance();
+        Transformer transformer = transformerFactory.newTransformer();
+        StreamResult result = new StreamResult(_file);
+        transformer.transform(source, result);
+    }*/
+
+    public void addTrackLine(/*File file, */String coordinates, String time) throws ParserConfigurationException, IOException, SAXException, TransformerException {
         DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
         DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
         Document document = documentBuilder.parse(_file);
@@ -121,80 +144,81 @@ public class TrackingSaver {
 
     }
 
-    public void addComment(String text) {
+    public void addCommentLine(String text) {
+       /*
         FileWriter fw = null;
         try {
             fw = new FileWriter(_file);
             BufferedWriter bw = new BufferedWriter(fw);
-            bw.write("<!--" + text + "-->");
+            bw.append("<!--" + text + "-->");
             bw.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
+*/
+    }
 
+    private void CreateKMLFIle(int type) {
+        switch (type) {
+            case GEOMETRY_GX_TRACK:
+                CreateKMLFIleForGX_TRACK();
+                break;
+            case GEOMETRY_GX_MULTYTRACK:
+                break;
+            default:
+                throw new RuntimeException("Unknown type: " + type);
+        }
 
     }
-    /* private void CreateKMLFIle2(File file)
+
+    private void CreateKMLFileCommonStart(XmlSerializer xmlSerializer) throws IOException {
+        xmlSerializer.startDocument("UTF-8", true);
+        xmlSerializer.startTag(null, "kml");
+        xmlSerializer.attribute(null, "xmlns", "http://www.opengis.net/kml/2.2");
+        xmlSerializer.attribute(null, "xmlns:gx", "http://www.google.com/kml/ext/2.2");
+        xmlSerializer.startTag(null, "Document");
+        xmlSerializer.startTag(null, "Folder");
+        xmlSerializer.startTag(null, "name");
+        xmlSerializer.text("Tracks");
+        xmlSerializer.endTag(null, "name");
+        xmlSerializer.startTag(null, "Placemark");
+        xmlSerializer.startTag(null, "name");
+        xmlSerializer.text(_fileNameFull);
+        xmlSerializer.endTag(null, "name");
+    }
+
+    private void CreateKMLFileCommonEnd(XmlSerializer xmlSerializer) throws IOException {
+        xmlSerializer.endTag(null, "Placemark");
+        xmlSerializer.endTag(null, "Folder");
+        xmlSerializer.endTag(null, "Document");
+        xmlSerializer.endTag(null, "kml");
+        xmlSerializer.endDocument();
+        xmlSerializer.flush();
+    }
+
+    private void CreateKMLFIleForGX_MULTYTRACK()
     {
-        Document doc = new Document();
-        LocalSocketAddress.Namespace sNS = Namespace.getNamespace("someNS", "someNamespace");
-        Element element = new Element("SomeElement", sNS);
-        element.setAttribute("someKey", "someValue", Namespace.getNamespace("someONS", "someOtherNamespace"));
-        Element element2 = new Element("SomeElement", Namespace.getNamespace("someNS", "someNamespace"));
-        element2.setAttribute("someKey", "someValue", sNS);
-        element.addContent(element2);
-        doc.addContent(element);
-    }*/
-
-    private void CreateKMLFIle(File file) {
-        //TrackingSaver asd = new TrackingSaver();
-        //File file = asd.getAlbumStorageDir("traks");
         try {
-
-            OutputStream os = new FileOutputStream(file);
+            OutputStream os = new FileOutputStream(_file);
             XmlSerializer xmlSerializer = Xml.newSerializer();
 
             StringWriter writer = new StringWriter();
             xmlSerializer.setOutput(writer);
-            xmlSerializer.startDocument("UTF-8", true);
-            xmlSerializer.startTag(null, "kml");
-            xmlSerializer.attribute(null, "xmlns", "http://www.opengis.net/kml/2.2");
-            xmlSerializer.attribute(null, "xmlns:gx", "http://www.google.com/kml/ext/2.2");
-            xmlSerializer.startTag(null, "Folder");
-            xmlSerializer.startTag(null, "Placemark");
 
-            xmlSerializer.startTag(null, "gx:Track");
+            CreateKMLFileCommonStart(xmlSerializer);
 
-            /*xmlSerializer.startTag(null, "gx:when");
-            xmlSerializer.text("2010-05-28T02:02:09Z");
-            xmlSerializer.endTag(null, "gx:when");
-
-            xmlSerializer.startTag(null, "gx:coord");
-            xmlSerializer.text("-122.207881 37.371915 156.000000");
-            xmlSerializer.endTag(null, "gx:coord");*/
-
-            xmlSerializer.endTag(null, "gx:Track");
-            xmlSerializer.endTag(null, "Placemark");
-            xmlSerializer.endTag(null, "Folder");
-            xmlSerializer.endTag(null, "kml");
+            xmlSerializer.startTag(null, "gx:MultiTrack");
+            xmlSerializer.startTag(null, "gx:interpolate");
+            xmlSerializer.text("0");
+            xmlSerializer.endTag(null, "gx:interpolate");
+            xmlSerializer.startTag(null, "gx:altitudeMode");
+            xmlSerializer.text("absolute");
+            xmlSerializer.endTag(null, "gx:altitudeMode");
+            xmlSerializer.endTag(null, "gx:MultiTrack");
 
 
+            CreateKMLFileCommonEnd(xmlSerializer);
 
-
-            /*xmlSerializer.text("GPS device");
-            xmlSerializer.endTag(null, "name");
-            xmlSerializer.startTag(null, "Snippet");
-            xmlSerializer.text("Created by Benja");
-            xmlSerializer.endTag(null, "Snippet");
-
-
-
-            xmlSerializer.text("asdadada benja");
-            xmlSerializer.endTag(null, "userName");
-            xmlSerializer.startTag(null, "password");
-            xmlSerializer.text("adasd testest");
-            xmlSerializer.endTag(null, "password");
-            xmlSerializer.endTag(null, "userData");*/
             xmlSerializer.endDocument();
             xmlSerializer.flush();
             String dataWrite = writer.toString();
@@ -215,6 +239,42 @@ public class TrackingSaver {
         }
     }
 
+    private void CreateKMLFIleForGX_TRACK() {
+        try {
 
+            OutputStream os = new FileOutputStream(_file);
+            XmlSerializer xmlSerializer = Xml.newSerializer();
+
+            StringWriter writer = new StringWriter();
+            xmlSerializer.setOutput(writer);
+            CreateKMLFileCommonStart(xmlSerializer);
+
+            xmlSerializer.startTag(null, "gx:Track");
+            xmlSerializer.startTag(null, "gx:altitudeMode");
+            xmlSerializer.text("absolute");
+            xmlSerializer.endTag(null, "gx:altitudeMode");
+            xmlSerializer.endTag(null, "gx:Track");
+
+            CreateKMLFileCommonEnd(xmlSerializer);
+
+            xmlSerializer.endDocument();
+            xmlSerializer.flush();
+            String dataWrite = writer.toString();
+            os.write(dataWrite.getBytes());
+            os.close();
+        } catch (FileNotFoundException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (IllegalArgumentException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (IllegalStateException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+    }
 }
 

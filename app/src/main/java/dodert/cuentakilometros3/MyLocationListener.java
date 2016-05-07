@@ -6,19 +6,24 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+
 import org.xml.sax.SAXException;
+
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
+
+import dodert.tools.Helpers;
 
 /**
  * Created by dodert on 19/03/2016.
  */
-public class MyLocationListener implements LocationListener{
+public class MyLocationListener implements LocationListener {
     private static MyLocationListener instance;
 
     final int _maxLengthForKilometers = 7;
@@ -30,8 +35,7 @@ public class MyLocationListener implements LocationListener{
     private TrackingSaver _trakingFile;
     private List<DistanceChangeListener> listeners = new ArrayList<DistanceChangeListener>();
 
-    private void Initialize(Context context)
-    {
+    private void Initialize(Context context) {
         _context = context;
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(_context);
         boolean trackEnabled = settings.getBoolean("enable_track", false);
@@ -41,17 +45,14 @@ public class MyLocationListener implements LocationListener{
         }
     }
 
-    public static void Instance(Context context)
-    {
-        if (instance == null)
-        {
+    public static void Instance(Context context) {
+        if (instance == null) {
             instance = new MyLocationListener();
         }
         instance.Initialize(context);
     }
 
-    public static MyLocationListener GetInstance()
-    {
+    public static MyLocationListener GetInstance() {
         return instance;
     }
 
@@ -63,11 +64,11 @@ public class MyLocationListener implements LocationListener{
 
     @Override
     public void onLocationChanged(Location location) {
-        float distanceTo;
+        float distanceTo = 0.0F;
         Location currentLocation = location;
-        if (_previousLocation != null)
-        {
+        if (_previousLocation != null) {
             distanceTo = _previousLocation.distanceTo(currentLocation);
+
             SumTotalMeters(distanceTo);
             SumTotalHistoryMeters(distanceTo);
             ChangeSpeed(String.format("%.2f", (currentLocation.getSpeed() * 3.6)));
@@ -85,15 +86,18 @@ public class MyLocationListener implements LocationListener{
         boolean trackEnabled = settings.getBoolean("enable_track", false);
 
         if (trackEnabled) {
-            //_trakingFile.addComment("Inicio");
+            //_trakingFile.addCommentLine("Inicio");
 
-            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
+            /*SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:sszzzzzz");
             Date outputDate = new Date(time);
-            String timeFormated = format.format(outputDate);
+            String timeFormated = format.format(outputDate);*/
+
+            String timeFormated = Helpers.FormatDateTimeTo_gxTrack(time);
+            Log(timeFormated);
 
             try {
                 String coor = String.format("%f %f %f", lng, lat, alt);
-                _trakingFile.addLine(coor, timeFormated);
+                _trakingFile.addTrackLine(coor, timeFormated);
             } catch (ParserConfigurationException e) {
                 e.printStackTrace();
             } catch (IOException e) {
@@ -123,43 +127,45 @@ public class MyLocationListener implements LocationListener{
         Log("Monitor Location - Provider Disabled: " + provider);
     }
 
-    public void ResetTotalMeters (){
+    public void ResetTotalMeters() {
         SumTotalMeters(0.0F);
         SumTotalHistoryMeters(0.0F);
     }
 
-    public void SubtractTotalMeters(float meters)
-    {
-        SumTotalMeters(-meters);
+    public void OverrideTotalMeters(float meters) {
+        System.out.println("Override meters - " + _currentTotalMeters + " - " + meters);
+        _currentTotalMeters = meters;
     }
 
-    public void SumTotalMeters(float meters)
-    {
-        float current = _currentTotalMeters;
+    public void SumTotalMeters(float meters) {
+        float previous = _currentTotalMeters;
+
         if (meters == 0) {
             _currentTotalMeters = 0.0F;
             Log("Reseted");
+            System.out.println("Reseted");
         } else if (_currentTotalMeters + meters >= 0) {
             _currentTotalMeters += meters;
-            Log(meters + " Before " + current + " after " + _currentTotalMeters);
+            Log(meters + " Before " + previous + " after " + _currentTotalMeters);
+            System.out.println(meters + " Before " + previous + " after " + _currentTotalMeters);
         }
 
         for (DistanceChangeListener hl : listeners) {
-            hl.onChangeDistance((meters / 1000), 0.0F, GetDistanceFormatted(_currentTotalMeters));
+            hl.onChangeDistance((_currentTotalMeters / 1000), (previous / 1000), GetDistanceFormatted(_currentTotalMeters), GetDistanceFormatted(previous));
         }
     }
 
     public void SumTotalHistoryMeters(float meters) {
         Log("TotalHistoryMeters");
-        if(meters == 0) _totalHistoryMeters = 0;
+        if (meters == 0) _totalHistoryMeters = 0;
         else _totalHistoryMeters += meters;
 
         for (DistanceChangeListener hl : listeners) {
-            hl.onChangeHistoryDistance((meters / 1000), 0.0F, GetDistanceFormatted(_totalHistoryMeters));
+            hl.onChangeHistoryDistance((_totalHistoryMeters / 1000), 0.0F, GetDistanceFormatted(_totalHistoryMeters));
         }
     }
 
-    private String GetDistanceFormatted(float meters) {
+    public String GetDistanceFormatted(float meters) {
         String number = String.format("%.2f", (float) (meters / 1000));
         String mask = _maskForKilometers;
         mask += number;
@@ -184,7 +190,7 @@ public class MyLocationListener implements LocationListener{
     }
 
     public void Stop() {
-        _trakingFile.addComment("Fin");
+        _trakingFile.addCommentLine("Fin");
     }
 
     public void addListener(DistanceChangeListener toAdd) {

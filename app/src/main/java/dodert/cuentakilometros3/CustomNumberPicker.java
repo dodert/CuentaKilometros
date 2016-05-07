@@ -31,6 +31,24 @@ public class CustomNumberPicker extends NumberPicker {
         }
     }
 
+    public boolean putoflag = true;
+    //private int _pre;
+
+    /*@Override
+    public int getValue() {
+        if (putoflag) {
+            _pre = super.getValue();
+            return super.getValue();
+        }
+        else
+            return _pre;
+
+    }*/
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        return super.onTouchEvent(event);
+    }
 
     public void setTextSizeBenja(int textSizeBenja) {
         this._textSizeBenja = textSizeBenja;

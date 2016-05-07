@@ -24,12 +24,11 @@ import android.view.View;
 import android.widget.NumberPicker;
 import android.widget.TextView;
 
-public class DistanceActivity extends AppCompatActivity implements DistanceChangeListener {
+public class DistanceActivity extends AppCompatActivity implements DistanceChangeListener, NumberPicker.OnValueChangeListener {
 
     final String _logTag = "Monitor Location";
     public TextView _logTextView, _speedTextView, _distanceHistoryTextView;
-    public NumberPicker _npHundreds, _npThousands, _npDozen, _npUnit, _npTenth, _npHundredth;
-    // public SeekBar _seekBar;
+    public CustomNumberPicker _npHundreds, _npThousands, _npDozen, _npUnit, _npTenth, _npHundredth;
     private MyLocationListener _gpsListener;
     protected LocationManager _lm;
     private boolean _areLocationUpdatesEnabled;
@@ -46,18 +45,36 @@ public class DistanceActivity extends AppCompatActivity implements DistanceChang
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        //   _seekBar = (SeekBar) findViewById(R.id.seekBar);
-        _npHundreds = (NumberPicker) findViewById(R.id.npHundreds);
-        _npThousands = (NumberPicker) findViewById(R.id.npThousands);
-        _npDozen = (NumberPicker) findViewById(R.id.npDozens);
-        _npUnit = (NumberPicker) findViewById(R.id.npUnits);
-        _npTenth = (NumberPicker) findViewById(R.id.npTenths);
-        _npHundredth = (NumberPicker) findViewById(R.id.npHundredth);
+        _npThousands = (CustomNumberPicker) findViewById(R.id.npThousands);
+        _npHundreds = (CustomNumberPicker) findViewById(R.id.npHundreds);
+        _npDozen = (CustomNumberPicker) findViewById(R.id.npDozens);
+        _npUnit = (CustomNumberPicker) findViewById(R.id.npUnits);
+        _npTenth = (CustomNumberPicker) findViewById(R.id.npTenths);
+        _npHundredth = (CustomNumberPicker) findViewById(R.id.npHundredth);
 
-        _npHundreds.setMinValue(0);
-        _npHundreds.setMaxValue(9);
         _npThousands.setMinValue(0);
         _npThousands.setMaxValue(9);
+
+        _npHundreds.setOnValueChangedListener(this);
+        _npHundreds.setOnScrollListener(new CustomNumberPicker.OnScrollListener() {
+
+            @Override
+            public void onScrollStateChange(NumberPicker numberPicker, int scrollState) {
+                if (scrollState == NumberPicker.OnScrollListener.SCROLL_STATE_IDLE) {
+
+                    int value = numberPicker.getValue();
+                    ((CustomNumberPicker) numberPicker).putoflag = true;
+                    System.out.println("cccccccc true " + value + " - " + scrollState);
+                } else {
+                    ((CustomNumberPicker) numberPicker).putoflag = false;
+                    System.out.println("cccccccc false " + " - " + scrollState);
+                }
+
+            }
+        });
+        _npHundreds.setMinValue(0);
+        _npHundreds.setMaxValue(9);
+
         _npDozen.setMinValue(0);
         _npDozen.setMaxValue(9);
         _npUnit.setMinValue(0);
@@ -71,16 +88,13 @@ public class DistanceActivity extends AppCompatActivity implements DistanceChang
         _logTextView = (TextView) findViewById(R.id.LogTextView);
         _speedTextView = (TextView) findViewById(R.id.VelocityTextView);
         _logTextView.setMovementMethod(new ScrollingMovementMethod());
-        //  _textView4 = (TextView) findViewById(R.id.textView4);
 
         MyLocationListener.Instance(mContext);
 
         _lm = (LocationManager) mContext.getSystemService(LOCATION_SERVICE);
         _gpsListener = MyLocationListener.GetInstance();
 
-
         _gpsListener.addListener(this);
-
 
         if(savedInstanceState != null)
         {
@@ -88,9 +102,8 @@ public class DistanceActivity extends AppCompatActivity implements DistanceChang
             {
                 onStartListening(null);
             }
-            updateCounter(0, savedInstanceState.getString("TotalDistance"));
+            UpdateCounter(0, savedInstanceState.getString("TotalDistance"));
             _distanceHistoryTextView.setText(savedInstanceState.getString("TotalHistoryDistance"));
-
         }
 
         setVolumeControlStream(AudioManager.STREAM_MUSIC);
@@ -99,33 +112,6 @@ public class DistanceActivity extends AppCompatActivity implements DistanceChang
         String pref_meters_step = settings.getString("meters_steps", "100");
 
         _valueToAddOrSubtract = Float.parseFloat(pref_meters_step);
-
-        // _seekBar.setProgress((int)_valueToAddOrSubtract);
-        //_seekBar.setMax((int)_valueToAddOrSubtract);
-        /*_seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener(){
-            int progress = 0;
-
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int progresValue, boolean fromUser) {
-                //_textView4.made( getApplicationContext(),progress);
-                progress = progresValue;
-                Toast.makeText(getApplicationContext(), "Changing seekbar's progress", Toast.LENGTH_SHORT).show();
-                _textView4.setText("Covered: " + progress + "/" + seekBar.getMax());
-            }
-
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
-
-            }
-
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
-                _textView4.setText("Covered: " + progress + "/" + seekBar.getMax());
-
-            }
-        });
-*/
-
     }
 
     @Override
@@ -155,7 +141,6 @@ public class DistanceActivity extends AppCompatActivity implements DistanceChang
         outState.putBoolean("IsProviderEnable", _areLocationUpdatesEnabled);
         outState.putString("TotalDistance", GetCurrentDistanceFormatted());
         outState.putString("TotalHistoryDistance", _distanceHistoryTextView.getText().toString());
-
     }
 
     @Override
@@ -276,33 +261,12 @@ public class DistanceActivity extends AppCompatActivity implements DistanceChang
         }
     }
 
-    private void onMinusDistanceBy(float meters) {
-        if (_gpsListener!= null)
-            _gpsListener.SubtractTotalMeters(meters);
-        else
-            Log("gpsListener null");
-    }
-
-    private void onPlusDistance(float meters) {
-        if (_gpsListener!= null)
-            _gpsListener.SumTotalMeters(meters);
-        else
-            Log("gpsListener null");
-    }
-
     public void onResetDistance(View view) {
         if (_gpsListener!= null) {
             _gpsListener.ResetTotalMeters();
         }
         else
             Log("gpsListener null");
-    }
-
-    public void onPlusDistance100(View view) {
-        onPlusDistance(_valueToAddOrSubtract);
-    }
-    public void onMinusDistance100(View view) {
-        onMinusDistanceBy(_valueToAddOrSubtract);
     }
 
     private void Log(String logText) {
@@ -334,13 +298,31 @@ public class DistanceActivity extends AppCompatActivity implements DistanceChang
     }
 
     @Override
-    public void onChangeDistance(float totalDistance, float previousDistance, String totalDistanceFormatted) {
-        System.out.println("test benja - " + totalDistanceFormatted);
+    public void onChangeDistance(float totalDistance, float previousDistance, String totalDistanceFormatted, String previousDistanceFormatted) {
         Log("test benja - " + totalDistanceFormatted);
-        //_distanceTextView.setText(totalDistanceFormatted);
-        updateCounter(totalDistance, totalDistanceFormatted);
-    }
+        String test = GetCounterString();
 
+        System.out.println("previous: " + previousDistanceFormatted + " - Counter: " + GetCounterString());
+        if (IsCounterFix()) {
+            if (previousDistanceFormatted.compareTo(GetCounterString()) != 0) {
+
+                System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+                Log("cambiar");
+                float currentCounter = GetCounter();
+                _gpsListener.OverrideTotalMeters(currentCounter * 1000);
+                float newcount = _gpsListener.GetDistance();
+                String newcountstring = _gpsListener.GetDistanceFormatted();
+
+                totalDistance = newcount;
+                totalDistanceFormatted = newcountstring;
+            }
+        } else {
+            System.out.println("tocando counter");
+        }
+
+
+        UpdateCounter(totalDistance, totalDistanceFormatted);
+    }
     @Override
     public void onChangeHistoryDistance(float totalDistance, float previousDistance, String totalDistanceFormatted) {
         _distanceHistoryTextView.setText(totalDistanceFormatted);
@@ -360,7 +342,27 @@ public class DistanceActivity extends AppCompatActivity implements DistanceChang
         return _gpsListener.GetDistanceFormatted();
     }
 
-    private void updateCounter(float distance, String distanceString) {
+    private boolean IsCounterFix() {
+        return _npThousands.putoflag && _npHundreds.putoflag && _npDozen.putoflag && _npUnit.putoflag && _npTenth.putoflag && _npHundredth.putoflag;
+    }
+
+    private float GetCounter() {
+        if (_npThousands.isPressed()) {
+            System.out.println("bbbbbbbbbbbbbbbbbbbbb");
+        }
+        System.out.println("jajaj " + _npHundreds.putoflag);
+        if (IsCounterFix()) {
+
+        }
+
+        return (_npThousands.getValue() * 1000) + (_npHundreds.getValue() * 100) + (_npDozen.getValue() * 10) + (_npUnit.getValue()) + ((float) _npTenth.getValue() / 10) + ((float) _npHundredth.getValue() / 100);
+    }
+
+    private String GetCounterString() {
+        return _gpsListener.GetDistanceFormatted(GetCounter() * 1000);
+    }
+
+    private void UpdateCounter(float distance, String distanceString) {
         String test = _gpsListener.GetDistanceFormatted();
         String hundredthPart = "0";
         hundredthPart = distanceString.substring(distanceString.length() - 1);
@@ -372,5 +374,11 @@ public class DistanceActivity extends AppCompatActivity implements DistanceChang
         _npHundreds.setValue(Integer.parseInt(distanceString.substring(distanceLenght - 6, distanceLenght - 5)));
         _npThousands.setValue(Integer.parseInt(distanceString.substring(distanceLenght - 7, distanceLenght - 6)));
 
+    }
+
+    @Override
+    public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
+
+        // System.out.println("bbbbbbbbbbbbbbbbbbbbb " + oldVal + " - " + newVal);
     }
 }
