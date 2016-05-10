@@ -120,6 +120,8 @@ public class TrackingSaver {
     }*/
 
     public void addTrackLine(String coordinates, String time) throws ParserConfigurationException, IOException, SAXException, TransformerException {
+
+
         DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
         DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
         Document document = documentBuilder.parse(_file);

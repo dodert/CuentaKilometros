@@ -11,10 +11,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
-
 import dodert.tools.Helpers;
 
 /**
@@ -60,17 +58,17 @@ public class MyLocationListener implements LocationListener {
 
     @Override
     public void onLocationChanged(Location location) {
-        float distanceTo = 0.0F;
+        float distanceTo;
         Location currentLocation = location;
         if (_previousLocation != null) {
             distanceTo = _previousLocation.distanceTo(currentLocation);
-
             SumTotalMeters(distanceTo);
             SumTotalHistoryMeters(distanceTo);
             ChangeSpeed(String.format("%.2f", (currentLocation.getSpeed() * 3.6)));
         }
 
         String provider = currentLocation.getProvider();
+
         double lat = currentLocation.getLatitude();
         double lng = currentLocation.getLongitude();
         double alt = currentLocation.getAltitude();
@@ -82,12 +80,12 @@ public class MyLocationListener implements LocationListener {
         boolean trackEnabled = settings.getBoolean("enable_track", false);
 
         if (trackEnabled) {
-            String timeFormated = Helpers.FormatDateTimeTo_gxTrack(time);
-            Log(timeFormated);
+            String timeFormatted = Helpers.FormatDateTimeTo_gxTrack(time);
+            Log(timeFormatted);
 
             try {
-                String coor = String.format(Locale.US, "%f %f %f", lng, lat, alt);
-                _trakingFile.addTrackLine(coor, timeFormated);
+                String coordinates = String.format(Locale.US, "%f %f %f", lng, lat, alt);
+                _trakingFile.addTrackLine(coordinates, timeFormatted);
             } catch (ParserConfigurationException e) {
                 e.printStackTrace();
             } catch (IOException e) {
@@ -98,7 +96,7 @@ public class MyLocationListener implements LocationListener {
                 e.printStackTrace();
             }
         }
-        String logMessage = LogHelper.FormatLocationInfo(provider, lat, lng, alt, accuracy, time);
+        String logMessage = Helpers.FormatLocationInfo(provider, lat, lng, alt, accuracy, time);
         Log("Monitor Location: " + logMessage);
     }
 
@@ -123,7 +121,7 @@ public class MyLocationListener implements LocationListener {
     }
 
     public void OverrideTotalMeters(float meters) {
-        System.out.println("Override meters - " + _currentTotalMeters + " - " + meters);
+        Log("OTM: " + _currentTotalMeters + " - " + meters, 10);
         _currentTotalMeters = meters;
     }
 
@@ -133,22 +131,22 @@ public class MyLocationListener implements LocationListener {
         if (meters == 0) {
             _currentTotalMeters = 0.0F;
             Log("Reseted");
-            System.out.println("Reseted");
         } else if (_currentTotalMeters + meters >= 0) {
             _currentTotalMeters += meters;
-            Log(meters + " Before " + previous + " after " + _currentTotalMeters);
-            System.out.println(meters + " Before " + previous + " after " + _currentTotalMeters);
+            Log("STM: " + meters + " B " + previous + " A " + _currentTotalMeters, 10);
         }
 
         for (DistanceChangeListener hl : listeners) {
-            hl.onChangeDistance((_currentTotalMeters / 1000), (previous / 1000), GetDistanceFormatted(_currentTotalMeters), GetDistanceFormatted(previous));
+            hl.onChangeDistance((_currentTotalMeters / 1000), (previous / 1000), GetDistanceFormatted(_currentTotalMeters), GetDistanceFormatted(previous), meters);
         }
     }
 
     public void SumTotalHistoryMeters(float meters) {
-        Log("TotalHistoryMeters");
+        float previous = _totalHistoryMeters;
         if (meters == 0) _totalHistoryMeters = 0;
         else _totalHistoryMeters += meters;
+
+        Log("STHM: " + meters + " B " + previous + " A " + _totalHistoryMeters, 10);
 
         for (DistanceChangeListener hl : listeners) {
             hl.onChangeHistoryDistance((_totalHistoryMeters / 1000), 0.0F, GetDistanceFormatted(_totalHistoryMeters));
@@ -175,7 +173,13 @@ public class MyLocationListener implements LocationListener {
 
     private void Log(String logText) {
         for (DistanceChangeListener hl : listeners) {
-            hl.onLog(logText);
+            hl.onLog(logText, 0);
+        }
+    }
+
+    private void Log(String logText, int type) {
+        for (DistanceChangeListener hl : listeners) {
+            hl.onLog(logText, type);
         }
     }
 

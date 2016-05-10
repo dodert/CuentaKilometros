@@ -35,6 +35,7 @@ public class DistanceActivity extends AppCompatActivity implements DistanceChang
     final float _metersListener = 5;
     float _valueToAddOrSubtract = 100;
 
+    int _logType = 10;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,47 +43,11 @@ public class DistanceActivity extends AppCompatActivity implements DistanceChang
 
         Context mContext = getApplicationContext();
         setContentView(R.layout.activity_kilometros);
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        _npThousands = (CustomNumberPicker) findViewById(R.id.npThousands);
-        _npHundreds = (CustomNumberPicker) findViewById(R.id.npHundreds);
-        _npDozen = (CustomNumberPicker) findViewById(R.id.npDozens);
-        _npUnit = (CustomNumberPicker) findViewById(R.id.npUnits);
-        _npTenth = (CustomNumberPicker) findViewById(R.id.npTenths);
-        _npHundredth = (CustomNumberPicker) findViewById(R.id.npHundredth);
-
-        _npThousands.setMinValue(0);
-        _npThousands.setMaxValue(9);
-
-        _npHundreds.setOnValueChangedListener(this);
-        _npHundreds.setOnScrollListener(new CustomNumberPicker.OnScrollListener() {
-
-            @Override
-            public void onScrollStateChange(NumberPicker numberPicker, int scrollState) {
-                if (scrollState == NumberPicker.OnScrollListener.SCROLL_STATE_IDLE) {
-
-                    int value = numberPicker.getValue();
-                    ((CustomNumberPicker) numberPicker).putoflag = true;
-                    System.out.println("cccccccc true " + value + " - " + scrollState);
-                } else {
-                    ((CustomNumberPicker) numberPicker).putoflag = false;
-                    System.out.println("cccccccc false " + " - " + scrollState);
-                }
-
-            }
-        });
-        _npHundreds.setMinValue(0);
-        _npHundreds.setMaxValue(9);
-
-        _npDozen.setMinValue(0);
-        _npDozen.setMaxValue(9);
-        _npUnit.setMinValue(0);
-        _npUnit.setMaxValue(9);
-        _npTenth.setMinValue(0);
-        _npTenth.setMaxValue(9);
-        _npHundredth.setMinValue(0);
-        _npHundredth.setMaxValue(9);
+        InitializeDistanceCounter();
 
         _distanceHistoryTextView = (TextView) findViewById(R.id.DistanceTotalTextView);
         _logTextView = (TextView) findViewById(R.id.LogTextView);
@@ -112,6 +77,52 @@ public class DistanceActivity extends AppCompatActivity implements DistanceChang
         String pref_meters_step = settings.getString("meters_steps", "100");
 
         _valueToAddOrSubtract = Float.parseFloat(pref_meters_step);
+    }
+
+    private void InitializeDistanceCounter() {
+        _npThousands = (CustomNumberPicker) findViewById(R.id.npThousands);
+        _npHundreds = (CustomNumberPicker) findViewById(R.id.npHundreds);
+        _npDozen = (CustomNumberPicker) findViewById(R.id.npDozens);
+        _npUnit = (CustomNumberPicker) findViewById(R.id.npUnits);
+        _npTenth = (CustomNumberPicker) findViewById(R.id.npTenths);
+        _npHundredth = (CustomNumberPicker) findViewById(R.id.npHundredth);
+
+        _npThousands.setMinValue(0);
+        _npThousands.setMaxValue(9);
+        _npHundreds.setMinValue(0);
+        _npHundreds.setMaxValue(9);
+        _npDozen.setMinValue(0);
+        _npDozen.setMaxValue(9);
+        _npUnit.setMinValue(0);
+        _npUnit.setMaxValue(9);
+        _npTenth.setMinValue(0);
+        _npTenth.setMaxValue(9);
+        _npHundredth.setMinValue(0);
+        _npHundredth.setMaxValue(9);
+
+        //InitializeListenersDistanceCounter();
+    }
+
+    private void InitializeListenersDistanceCounter() {
+        _npHundreds.setOnValueChangedListener(this);
+
+        _npHundreds.setOnScrollListener(new CustomNumberPicker.OnScrollListener() {
+
+            @Override
+            public void onScrollStateChange(NumberPicker numberPicker, int scrollState) {
+
+                if (scrollState == NumberPicker.OnScrollListener.SCROLL_STATE_IDLE && scrollState != SCROLL_STATE_TOUCH_SCROLL && scrollState != SCROLL_STATE_FLING) {
+                    int value = numberPicker.getValue();
+                    ((CustomNumberPicker) numberPicker).putoflag = true;
+                    Log("NP true " + value + " - " + scrollState, 10);
+                } else {
+                    ((CustomNumberPicker) numberPicker).putoflag = false;
+                    Log("NP false " + " - " + scrollState, 10);
+                }
+
+            }
+        });
+
     }
 
     @Override
@@ -269,14 +280,21 @@ public class DistanceActivity extends AppCompatActivity implements DistanceChang
             Log("gpsListener null");
     }
 
-    private void Log(String logText) {
+    private void Log(String logText, int type) {
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
         boolean logEnabled = settings.getBoolean("enable_log", false);
         getApplicationContext();
         if (logEnabled) {
-            Log.d(_logTag, logText);
-            _logTextView.setText(logText + "\n" + _logTextView.getText());
+            if (type == _logType) {
+                Log.d(_logTag, logText);
+                System.out.println(_logTag + " " + logText);
+                _logTextView.setText(logText + "\n" + _logTextView.getText());
+            }
         }
+    }
+
+    private void Log(String logText) {
+        Log(logText, 0);
     }
 
     private void buildAlertMessageNoGps() {
@@ -298,18 +316,23 @@ public class DistanceActivity extends AppCompatActivity implements DistanceChang
     }
 
     @Override
-    public void onChangeDistance(float totalDistance, float previousDistance, String totalDistanceFormatted, String previousDistanceFormatted) {
-        Log("test benja - " + totalDistanceFormatted);
+    public void onChangeDistance(float totalDistance, float previousDistance, String totalDistanceFormatted, String previousDistanceFormatted, float distanceToAdd) {
+        /*Log("test benja - " + totalDistanceFormatted);
         String test = GetCounterString();
 
-        System.out.println("previous: " + previousDistanceFormatted + " - Counter: " + GetCounterString());
-        if (IsCounterFix()) {
+        System.out.println("previous: " + previousDistanceFormatted + " - Counter: " + GetCounterString());*/
+        //  _npHundreds.putoflag = true;
+        boolean isFix = IsCounterFix();
+        Log(String.format("%b", isFix));
+        if (isFix) {
             if (previousDistanceFormatted.compareTo(GetCounterString()) != 0) {
 
-                System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
-                Log("cambiar");
+                //System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+                //Log("cambiar");
                 float currentCounter = GetCounter();
-                _gpsListener.OverrideTotalMeters(currentCounter * 1000);
+
+                //problema con la distancia y la suma con decimales, depende de los decimas cambia un poco la distancia. ya lo arreglere
+                _gpsListener.OverrideTotalMeters(currentCounter * 1000 + distanceToAdd);
                 float newcount = _gpsListener.GetDistance();
                 String newcountstring = _gpsListener.GetDistanceFormatted();
 
@@ -334,8 +357,8 @@ public class DistanceActivity extends AppCompatActivity implements DistanceChang
     }
 
     @Override
-    public void onLog(String log) {
-        Log(log);
+    public void onLog(String log, int type) {
+        Log(log, type);
     }
 
     private String GetCurrentDistanceFormatted() {
@@ -347,14 +370,6 @@ public class DistanceActivity extends AppCompatActivity implements DistanceChang
     }
 
     private float GetCounter() {
-        if (_npThousands.isPressed()) {
-            System.out.println("bbbbbbbbbbbbbbbbbbbbb");
-        }
-        System.out.println("jajaj " + _npHundreds.putoflag);
-        if (IsCounterFix()) {
-
-        }
-
         return (_npThousands.getValue() * 1000) + (_npHundreds.getValue() * 100) + (_npDozen.getValue() * 10) + (_npUnit.getValue()) + ((float) _npTenth.getValue() / 10) + ((float) _npHundredth.getValue() / 100);
     }
 
@@ -378,7 +393,7 @@ public class DistanceActivity extends AppCompatActivity implements DistanceChang
 
     @Override
     public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
-
-        // System.out.println("bbbbbbbbbbbbbbbbbbbbb " + oldVal + " - " + newVal);
+        String idStr = getResources().getResourceEntryName(picker.getId());
+        Log("onValueChange " + idStr + ",o " + oldVal + ",n " + newVal + "p:" + String.format("%b", ((CustomNumberPicker) picker).putoflag));
     }
 }
