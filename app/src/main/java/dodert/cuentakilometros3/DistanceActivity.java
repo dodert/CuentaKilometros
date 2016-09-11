@@ -26,6 +26,7 @@ import android.widget.TextView;
 
 public class DistanceActivity extends AppCompatActivity implements DistanceChangeListener, NumberPicker.OnValueChangeListener {
 
+    public static final int MY_PERMISSIONS_REQUEST_GPS = 111;
     final String _logTag = "Monitor Location";
     public TextView _logTextView, _speedTextView, _distanceHistoryTextView;
     public CustomNumberPicker _npHundreds, _npThousands, _npDozen, _npUnit, _npTenth, _npHundredth;
@@ -61,10 +62,8 @@ public class DistanceActivity extends AppCompatActivity implements DistanceChang
 
         _gpsListener.addListener(this);
 
-        if(savedInstanceState != null)
-        {
-            if(savedInstanceState.getBoolean("IsProviderEnable"))
-            {
+        if (savedInstanceState != null) {
+            if (savedInstanceState.getBoolean("IsProviderEnable")) {
                 onStartListening(null);
             }
             UpdateCounter(0, savedInstanceState.getString("TotalDistance"));
@@ -155,8 +154,7 @@ public class DistanceActivity extends AppCompatActivity implements DistanceChang
     }
 
     @Override
-    protected  void onResume()
-    {
+    protected void onResume() {
         super.onResume();
     }
 
@@ -167,7 +165,7 @@ public class DistanceActivity extends AppCompatActivity implements DistanceChang
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
 
         boolean keepEnableGpsWhenBackground = settings.getBoolean("keep_enable_gps_when_background", true);
-        if(!keepEnableGpsWhenBackground) {
+        if (!keepEnableGpsWhenBackground) {
             if (_lm != null) {
                 if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                     // TODO: Consider calling
@@ -200,6 +198,30 @@ public class DistanceActivity extends AppCompatActivity implements DistanceChang
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case MY_PERMISSIONS_REQUEST_GPS: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                    // permission was granted, yay! Do the
+                    // contacts-related task you need to do.
+
+                } else {
+
+                    // permission denied, boo! Disable the
+                    // functionality that depends on this permission.
+                }
+                return;
+            }
+
+            // other 'case' lines to check for other
+            // permissions this app might request
+        }
+    }
     public void onStartListening(MenuItem item) {
         if (_areLocationUpdatesEnabled) {
             Log("Already started.");
@@ -208,23 +230,24 @@ public class DistanceActivity extends AppCompatActivity implements DistanceChang
 
         Log("Monitor Location - Start Listening");
         try {
-            //_lm = (LocationManager) getSystemService(LOCATION_SERVICE);
-            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                // TODO: Consider calling
-                //    ActivityCompat#requestPermissions
-                // here to request the missing permissions, and then overriding
-                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                //                                          int[] grantResults)
-                // to handle the case where the user grants the permission. See the documentation
-                // for ActivityCompat#requestPermissions for more details.
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_FINE_LOCATION)) {
+
+                    // Show an expanation to the user *asynchronously* -- don't block
+                    // this thread waiting for the user's response! After the user
+                    // sees the explanation, try again to request the permission.
+
+                } else {
+                    ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, MY_PERMISSIONS_REQUEST_GPS);
+                }
                 return;
             }
             //check if the GPS is enabled
 
-            if ( !_lm.isProviderEnabled( LocationManager.GPS_PROVIDER ) ) {
+            if (!_lm.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
                 buildAlertMessageNoGps();
-            }
-            else {
+            } else {
+
 
                 _lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, _metersListener, _gpsListener);
                 _areLocationUpdatesEnabled = true;
@@ -234,7 +257,7 @@ public class DistanceActivity extends AppCompatActivity implements DistanceChang
 
         } catch (Exception e) {
             Log("Error on requestLocationUpdates" + e.getMessage());
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+            e.printStackTrace();
         }
     }
 
