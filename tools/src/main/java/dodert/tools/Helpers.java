@@ -14,10 +14,10 @@ public class Helpers {
         return format.format(outputDate);
     }
 
-    public static String FormatDateTimeTo_gxTrack(Date date) {
+   /* public static String FormatDateTimeTo_gxTrack(Date date) {
         SimpleDateFormat format = new SimpleDateFormat(DateFormatForGxTrack);
         return format.format(date);
-    }
+    }*/
 
     public static String FormatLocationInfo(String provider, double lat, double lng, double alt, float accuracy, long time) {
         SimpleDateFormat timeStampFormatter = new SimpleDateFormat(DateFormatForGxTrack);
