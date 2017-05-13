@@ -27,6 +27,7 @@ import android.widget.TextView;
 public class DistanceActivity extends AppCompatActivity implements DistanceChangeListener, NumberPicker.OnValueChangeListener {
 
     public static final int MY_PERMISSIONS_REQUEST_GPS = 111;
+    public static final int MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE = 112;
     final String _logTag = "Monitor Location";
     public TextView _logTextView, _speedTextView, _distanceHistoryTextView;
     public CustomNumberPicker _npHundreds, _npThousands, _npDozen, _npUnit, _npTenth, _npHundredth;
@@ -206,6 +207,19 @@ public class DistanceActivity extends AppCompatActivity implements DistanceChang
                 // If request is cancelled, the result arrays are empty.
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    startListening();
+
+                } else {
+
+                    // permission denied, boo! Disable the
+                    // functionality that depends on this permission.
+                }
+                return;
+            }
+            case MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
 
                     // permission was granted, yay! Do the
                     // contacts-related task you need to do.
@@ -217,31 +231,18 @@ public class DistanceActivity extends AppCompatActivity implements DistanceChang
                 }
                 return;
             }
-
-            // other 'case' lines to check for other
-            // permissions this app might request
         }
     }
-    public void onStartListening(MenuItem item) {
+
+    private void startListening()
+    {
         if (_areLocationUpdatesEnabled) {
             Log("Already started.");
             return;
         }
-
         Log("Monitor Location - Start Listening");
         try {
-            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_FINE_LOCATION)) {
-
-                    // Show an expanation to the user *asynchronously* -- don't block
-                    // this thread waiting for the user's response! After the user
-                    // sees the explanation, try again to request the permission.
-
-                } else {
-                    ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, MY_PERMISSIONS_REQUEST_GPS);
-                }
-                return;
-            }
+            checkPermissionsWhenStartListening();
             //check if the GPS is enabled
 
             if (!_lm.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
@@ -259,6 +260,30 @@ public class DistanceActivity extends AppCompatActivity implements DistanceChang
             Log("Error on requestLocationUpdates" + e.getMessage());
             e.printStackTrace();
         }
+
+    }
+
+    private void checkPermissionsWhenStartListening()
+    {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, MY_PERMISSIONS_REQUEST_GPS);
+            return;
+        }
+
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
+
+        boolean trackEnabled = settings.getBoolean("enable_track", false);
+
+        if (trackEnabled) {
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE);
+                return;
+            }
+        }
+    }
+
+    public void onStartListening(MenuItem item) {
+        startListening();
     }
 
     public void onStopListening(MenuItem item) {

@@ -88,10 +88,12 @@ public class TrackingSaver {
         // Get the directory for the user's public pictures directory.
         File file = new File(Environment.getExternalStoragePublicDirectory(
                 Environment.DIRECTORY_DOCUMENTS), _folderName);
-        if (!file.mkdirs()) {
-            Log.e("log file test", "Directory not created");
-        }
 
+        if(!file.exists()) {
+            if (!file.mkdirs()) {
+                Log.e("log file test", "Directory not created");
+            }
+        }
         File newfile = new File(file, _fileNameFull + ".kml");
 
         return newfile;
