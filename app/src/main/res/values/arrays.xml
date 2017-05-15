@@ -2,10 +2,10 @@
 <resources>
     <string-array name="test">test</string-array>
     <string-array name="empty_array"/>
-    <string-array name="pref_control_types_default_values">
+    <string-array name="pref_control_types_default_values" translatable="false">
         <item>10</item>
     </string-array>
-    <string-array name="pref_control_types_values">
+    <string-array name="pref_control_types_values" translatable="false">
         <item>10</item>
         <item>20</item>
     </string-array>
