@@ -15,4 +15,9 @@
     <string name="pref_keep_gps_summary">Mantener GPS activo incluse si la aplicación esta en segundo plano.</string>
     <string name="pref_enable_track_summary">Guardar la ruta en fichero KML.</string>
     <string name="pref_enable_track">Habiliar guardado a KML - Beta</string>
+    <string name="pref_control_types_desc">Elige como se incrementa</string>
+    <string-array name="pref_control_types_titles">
+        <item>Por las teclas de volumne</item>
+        <item>Por las teclas de siguiente y previa cancion</item>
+    </string-array>
 </resources>

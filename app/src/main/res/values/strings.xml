@@ -73,6 +73,7 @@
     <string name="pref_keep_gps_summary">Keep the gps enabled even when the app is in background.</string>
     <string name="pref_enable_track_summary">Enable tracking to kml file.</string>
     <string name="pref_enable_track">Enable track to KML - Beta</string>
+    <string name="pref_control_types_desc">Choose how is the incrementation</string>
     <string-array name="pref_meters_steps_titles" translatable="false">
         <item>100 meters</item>
         <item>200 meters</item>
@@ -101,4 +102,10 @@
         <item>2000</item>
         <item>5000</item>
     </string-array>
+    <string-array name="pref_control_types_titles">
+        <item>By volume keys</item>
+        <item>By media next-previous keys</item>
+    </string-array>
+
+
 </resources>

@@ -24,10 +24,14 @@ import android.view.View;
 import android.widget.NumberPicker;
 import android.widget.TextView;
 
+import java.util.Set;
+
 public class DistanceActivity extends AppCompatActivity implements DistanceChangeListener, NumberPicker.OnValueChangeListener {
 
     public static final int MY_PERMISSIONS_REQUEST_GPS = 111;
     public static final int MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE = 112;
+    public static final String CONTROL_BY_VOLUME = "10";
+    public static final String CONTROL_BY_MEDIA = "20";
     final String _logTag = "Monitor Location";
     public TextView _logTextView, _speedTextView, _distanceHistoryTextView;
     public CustomNumberPicker _npHundreds, _npThousands, _npDozen, _npUnit, _npTenth, _npHundredth;
@@ -129,13 +133,28 @@ public class DistanceActivity extends AppCompatActivity implements DistanceChang
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
         String pref_meters_step = settings.getString("meters_steps", "100");
+
+        Set<String> selections = settings.getStringSet("increment_types", null);
+
         Float metersToSet = Float.parseFloat(pref_meters_step);
         switch (keyCode) {
+            case KeyEvent.KEYCODE_MEDIA_NEXT:
+                if(selections == null || (selections != null && !selections.contains(CONTROL_BY_MEDIA))) return  false;
+                Log("Media Next");
+                _gpsListener.SumTotalMeters(metersToSet);
+                return true;
             case KeyEvent.KEYCODE_VOLUME_UP:
+                if(selections == null || (selections != null && !selections.contains(CONTROL_BY_VOLUME))) return  false;
                 Log("Volumne UP");
                 _gpsListener.SumTotalMeters(metersToSet);
                 return true;
+            case KeyEvent.KEYCODE_MEDIA_PREVIOUS:
+                if(selections == null || (selections != null && !selections.contains(CONTROL_BY_MEDIA))) return  false;
+                Log("Media Previous");
+                _gpsListener.SumTotalMeters(-metersToSet);
+                return true;
             case KeyEvent.KEYCODE_VOLUME_DOWN:
+                if(selections == null || (selections != null && !selections.contains(CONTROL_BY_VOLUME))) return  false;
                 Log("Volumne Down");
                 _gpsListener.SumTotalMeters(-metersToSet);
                 return true;
@@ -249,7 +268,6 @@ public class DistanceActivity extends AppCompatActivity implements DistanceChang
                 buildAlertMessageNoGps();
             } else {
 
-
                 _lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, _metersListener, _gpsListener);
                 _areLocationUpdatesEnabled = true;
                 this.setTitle(this.getTitle());
@@ -293,6 +311,8 @@ public class DistanceActivity extends AppCompatActivity implements DistanceChang
 
     public void onSettings(MenuItem item) {
         Intent intent = new Intent(this, SettingsActivity.class);
+        intent.putExtra( SettingsActivity.EXTRA_SHOW_FRAGMENT, SettingsActivity.GeneralPreferenceFragment.class.getName() );
+        intent.putExtra( SettingsActivity.EXTRA_NO_HEADERS, true );
         startActivity(intent);
     }
 
