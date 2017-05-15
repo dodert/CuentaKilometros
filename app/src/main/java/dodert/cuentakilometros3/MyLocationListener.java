@@ -184,7 +184,11 @@ public class MyLocationListener implements LocationListener {
     }
 
     public void Stop() {
-        _trakingFile.addCommentLine("Fin");
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(_context);
+        boolean trackEnabled = settings.getBoolean("enable_track", false);
+        if (trackEnabled) {
+            _trakingFile.addCommentLine("Fin");
+        }
     }
 
     public void addListener(DistanceChangeListener toAdd) {
