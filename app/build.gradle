@@ -7,7 +7,7 @@ android {
         applicationId "dodert.cuentakilometros3"
         minSdkVersion 23
         targetSdkVersion 23
-        versionCode 13
+        versionCode 14
         versionName "0.908"
     }
     buildTypes {
