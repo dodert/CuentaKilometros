@@ -9,6 +9,7 @@ import android.preference.PreferenceManager;
 import org.xml.sax.SAXException;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 import javax.xml.parsers.ParserConfigurationException;
@@ -37,6 +38,11 @@ public class MyLocationListener implements LocationListener {
         if (trackEnabled) {
             _trakingFile = TrackingSaver.GetInstance();
         }
+    }
+
+    public int CountListeners()
+    {
+        return listeners.size();
     }
 
     public static void Instance(Context context) {
@@ -120,8 +126,9 @@ public class MyLocationListener implements LocationListener {
         SumTotalHistoryMeters(0.0F);
     }
 
-    public void OverrideTotalMeters(float meters) {
+    public void OverrideTotalMeters(float meters) { //se llama una vez mas cada vez qeu se recrea la actividad distance
         Log("OTM: " + _currentTotalMeters + " - " + meters, 10);
+
         _currentTotalMeters = meters;
     }
 
@@ -192,7 +199,9 @@ public class MyLocationListener implements LocationListener {
     }
 
     public void addListener(DistanceChangeListener toAdd) {
+        if(CountListeners() == 0)
         listeners.add(toAdd);
     }
+
 
 }

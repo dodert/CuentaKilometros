@@ -1,14 +1,14 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 23
+    compileSdkVersion 26
     buildToolsVersion '25.0.0'
     defaultConfig {
         applicationId "dodert.cuentakilometros3"
-        minSdkVersion 23
-        targetSdkVersion 23
-        versionCode 15
-        versionName "0.909"
+        minSdkVersion 26
+        targetSdkVersion 26
+        versionCode 16
+        versionName "0.910"
     }
     buildTypes {
         release {
@@ -27,8 +27,8 @@ android {
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     testCompile 'junit:junit:4.12'
-    compile 'com.android.support:appcompat-v7:23.2.1'
-    compile 'com.android.support:design:23.2.1'
-    compile 'com.android.support:support-v4:23.2.1'
+    compile 'com.android.support:appcompat-v7:26.1.0'
+    compile 'com.android.support:design:26.1.0'
+    compile 'com.android.support:support-v4:26.1.0'
     compile project(path: ':tools')
 }

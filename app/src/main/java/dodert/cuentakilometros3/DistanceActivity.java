@@ -67,6 +67,9 @@ public class DistanceActivity extends AppCompatActivity implements DistanceChang
 
         _gpsListener.addListener(this);
 
+        Log("Listeners" + _gpsListener.CountListeners(), 10);
+
+
         if (savedInstanceState != null) {
             if (savedInstanceState.getBoolean("IsProviderEnable")) {
                 onStartListening(null);
@@ -201,6 +204,12 @@ public class DistanceActivity extends AppCompatActivity implements DistanceChang
                 _lm.removeUpdates(MyLocationListener.GetInstance());
             }
         }
+    }
+
+    @Override
+    protected void onDestroy ()
+    {
+        super.onDestroy();
     }
 
     @Override
@@ -438,7 +447,11 @@ public class DistanceActivity extends AppCompatActivity implements DistanceChang
     }
 
     private float GetCounter() {
-        return (_npThousands.getValue() * 1000) + (_npHundreds.getValue() * 100) + (_npDozen.getValue() * 10) + (_npUnit.getValue()) + ((float) _npTenth.getValue() / 10) + ((float) _npHundredth.getValue() / 100);
+        return (_npThousands.getValue() * 1000)
+                + (_npHundreds.getValue() * 100)
+                + (_npDozen.getValue() * 10)
+                + (_npUnit.getValue()) + ((float) _npTenth.getValue() / 10)
+                + ((float) _npHundredth.getValue() / 100);
     }
 
     private String GetCounterString() {
