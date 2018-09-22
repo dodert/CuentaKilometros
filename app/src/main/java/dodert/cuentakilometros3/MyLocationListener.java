@@ -56,21 +56,31 @@ public class MyLocationListener implements LocationListener {
         return instance;
     }
 
-    private void ChangeSpeed(String speed) {
+    private void ChangeSpeed(float speed) {
+        String speedString;
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(_context);
+        boolean useMiles = settings.getBoolean("use_miles", false);
+        speed = useMiles ? convertSpeedToMilesPerHour(speed) : convertSpeedToKilometerPerHours(speed);
+        speedString = String.format("%.2f", speed);
+
         for (DistanceChangeListener hl : listeners) {
-            hl.onChangeSpeed(speed);
+            hl.onChangeSpeed(speedString);
         }
     }
 
     @Override
     public void onLocationChanged(Location location) {
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(_context);
         float distanceTo;
         Location currentLocation = location;
         if (_previousLocation != null) {
             distanceTo = _previousLocation.distanceTo(currentLocation);
+
             SumTotalMeters(distanceTo);
             SumTotalHistoryMeters(distanceTo);
-            ChangeSpeed(String.format("%.2f", (currentLocation.getSpeed() * 3.6)));
+
+            float speed = currentLocation.getSpeed();
+            ChangeSpeed(speed);
         }
 
         String provider = currentLocation.getProvider();
@@ -82,7 +92,7 @@ public class MyLocationListener implements LocationListener {
         long time = currentLocation.getTime();
 
         _previousLocation = currentLocation;
-        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(_context);
+
         boolean trackEnabled = settings.getBoolean("enable_track", false);
 
         if (trackEnabled) {
@@ -133,6 +143,11 @@ public class MyLocationListener implements LocationListener {
     }
 
     public void SumTotalMeters(float meters) {
+        //TODO add call to convertToMiles, first crete a setting to handle this. use_miles
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(_context);
+        boolean useMiles = settings.getBoolean("use_miles", false);
+        if(useMiles) meters = convertToMiles(meters);
+
         float previous = _currentTotalMeters;
 
         if (meters == 0) {
@@ -149,6 +164,12 @@ public class MyLocationListener implements LocationListener {
     }
 
     public void SumTotalHistoryMeters(float meters) {
+        //TODO add call to convertToMiles, first crete a setting to handle this. use_miles
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(_context);
+        boolean useMiles = settings.getBoolean("use_miles", false);
+        if(useMiles) meters = convertToMiles(meters);
+
+
         float previous = _totalHistoryMeters;
         if (meters == 0) _totalHistoryMeters = 0;
         else _totalHistoryMeters += meters;
@@ -203,5 +224,17 @@ public class MyLocationListener implements LocationListener {
         listeners.add(toAdd);
     }
 
+    private float convertToMiles(float meters)
+    {
+        return (float) (meters * 0.621371);
+    }
 
+    private float convertSpeedToMilesPerHour(float metersPerSecond)
+    {
+        return (float) (metersPerSecond * 2.2369);
+    }
+    private float convertSpeedToKilometerPerHours(float metersPerSecond)
+    {
+        return (float) (metersPerSecond * 3.6);
+    }
 }

@@ -74,6 +74,12 @@
     <string name="pref_enable_track_summary">Enable tracking to kml file.</string>
     <string name="pref_enable_track">Enable track to KML - Beta</string>
     <string name="pref_control_types_desc">Choose how is the incrementation</string>
+    <string name="pref_use_miles">Use Miles</string>
+    <string name="pref_use_miles_summary">Visualize distance in Miles</string>
+    <string name="pref_speedLabel_miles">mph</string>
+    <string name="pref_distanceLabel_miles">mi</string>
+    <string name="pref_speedLabel_kilometres">km/h</string>
+    <string name="pref_distanceLabel_kilometres">km</string>
     <string-array name="pref_meters_steps_titles" translatable="false">
         <item>100 meters</item>
         <item>200 meters</item>

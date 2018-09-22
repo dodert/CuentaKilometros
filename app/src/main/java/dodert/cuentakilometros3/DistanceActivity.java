@@ -34,6 +34,7 @@ public class DistanceActivity extends AppCompatActivity implements DistanceChang
     public static final String CONTROL_BY_MEDIA = "20";
     final String _logTag = "Monitor Location";
     public TextView _logTextView, _speedTextView, _distanceHistoryTextView;
+    public TextView _speedLabelTextView, _distanceLabelTextView;
     public CustomNumberPicker _npHundreds, _npThousands, _npDozen, _npUnit, _npTenth, _npHundredth;
     private MyLocationListener _gpsListener;
     protected LocationManager _lm;
@@ -42,12 +43,13 @@ public class DistanceActivity extends AppCompatActivity implements DistanceChang
     float _valueToAddOrSubtract = 100;
 
     int _logType = 10;
+    private Context _context;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        Context mContext = getApplicationContext();
+        _context = getApplicationContext();
         setContentView(R.layout.activity_kilometros);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -60,9 +62,9 @@ public class DistanceActivity extends AppCompatActivity implements DistanceChang
         _speedTextView = (TextView) findViewById(R.id.VelocityTextView);
         _logTextView.setMovementMethod(new ScrollingMovementMethod());
 
-        MyLocationListener.Instance(mContext);
+        MyLocationListener.Instance(_context);
 
-        _lm = (LocationManager) mContext.getSystemService(LOCATION_SERVICE);
+        _lm = (LocationManager) _context.getSystemService(LOCATION_SERVICE);
         _gpsListener = MyLocationListener.GetInstance();
 
         _gpsListener.addListener(this);
@@ -80,19 +82,22 @@ public class DistanceActivity extends AppCompatActivity implements DistanceChang
 
         setVolumeControlStream(AudioManager.STREAM_MUSIC);
 
-        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(mContext);
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(_context);
         String pref_meters_step = settings.getString("meters_steps", "100");
 
         _valueToAddOrSubtract = Float.parseFloat(pref_meters_step);
     }
 
     private void InitializeDistanceCounter() {
-        _npThousands = (CustomNumberPicker) findViewById(R.id.npThousands);
-        _npHundreds = (CustomNumberPicker) findViewById(R.id.npHundreds);
-        _npDozen = (CustomNumberPicker) findViewById(R.id.npDozens);
-        _npUnit = (CustomNumberPicker) findViewById(R.id.npUnits);
-        _npTenth = (CustomNumberPicker) findViewById(R.id.npTenths);
-        _npHundredth = (CustomNumberPicker) findViewById(R.id.npHundredth);
+
+        _npThousands = findViewById(R.id.npThousands);
+        _npHundreds = findViewById(R.id.npHundreds);
+        _npDozen = findViewById(R.id.npDozens);
+        _npUnit = findViewById(R.id.npUnits);
+        _npTenth = findViewById(R.id.npTenths);
+        _npHundredth = findViewById(R.id.npHundredth);
+        _speedLabelTextView = findViewById(R.id.speedLabel);
+        _distanceLabelTextView = findViewById(R.id.distanceLabel);
 
         _npThousands.setMinValue(0);
         _npThousands.setMaxValue(9);
@@ -107,7 +112,25 @@ public class DistanceActivity extends AppCompatActivity implements DistanceChang
         _npHundredth.setMinValue(0);
         _npHundredth.setMaxValue(9);
 
+
+
         //InitializeListenersDistanceCounter();
+    }
+    private void setSpeedAndDistanceLabels()
+    {
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(_context);
+        boolean useMiles = settings.getBoolean("use_miles", false);
+
+        if(useMiles)
+        {
+            _speedLabelTextView.setText(R.string.pref_speedLabel_miles);
+            _distanceLabelTextView.setText(R.string.pref_distanceLabel_miles);
+        }
+        else
+        {
+            _speedLabelTextView.setText(R.string.pref_speedLabel_kilometres);
+            _distanceLabelTextView.setText(R.string.pref_distanceLabel_kilometres);
+        }
     }
 
     private void InitializeListenersDistanceCounter() {
@@ -178,7 +201,12 @@ public class DistanceActivity extends AppCompatActivity implements DistanceChang
 
     @Override
     protected void onResume() {
+        rerefreshLayaout();
         super.onResume();
+    }
+
+    private void rerefreshLayaout() {
+        setSpeedAndDistanceLabels();
     }
 
     @Override

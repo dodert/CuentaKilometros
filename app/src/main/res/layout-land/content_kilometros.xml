@@ -59,7 +59,7 @@
         android:textSize="40sp"
         android:gravity="end"
         android:layout_alignParentTop="true"
-        android:layout_toStartOf="@+id/textView2" />
+        android:layout_toStartOf="@+id/speedLabel" />
 
     <TextClock
         android:layout_width="wrap_content"
@@ -75,7 +75,7 @@
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:text="Km/h"
-        android:id="@+id/textView2"
+        android:id="@+id/speedLabel"
         android:layout_alignBottom="@+id/VelocityTextView"
         android:layout_alignEnd="@+id/resetButton" />
 
@@ -84,7 +84,7 @@
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:text="Km"
-        android:id="@+id/textView3"
+        android:id="@+id/distanceLabel"
         android:layout_alignBaseline="@+id/DistanceTotalTextView"
         android:layout_alignBottom="@+id/DistanceTotalTextView"
         android:layout_toEndOf="@+id/DistanceTotalTextView" />
