@@ -22,8 +22,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.NumberPicker;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import java.io.Console;
 import java.util.Set;
 
 public class DistanceActivity extends AppCompatActivity implements DistanceChangeListener, NumberPicker.OnValueChangeListener {
@@ -41,6 +43,7 @@ public class DistanceActivity extends AppCompatActivity implements DistanceChang
     private boolean _areLocationUpdatesEnabled;
     final float _metersListener = 5;
     float _valueToAddOrSubtract = 100;
+    RelativeLayout _relativeLayout;
 
     int _logType = 10;
     private Context _context;
@@ -48,18 +51,18 @@ public class DistanceActivity extends AppCompatActivity implements DistanceChang
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        _relativeLayout = findViewById(R.id.relativeLayout);
         _context = getApplicationContext();
         setContentView(R.layout.activity_kilometros);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         InitializeDistanceCounter();
 
-        _distanceHistoryTextView = (TextView) findViewById(R.id.DistanceTotalTextView);
-        _logTextView = (TextView) findViewById(R.id.LogTextView);
-        _speedTextView = (TextView) findViewById(R.id.VelocityTextView);
+        _distanceHistoryTextView = findViewById(R.id.DistanceTotalTextView);
+        _logTextView = findViewById(R.id.LogTextView);
+        _speedTextView = findViewById(R.id.VelocityTextView);
         _logTextView.setMovementMethod(new ScrollingMovementMethod());
 
         MyLocationListener.Instance(_context);
@@ -116,8 +119,8 @@ public class DistanceActivity extends AppCompatActivity implements DistanceChang
 
         //InitializeListenersDistanceCounter();
     }
-    private void setSpeedAndDistanceLabels()
-    {
+
+    private void setSpeedAndDistanceLabels() {
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(_context);
         boolean useMiles = settings.getBoolean("use_miles", false);
 
@@ -133,7 +136,7 @@ public class DistanceActivity extends AppCompatActivity implements DistanceChang
         }
     }
 
-    private void InitializeListenersDistanceCounter() {
+    /*private void InitializeListenersDistanceCounter() {
         _npHundreds.setOnValueChangedListener(this);
 
         _npHundreds.setOnScrollListener(new CustomNumberPicker.OnScrollListener() {
@@ -153,7 +156,7 @@ public class DistanceActivity extends AppCompatActivity implements DistanceChang
             }
         });
 
-    }
+    }*/
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
@@ -201,7 +204,7 @@ public class DistanceActivity extends AppCompatActivity implements DistanceChang
 
     @Override
     protected void onResume() {
-        rerefreshLayaout();
+         rerefreshLayaout();
         super.onResume();
     }
 
@@ -256,8 +259,7 @@ public class DistanceActivity extends AppCompatActivity implements DistanceChang
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode,
-                                           String permissions[], int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
         switch (requestCode) {
             case MY_PERMISSIONS_REQUEST_GPS: {
                 // If request is cancelled, the result arrays are empty.
@@ -290,9 +292,10 @@ public class DistanceActivity extends AppCompatActivity implements DistanceChang
         }
     }
 
-    private void startListening()
-    {
-        if (_areLocationUpdatesEnabled) {
+    private void startListening() {
+
+        boolean test = false;
+        if (_areLocationUpdatesEnabled || test == true) {
             Log("Already started.");
             return;
         }
@@ -318,8 +321,7 @@ public class DistanceActivity extends AppCompatActivity implements DistanceChang
 
     }
 
-    private void checkPermissionsWhenStartListening()
-    {
+    private void checkPermissionsWhenStartListening() {
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, MY_PERMISSIONS_REQUEST_GPS);
             return;
@@ -386,14 +388,15 @@ public class DistanceActivity extends AppCompatActivity implements DistanceChang
     }
 
     private void Log(String logText, int type) {
+        //getApplicationContext();
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
         boolean logEnabled = settings.getBoolean("enable_log", false);
-        getApplicationContext();
+
         if (logEnabled) {
             if (type == _logType) {
                 Log.d(_logTag, logText);
                 System.out.println(_logTag + " " + logText);
-                _logTextView.setText(logText + "\n" + _logTextView.getText());
+                _logTextView.setText(String.format("%s\n%s", logText, _logTextView.getText()));
             }
         }
     }
@@ -491,6 +494,7 @@ public class DistanceActivity extends AppCompatActivity implements DistanceChang
         String hundredthPart = "0";
         hundredthPart = distanceString.substring(distanceString.length() - 1);
         int distanceLenght = distanceString.length();
+        //TODO review context of labes to fix bug aobut missing update after rotate screen
         _npHundredth.setValue(Integer.parseInt(distanceString.substring(distanceLenght - 1)));
         _npTenth.setValue(Integer.parseInt(distanceString.substring(distanceLenght - 2, distanceLenght - 1)));
         _npUnit.setValue(Integer.parseInt(distanceString.substring(distanceLenght - 4, distanceLenght - 3)));
