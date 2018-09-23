@@ -9,7 +9,6 @@ import android.preference.PreferenceManager;
 import org.xml.sax.SAXException;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 import javax.xml.parsers.ParserConfigurationException;
@@ -29,10 +28,11 @@ public class MyLocationListener implements LocationListener {
     private Location _previousLocation;
     private Context _context;
     private TrackingSaver _trakingFile;
-    private List<DistanceChangeListener> listeners = new ArrayList<DistanceChangeListener>();
+    private List<DistanceChangeListener> distanceChangeListeners = new ArrayList<DistanceChangeListener>();
 
     private void Initialize(Context context) {
         _context = context;
+
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(_context);
         boolean trackEnabled = settings.getBoolean("enable_track", false);
         if (trackEnabled) {
@@ -42,19 +42,21 @@ public class MyLocationListener implements LocationListener {
 
     public int CountListeners()
     {
-        return listeners.size();
+        return distanceChangeListeners.size();
     }
 
-    public static void Instance(Context context) {
+    public static MyLocationListener Instance(Context context) {
         if (instance == null) {
             instance = new MyLocationListener();
         }
         instance.Initialize(context);
-    }
 
-    public static MyLocationListener GetInstance() {
         return instance;
     }
+
+//    public static MyLocationListener GetInstance() {
+//        return instance;
+ //   }
 
     private void ChangeSpeed(float speed) {
         String speedString;
@@ -63,7 +65,7 @@ public class MyLocationListener implements LocationListener {
         speed = useMiles ? convertSpeedToMilesPerHour(speed) : convertSpeedToKilometerPerHours(speed);
         speedString = String.format("%.2f", speed);
 
-        for (DistanceChangeListener hl : listeners) {
+        for (DistanceChangeListener hl : distanceChangeListeners) {
             hl.onChangeSpeed(speedString);
         }
     }
@@ -143,7 +145,6 @@ public class MyLocationListener implements LocationListener {
     }
 
     public void SumTotalMeters(float meters) {
-        //TODO add call to convertToMiles, first crete a setting to handle this. use_miles
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(_context);
         boolean useMiles = settings.getBoolean("use_miles", false);
         if(useMiles) meters = convertToMiles(meters);
@@ -158,13 +159,12 @@ public class MyLocationListener implements LocationListener {
             Log("STM: " + meters + " B " + previous + " A " + _currentTotalMeters, 10);
         }
 
-        for (DistanceChangeListener hl : listeners) {
+        for (DistanceChangeListener hl : distanceChangeListeners) {
             hl.onChangeDistance((_currentTotalMeters / 1000), (previous / 1000), GetDistanceFormatted(_currentTotalMeters), GetDistanceFormatted(previous), meters);
         }
     }
 
     public void SumTotalHistoryMeters(float meters) {
-        //TODO add call to convertToMiles, first crete a setting to handle this. use_miles
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(_context);
         boolean useMiles = settings.getBoolean("use_miles", false);
         if(useMiles) meters = convertToMiles(meters);
@@ -176,7 +176,7 @@ public class MyLocationListener implements LocationListener {
 
         Log("STHM: " + meters + " B " + previous + " A " + _totalHistoryMeters, 10);
 
-        for (DistanceChangeListener hl : listeners) {
+        for (DistanceChangeListener hl : distanceChangeListeners) {
             hl.onChangeHistoryDistance((_totalHistoryMeters / 1000), 0.0F, GetDistanceFormatted(_totalHistoryMeters));
         }
     }
@@ -200,13 +200,13 @@ public class MyLocationListener implements LocationListener {
     }
 
     private void Log(String logText) {
-        for (DistanceChangeListener hl : listeners) {
+        for (DistanceChangeListener hl : distanceChangeListeners) {
             hl.onLog(logText, 0);
         }
     }
 
     private void Log(String logText, int type) {
-        for (DistanceChangeListener hl : listeners) {
+        for (DistanceChangeListener hl : distanceChangeListeners) {
             hl.onLog(logText, type);
         }
     }
@@ -221,7 +221,10 @@ public class MyLocationListener implements LocationListener {
 
     public void addListener(DistanceChangeListener toAdd) {
         if(CountListeners() == 0)
-        listeners.add(toAdd);
+            distanceChangeListeners.add(toAdd);
+        else
+            distanceChangeListeners.set(0, toAdd);
+
     }
 
     private float convertToMiles(float meters)

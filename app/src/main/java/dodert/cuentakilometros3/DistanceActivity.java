@@ -25,7 +25,6 @@ import android.widget.NumberPicker;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import java.io.Console;
 import java.util.Set;
 
 public class DistanceActivity extends AppCompatActivity implements DistanceChangeListener, NumberPicker.OnValueChangeListener {
@@ -68,21 +67,24 @@ public class DistanceActivity extends AppCompatActivity implements DistanceChang
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
         if (savedInstanceState != null) {
-            if (savedInstanceState.getBoolean("IsProviderEnable")) {
+            _areLocationUpdatesEnabled = savedInstanceState.getBoolean("IsProviderEnable");
+            if (_areLocationUpdatesEnabled) {
                 onStartListening(null);
             }
             UpdateCounter(0, savedInstanceState.getString("TotalDistance"));
             _distanceHistoryTextView.setText(savedInstanceState.getString("TotalHistoryDistance"));
         }
+
+
     }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putBoolean("IsProviderEnable", false);
         outState.putBoolean("IsProviderEnable", _areLocationUpdatesEnabled);
         outState.putString("TotalDistance", GetCurrentDistanceFormatted());
         outState.putString("TotalHistoryDistance", _distanceHistoryTextView.getText().toString());
+        super.onSaveInstanceState(outState);
     }
 
     @Override
@@ -111,7 +113,7 @@ public class DistanceActivity extends AppCompatActivity implements DistanceChang
                     return;
                 }
 
-                _lm.removeUpdates(MyLocationListener.GetInstance());
+                _lm.removeUpdates(MyLocationListener.Instance(_context));
             }
         }
     }
@@ -179,7 +181,7 @@ public class DistanceActivity extends AppCompatActivity implements DistanceChang
                 // If request is cancelled, the result arrays are empty.
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    startListening();
+                    StartListening();
 
                 } else {
 
@@ -237,6 +239,7 @@ public class DistanceActivity extends AppCompatActivity implements DistanceChang
 
         UpdateCounter(totalDistance, totalDistanceFormatted);
     }
+
     @Override
     public void onChangeHistoryDistance(float totalDistance, float previousDistance, String totalDistanceFormatted) {
         _distanceHistoryTextView.setText(totalDistanceFormatted);
@@ -295,11 +298,11 @@ public class DistanceActivity extends AppCompatActivity implements DistanceChang
     }
 
     public void InitializeLocationListener() {
-        MyLocationListener.Instance(_context);
+        _gpsListener = MyLocationListener.Instance(_context);
         _lm = (LocationManager) _context.getSystemService(LOCATION_SERVICE);
-        _gpsListener = MyLocationListener.GetInstance();
+       // _gpsListener = MyLocationListener.GetInstance();
         _gpsListener.addListener(this);
-
+       // _gpsListener.GetDistanceChangeListener(this);
         Log("Listeners" + _gpsListener.CountListeners(), 10);
     }
 
@@ -331,16 +334,17 @@ public class DistanceActivity extends AppCompatActivity implements DistanceChang
         }
     }
 
-    private void startListening() {
+    private void StartListening() {
 
         boolean test = false;
         if (_areLocationUpdatesEnabled || test == true) {
             Log("Already started.");
             return;
         }
+
         Log("Monitor Location - Start Listening");
         try {
-            checkPermissionsWhenStartListening();
+            CheckPermissionsWhenStartListening();
             //check if the GPS is enabled
 
             if (!_lm.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
@@ -360,7 +364,7 @@ public class DistanceActivity extends AppCompatActivity implements DistanceChang
 
     }
 
-    private void checkPermissionsWhenStartListening() {
+    private void CheckPermissionsWhenStartListening() {
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, MY_PERMISSIONS_REQUEST_GPS);
             return;
@@ -379,7 +383,7 @@ public class DistanceActivity extends AppCompatActivity implements DistanceChang
     }
 
     public void onStartListening(MenuItem item) {
-        startListening();
+        StartListening();
     }
 
     public void onStopListening(MenuItem item) {
@@ -408,7 +412,7 @@ public class DistanceActivity extends AppCompatActivity implements DistanceChang
             if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                 return;
             }
-            MyLocationListener test = MyLocationListener.GetInstance();
+            MyLocationListener test = MyLocationListener.Instance(_context);
 
             _lm.removeUpdates(test);
             test.Stop();
