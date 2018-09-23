@@ -5,12 +5,14 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/relativeLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:paddingBottom="@dimen/activity_horizontal_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_horizontal_margin"
+
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context=".DistanceActivity"
     tools:showIn="@layout/activity_kilometros"
@@ -30,17 +32,19 @@
         android:layout_centerHorizontal="true" />
 
     <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceSmall"
         android:id="@+id/LogTextView"
-        android:maxLines = "300"
-        android:scrollbars = "vertical"
-        android:width="500dp"
-        android:layout_below="@+id/resetButton"
+        android:layout_width="228dp"
+        android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
+        android:layout_alignStart="@+id/VelocityTextView"
+        android:layout_below="@+id/resetButton"
+        android:layout_marginStart="-127dp"
         android:layout_toEndOf="@+id/DistanceTotalTextView"
-        android:layout_alignStart="@+id/VelocityTextView" />
+        android:width="500dp"
+        android:maxLines="300"
+        android:scrollbars="vertical"
+        android:textAlignment="viewEnd"
+        android:textAppearance="?android:attr/textAppearanceSmall" />
 
     <Button
         android:layout_width="wrap_content"
