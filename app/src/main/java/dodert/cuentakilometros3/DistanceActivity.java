@@ -1,6 +1,7 @@
 package dodert.cuentakilometros3;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -32,6 +33,9 @@ public class DistanceActivity extends AppCompatActivity implements DistanceChang
     public static final int MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE = 112;
     public static final String CONTROL_BY_VOLUME = "10";
     public static final String CONTROL_BY_MEDIA = "20";
+    public static final String IS_PROVIDER_ENABLE = "IsProviderEnable";
+    public static final String TOTAL_HISTORY_DISTANCE = "TotalHistoryDistance";
+    public static final String TOTAL_DISTANCE = "TotalDistance";
     final String _logTag = "Monitor Location";
     public TextView _logTextView, _speedTextView, _distanceHistoryTextView;
     public TextView _speedLabelTextView, _distanceLabelTextView;
@@ -67,12 +71,12 @@ public class DistanceActivity extends AppCompatActivity implements DistanceChang
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
         if (savedInstanceState != null) {
-            _areLocationUpdatesEnabled = savedInstanceState.getBoolean("IsProviderEnable");
+            _areLocationUpdatesEnabled = savedInstanceState.getBoolean(IS_PROVIDER_ENABLE);
             if (_areLocationUpdatesEnabled) {
                 onStartListening(null);
             }
-            UpdateCounter(0, savedInstanceState.getString("TotalDistance"));
-            _distanceHistoryTextView.setText(savedInstanceState.getString("TotalHistoryDistance"));
+            UpdateCounter(0, savedInstanceState.getString(TOTAL_DISTANCE));
+            _distanceHistoryTextView.setText(savedInstanceState.getString(TOTAL_HISTORY_DISTANCE));
         }
 
 
@@ -81,15 +85,15 @@ public class DistanceActivity extends AppCompatActivity implements DistanceChang
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putBoolean("IsProviderEnable", _areLocationUpdatesEnabled);
-        outState.putString("TotalDistance", GetCurrentDistanceFormatted());
-        outState.putString("TotalHistoryDistance", _distanceHistoryTextView.getText().toString());
+        outState.putBoolean(IS_PROVIDER_ENABLE, _areLocationUpdatesEnabled);
+        outState.putString(TOTAL_DISTANCE, GetCurrentDistanceFormatted());
+        outState.putString(TOTAL_HISTORY_DISTANCE, _distanceHistoryTextView.getText().toString());
         super.onSaveInstanceState(outState);
     }
 
     @Override
     protected void onResume() {
-        rerefreshLayaout();
+        RefreshLayout();
         super.onResume();
     }
 
@@ -210,11 +214,6 @@ public class DistanceActivity extends AppCompatActivity implements DistanceChang
 
     @Override
     public void onChangeDistance(float totalDistance, float previousDistance, String totalDistanceFormatted, String previousDistanceFormatted, float distanceToAdd) {
-        /*Log("test benja - " + totalDistanceFormatted);
-        String test = GetCounterString();
-
-        System.out.println("previous: " + previousDistanceFormatted + " - Counter: " + GetCounterString());*/
-        //  _npHundreds.putoflag = true;
         boolean isFix = IsCounterFix();
         Log(String.format("%b", isFix));
         if (isFix) {
@@ -235,7 +234,6 @@ public class DistanceActivity extends AppCompatActivity implements DistanceChang
         } else {
             System.out.println("tocando counter");
         }
-
 
         UpdateCounter(totalDistance, totalDistanceFormatted);
     }
@@ -261,7 +259,7 @@ public class DistanceActivity extends AppCompatActivity implements DistanceChang
         Log("onValueChange " + idStr + ",o " + oldVal + ",n " + newVal + "p:" + String.format("%b", ((CustomNumberPicker) picker).putoflag));
     }
 
-    private void rerefreshLayaout() {
+    private void RefreshLayout() {
         setSpeedAndDistanceLabels();
     }
 
@@ -300,9 +298,7 @@ public class DistanceActivity extends AppCompatActivity implements DistanceChang
     public void InitializeLocationListener() {
         _gpsListener = MyLocationListener.Instance(_context);
         _lm = (LocationManager) _context.getSystemService(LOCATION_SERVICE);
-       // _gpsListener = MyLocationListener.GetInstance();
         _gpsListener.addListener(this);
-       // _gpsListener.GetDistanceChangeListener(this);
         Log("Listeners" + _gpsListener.CountListeners(), 10);
     }
 
@@ -334,6 +330,7 @@ public class DistanceActivity extends AppCompatActivity implements DistanceChang
         }
     }
 
+    @SuppressLint("MissingPermission")
     private void StartListening() {
 
         boolean test = false;
