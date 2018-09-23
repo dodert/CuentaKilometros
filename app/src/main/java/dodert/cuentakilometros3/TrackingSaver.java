@@ -67,14 +67,6 @@ public class TrackingSaver {
         return _file;
     }
 
-    /*public void CreateAndInitilizaFile() {
-        if (isExternalStorageWritable()) {
-            _file = getAlbumStorageDir();
-            CreateKMLFIle(_file);
-
-        }
-    }*/
-
     /* Checks if external storage is available for read and write */
     private boolean isExternalStorageWritable() {
         String state = Environment.getExternalStorageState();
@@ -98,28 +90,6 @@ public class TrackingSaver {
 
         return newfile;
     }
-
-    /*private void AddNewTrack() throws ParserConfigurationException, IOException, SAXException, TransformerException {
-        DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
-        DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
-        Document document = documentBuilder.parse(_file);
-
-        NodeList b = document.getElementsByTagName("gx:MultiTrack");
-        Node a = b.item(0);
-        Element track = document.createElement("gx:Track");
-
-
-        track.appendChild(document.createTextNode(time));
-
-        a.appendChild(track);
-
-        DOMSource source = new DOMSource(document);
-
-        TransformerFactory transformerFactory = TransformerFactory.newInstance();
-        Transformer transformer = transformerFactory.newTransformer();
-        StreamResult result = new StreamResult(_file);
-        transformer.transform(source, result);
-    }*/
 
     public void addTrackLine(String coordinates, String time) throws ParserConfigurationException, IOException, SAXException, TransformerException {
 
@@ -200,8 +170,7 @@ public class TrackingSaver {
         xmlSerializer.flush();
     }
 
-    private void CreateKMLFIleForGX_MULTYTRACK()
-    {
+    private void CreateKMLFIleForGX_MULTYTRACK() {
         try {
             OutputStream os = new FileOutputStream(_file);
             XmlSerializer xmlSerializer = Xml.newSerializer();

@@ -29,7 +29,6 @@ import java.io.Console;
 import java.util.Set;
 
 public class DistanceActivity extends AppCompatActivity implements DistanceChangeListener, NumberPicker.OnValueChangeListener {
-
     public static final int MY_PERMISSIONS_REQUEST_GPS = 111;
     public static final int MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE = 112;
     public static final String CONTROL_BY_VOLUME = "10";
@@ -48,33 +47,26 @@ public class DistanceActivity extends AppCompatActivity implements DistanceChang
     int _logType = 10;
     private Context _context;
 
+    private SharedPreferences _sharedPreferences;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        _relativeLayout = findViewById(R.id.relativeLayout);
-        _context = getApplicationContext();
-        setContentView(R.layout.activity_kilometros);
 
+        setContentView(R.layout.activity_kilometros);
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        setVolumeControlStream(AudioManager.STREAM_MUSIC);
 
+        InitializeMain();
         InitializeDistanceCounter();
+        InitializeLocationListener();
+        InitializeFromSharedSettings();
+    }
 
-        _distanceHistoryTextView = findViewById(R.id.DistanceTotalTextView);
-        _logTextView = findViewById(R.id.LogTextView);
-        _speedTextView = findViewById(R.id.VelocityTextView);
-        _logTextView.setMovementMethod(new ScrollingMovementMethod());
-
-        MyLocationListener.Instance(_context);
-
-        _lm = (LocationManager) _context.getSystemService(LOCATION_SERVICE);
-        _gpsListener = MyLocationListener.GetInstance();
-
-        _gpsListener.addListener(this);
-
-        Log("Listeners" + _gpsListener.CountListeners(), 10);
-
-
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
         if (savedInstanceState != null) {
             if (savedInstanceState.getBoolean("IsProviderEnable")) {
                 onStartListening(null);
@@ -82,81 +74,53 @@ public class DistanceActivity extends AppCompatActivity implements DistanceChang
             UpdateCounter(0, savedInstanceState.getString("TotalDistance"));
             _distanceHistoryTextView.setText(savedInstanceState.getString("TotalHistoryDistance"));
         }
-
-        setVolumeControlStream(AudioManager.STREAM_MUSIC);
-
-        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(_context);
-        String pref_meters_step = settings.getString("meters_steps", "100");
-
-        _valueToAddOrSubtract = Float.parseFloat(pref_meters_step);
     }
 
-    private void InitializeDistanceCounter() {
-
-        _npThousands = findViewById(R.id.npThousands);
-        _npHundreds = findViewById(R.id.npHundreds);
-        _npDozen = findViewById(R.id.npDozens);
-        _npUnit = findViewById(R.id.npUnits);
-        _npTenth = findViewById(R.id.npTenths);
-        _npHundredth = findViewById(R.id.npHundredth);
-        _speedLabelTextView = findViewById(R.id.speedLabel);
-        _distanceLabelTextView = findViewById(R.id.distanceLabel);
-
-        _npThousands.setMinValue(0);
-        _npThousands.setMaxValue(9);
-        _npHundreds.setMinValue(0);
-        _npHundreds.setMaxValue(9);
-        _npDozen.setMinValue(0);
-        _npDozen.setMaxValue(9);
-        _npUnit.setMinValue(0);
-        _npUnit.setMaxValue(9);
-        _npTenth.setMinValue(0);
-        _npTenth.setMaxValue(9);
-        _npHundredth.setMinValue(0);
-        _npHundredth.setMaxValue(9);
-
-
-
-        //InitializeListenersDistanceCounter();
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putBoolean("IsProviderEnable", false);
+        outState.putBoolean("IsProviderEnable", _areLocationUpdatesEnabled);
+        outState.putString("TotalDistance", GetCurrentDistanceFormatted());
+        outState.putString("TotalHistoryDistance", _distanceHistoryTextView.getText().toString());
     }
 
-    private void setSpeedAndDistanceLabels() {
-        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(_context);
-        boolean useMiles = settings.getBoolean("use_miles", false);
-
-        if(useMiles)
-        {
-            _speedLabelTextView.setText(R.string.pref_speedLabel_miles);
-            _distanceLabelTextView.setText(R.string.pref_distanceLabel_miles);
-        }
-        else
-        {
-            _speedLabelTextView.setText(R.string.pref_speedLabel_kilometres);
-            _distanceLabelTextView.setText(R.string.pref_distanceLabel_kilometres);
-        }
+    @Override
+    protected void onResume() {
+        rerefreshLayaout();
+        super.onResume();
     }
 
-    /*private void InitializeListenersDistanceCounter() {
-        _npHundreds.setOnValueChangedListener(this);
+    @Override
+    protected void onPause() {
+        super.onPause();
+        //SharedPreferences preferences = getPreferences(MODE_PRIVATE);
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
 
-        _npHundreds.setOnScrollListener(new CustomNumberPicker.OnScrollListener() {
-
-            @Override
-            public void onScrollStateChange(NumberPicker numberPicker, int scrollState) {
-
-                if (scrollState == NumberPicker.OnScrollListener.SCROLL_STATE_IDLE && scrollState != SCROLL_STATE_TOUCH_SCROLL && scrollState != SCROLL_STATE_FLING) {
-                    int value = numberPicker.getValue();
-                    ((CustomNumberPicker) numberPicker).putoflag = true;
-                    Log("NP true " + value + " - " + scrollState, 10);
-                } else {
-                    ((CustomNumberPicker) numberPicker).putoflag = false;
-                    Log("NP false " + " - " + scrollState, 10);
+        boolean keepEnableGpsWhenBackground = settings.getBoolean("keep_enable_gps_when_background", true);
+        if (!keepEnableGpsWhenBackground) {
+            if (_lm != null) {
+                if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                    // TODO: Consider calling
+                    //    ActivityCompat#requestPermissions
+                    // here to request the missing permissions, and then overriding
+                    //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                    //                                          int[] grantResults)
+                    // to handle the case where the user grants the permission. See the documentation
+                    // for ActivityCompat#requestPermissions for more details.
+                    return;
                 }
 
+                _lm.removeUpdates(MyLocationListener.GetInstance());
             }
-        });
+        }
+    }
 
-    }*/
+    @Override
+    protected void onDestroy ()
+    {
+        super.onDestroy();
+    }
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
@@ -191,56 +155,6 @@ public class DistanceActivity extends AppCompatActivity implements DistanceChang
                 Log("Other" + keyCode);
                 return false;
         }
-    }
-
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putBoolean("IsProviderEnable", false);
-        outState.putBoolean("IsProviderEnable", _areLocationUpdatesEnabled);
-        outState.putString("TotalDistance", GetCurrentDistanceFormatted());
-        outState.putString("TotalHistoryDistance", _distanceHistoryTextView.getText().toString());
-    }
-
-    @Override
-    protected void onResume() {
-         rerefreshLayaout();
-        super.onResume();
-    }
-
-    private void rerefreshLayaout() {
-        setSpeedAndDistanceLabels();
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        //SharedPreferences preferences = getPreferences(MODE_PRIVATE);
-        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
-
-        boolean keepEnableGpsWhenBackground = settings.getBoolean("keep_enable_gps_when_background", true);
-        if (!keepEnableGpsWhenBackground) {
-            if (_lm != null) {
-                if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                    // TODO: Consider calling
-                    //    ActivityCompat#requestPermissions
-                    // here to request the missing permissions, and then overriding
-                    //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                    //                                          int[] grantResults)
-                    // to handle the case where the user grants the permission. See the documentation
-                    // for ActivityCompat#requestPermissions for more details.
-                    return;
-                }
-
-                _lm.removeUpdates(MyLocationListener.GetInstance());
-            }
-        }
-    }
-
-    @Override
-    protected void onDestroy ()
-    {
-        super.onDestroy();
     }
 
     @Override
@@ -289,6 +203,131 @@ public class DistanceActivity extends AppCompatActivity implements DistanceChang
                 }
                 return;
             }
+        }
+    }
+
+    @Override
+    public void onChangeDistance(float totalDistance, float previousDistance, String totalDistanceFormatted, String previousDistanceFormatted, float distanceToAdd) {
+        /*Log("test benja - " + totalDistanceFormatted);
+        String test = GetCounterString();
+
+        System.out.println("previous: " + previousDistanceFormatted + " - Counter: " + GetCounterString());*/
+        //  _npHundreds.putoflag = true;
+        boolean isFix = IsCounterFix();
+        Log(String.format("%b", isFix));
+        if (isFix) {
+            if (previousDistanceFormatted.compareTo(GetCounterString()) != 0) {
+
+                //System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+                //Log("cambiar");
+                float currentCounter = GetCounter();
+
+                //problema con la distancia y la suma con decimales, depende de los decimas cambia un poco la distancia. ya lo arreglere
+                _gpsListener.OverrideTotalMeters(currentCounter * 1000 + distanceToAdd);
+                float newcount = _gpsListener.GetDistance();
+                String newcountstring = _gpsListener.GetDistanceFormatted();
+
+                totalDistance = newcount;
+                totalDistanceFormatted = newcountstring;
+            }
+        } else {
+            System.out.println("tocando counter");
+        }
+
+
+        UpdateCounter(totalDistance, totalDistanceFormatted);
+    }
+    @Override
+    public void onChangeHistoryDistance(float totalDistance, float previousDistance, String totalDistanceFormatted) {
+        _distanceHistoryTextView.setText(totalDistanceFormatted);
+    }
+
+    @Override
+    public void onChangeSpeed(String speed) {
+        _speedTextView.setText(speed);
+    }
+
+    @Override
+    public void onLog(String log, int type) {
+        Log(log, type);
+    }
+
+    @Override
+    public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
+        String idStr = getResources().getResourceEntryName(picker.getId());
+        Log("onValueChange " + idStr + ",o " + oldVal + ",n " + newVal + "p:" + String.format("%b", ((CustomNumberPicker) picker).putoflag));
+    }
+
+    private void rerefreshLayaout() {
+        setSpeedAndDistanceLabels();
+    }
+
+    private void InitializeDistanceCounter() {
+
+        _npThousands = findViewById(R.id.npThousands);
+        _npHundreds = findViewById(R.id.npHundreds);
+        _npDozen = findViewById(R.id.npDozens);
+        _npUnit = findViewById(R.id.npUnits);
+        _npTenth = findViewById(R.id.npTenths);
+        _npHundredth = findViewById(R.id.npHundredth);
+        _speedLabelTextView = findViewById(R.id.speedLabel);
+        _distanceLabelTextView = findViewById(R.id.distanceLabel);
+
+        _npThousands.setMinValue(0);
+        _npThousands.setMaxValue(9);
+        _npHundreds.setMinValue(0);
+        _npHundreds.setMaxValue(9);
+        _npDozen.setMinValue(0);
+        _npDozen.setMaxValue(9);
+        _npUnit.setMinValue(0);
+        _npUnit.setMaxValue(9);
+        _npTenth.setMinValue(0);
+        _npTenth.setMaxValue(9);
+        _npHundredth.setMinValue(0);
+        _npHundredth.setMaxValue(9);
+
+
+        _distanceHistoryTextView = findViewById(R.id.DistanceTotalTextView);
+        _logTextView = findViewById(R.id.LogTextView);
+        _speedTextView = findViewById(R.id.VelocityTextView);
+        _logTextView.setMovementMethod(new ScrollingMovementMethod());
+        //InitializeListenersDistanceCounter();
+    }
+
+    public void InitializeLocationListener() {
+        MyLocationListener.Instance(_context);
+        _lm = (LocationManager) _context.getSystemService(LOCATION_SERVICE);
+        _gpsListener = MyLocationListener.GetInstance();
+        _gpsListener.addListener(this);
+
+        Log("Listeners" + _gpsListener.CountListeners(), 10);
+    }
+
+    private void InitializeMain() {
+        _relativeLayout = findViewById(R.id.relativeLayout);
+        _context = getApplicationContext();
+        _sharedPreferences = PreferenceManager.getDefaultSharedPreferences(_context);
+    }
+
+    private void InitializeFromSharedSettings() {
+        // SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(_context);
+        String pref_meters_step = _sharedPreferences.getString("meters_steps", "100");
+        _valueToAddOrSubtract = Float.parseFloat(pref_meters_step);
+    }
+
+    private void setSpeedAndDistanceLabels() {
+        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(_context);
+        boolean useMiles = settings.getBoolean("use_miles", false);
+
+        if(useMiles)
+        {
+            _speedLabelTextView.setText(R.string.pref_speedLabel_miles);
+            _distanceLabelTextView.setText(R.string.pref_distanceLabel_miles);
+        }
+        else
+        {
+            _speedLabelTextView.setText(R.string.pref_speedLabel_kilometres);
+            _distanceLabelTextView.setText(R.string.pref_distanceLabel_kilometres);
         }
     }
 
@@ -423,52 +462,6 @@ public class DistanceActivity extends AppCompatActivity implements DistanceChang
         alert.show();
     }
 
-    @Override
-    public void onChangeDistance(float totalDistance, float previousDistance, String totalDistanceFormatted, String previousDistanceFormatted, float distanceToAdd) {
-        /*Log("test benja - " + totalDistanceFormatted);
-        String test = GetCounterString();
-
-        System.out.println("previous: " + previousDistanceFormatted + " - Counter: " + GetCounterString());*/
-        //  _npHundreds.putoflag = true;
-        boolean isFix = IsCounterFix();
-        Log(String.format("%b", isFix));
-        if (isFix) {
-            if (previousDistanceFormatted.compareTo(GetCounterString()) != 0) {
-
-                //System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
-                //Log("cambiar");
-                float currentCounter = GetCounter();
-
-                //problema con la distancia y la suma con decimales, depende de los decimas cambia un poco la distancia. ya lo arreglere
-                _gpsListener.OverrideTotalMeters(currentCounter * 1000 + distanceToAdd);
-                float newcount = _gpsListener.GetDistance();
-                String newcountstring = _gpsListener.GetDistanceFormatted();
-
-                totalDistance = newcount;
-                totalDistanceFormatted = newcountstring;
-            }
-        } else {
-            System.out.println("tocando counter");
-        }
-
-
-        UpdateCounter(totalDistance, totalDistanceFormatted);
-    }
-    @Override
-    public void onChangeHistoryDistance(float totalDistance, float previousDistance, String totalDistanceFormatted) {
-        _distanceHistoryTextView.setText(totalDistanceFormatted);
-    }
-
-    @Override
-    public void onChangeSpeed(String speed) {
-        _speedTextView.setText(speed);
-    }
-
-    @Override
-    public void onLog(String log, int type) {
-        Log(log, type);
-    }
-
     private String GetCurrentDistanceFormatted() {
         return _gpsListener.GetDistanceFormatted();
     }
@@ -504,9 +497,4 @@ public class DistanceActivity extends AppCompatActivity implements DistanceChang
 
     }
 
-    @Override
-    public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
-        String idStr = getResources().getResourceEntryName(picker.getId());
-        Log("onValueChange " + idStr + ",o " + oldVal + ",n " + newVal + "p:" + String.format("%b", ((CustomNumberPicker) picker).putoflag));
-    }
 }

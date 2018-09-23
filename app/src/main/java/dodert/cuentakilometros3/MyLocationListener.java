@@ -229,12 +229,11 @@ public class MyLocationListener implements LocationListener {
         return (float) (meters * 0.621371);
     }
 
-    private float convertSpeedToMilesPerHour(float metersPerSecond)
-    {
+    private float convertSpeedToMilesPerHour(float metersPerSecond) {
         return (float) (metersPerSecond * 2.2369);
     }
-    private float convertSpeedToKilometerPerHours(float metersPerSecond)
-    {
+
+    private float convertSpeedToKilometerPerHours(float metersPerSecond) {
         return (float) (metersPerSecond * 3.6);
     }
 }

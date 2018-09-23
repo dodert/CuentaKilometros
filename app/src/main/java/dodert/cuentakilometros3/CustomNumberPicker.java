@@ -14,6 +14,7 @@ import android.widget.NumberPicker;
  */
 public class CustomNumberPicker extends NumberPicker {
     private float _textSizeBenja;
+    public boolean putoflag = true;
 
     public CustomNumberPicker(Context context, AttributeSet attrs) {
 
@@ -30,20 +31,6 @@ public class CustomNumberPicker extends NumberPicker {
             a.recycle();
         }
     }
-
-    public boolean putoflag = true;
-    //private int _pre;
-
-    /*@Override
-    public int getValue() {
-        if (putoflag) {
-            _pre = super.getValue();
-            return super.getValue();
-        }
-        else
-            return _pre;
-
-    }*/
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
