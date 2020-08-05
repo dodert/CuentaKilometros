@@ -17,10 +17,7 @@
   <component name="ChangeListManager">
     <list default="true" id="806372f6-42c9-40b9-985d-4f2a16f013fe" name="Default" comment="some refactor&#10;Update Gradle to 4.0.1">
       <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/gradle/wrapper/gradle-wrapper.properties" beforeDir="false" afterPath="$PROJECT_DIR$/gradle/wrapper/gradle-wrapper.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -278,7 +275,14 @@
       <option name="project" value="LOCAL" />
       <updated>1537712695490</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="some refactor&#10;Update Gradle to 4.0.1">
+      <created>1596649542763</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1596649542764</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="TodoView">
@@ -291,22 +295,32 @@
     </todo-panel>
   </component>
   <component name="VcsManagerConfiguration">
+    <option name="SHOW_UNVERSIONED_FILES_WHILE_COMMIT" value="false" />
     <MESSAGE value="add Miles support" />
     <MESSAGE value="update pligns and tools&#10;add miles labels" />
     <MESSAGE value="Code Cleaning and refactor" />
     <MESSAGE value="update listener after each rotation to avoid lose the instance" />
     <MESSAGE value="some refactor" />
-    <option name="LAST_COMMIT_MESSAGE" value="some refactor" />
+    <MESSAGE value="some refactor&#10;Update Gradle to 4.0.1" />
+    <option name="LAST_COMMIT_MESSAGE" value="some refactor&#10;Update Gradle to 4.0.1" />
   </component>
   <component name="WindowStateProjectService">
+    <state x="440" y="158" key="#Other_File_Types" timestamp="1596649905614">
+      <screen x="0" y="23" width="1680" height="960" />
+    </state>
+    <state x="440" y="158" key="#Other_File_Types/0.23.1680.960@0.23.1680.960" timestamp="1596649905614" />
     <state x="365" y="232" key="#PSD" timestamp="1596648370226">
       <screen x="0" y="23" width="1680" height="960" />
     </state>
     <state x="365" y="232" key="#PSD/0.23.1680.960@0.23.1680.960" timestamp="1596648370226" />
-    <state x="30" y="23" width="1608" height="903" key="CommitChangelistDialog2" timestamp="1596649467884">
+    <state x="30" y="23" width="1608" height="903" key="CommitChangelistDialog2" timestamp="1596650235237">
       <screen x="0" y="23" width="1680" height="960" />
     </state>
-    <state x="30" y="23" width="1608" height="903" key="CommitChangelistDialog2/0.23.1680.960@0.23.1680.960" timestamp="1596649467884" />
+    <state x="30" y="23" width="1608" height="903" key="CommitChangelistDialog2/0.23.1680.960@0.23.1680.960" timestamp="1596650235237" />
+    <state x="217" y="218" width="1200" height="740" key="DiffContextDialog" timestamp="1596650033402">
+      <screen x="0" y="23" width="1680" height="960" />
+    </state>
+    <state x="217" y="218" width="1200" height="740" key="DiffContextDialog/0.23.1680.960@0.23.1680.960" timestamp="1596650033402" />
     <state width="1358" height="251" key="GridCell.Tab.0.bottom" timestamp="1596648492030">
       <screen x="0" y="23" width="1680" height="960" />
     </state>
@@ -327,18 +341,30 @@
       <screen x="0" y="23" width="1680" height="960" />
     </state>
     <state x="568" y="192" key="RollbackChangesDialog/0.23.1680.960@0.23.1680.960" timestamp="1596649399143" />
+    <state x="240" y="123" width="1200" height="740" key="ShowDiffWithBranchDialog" timestamp="1596649832134">
+      <screen x="0" y="23" width="1680" height="960" />
+    </state>
+    <state x="240" y="123" width="1200" height="740" key="ShowDiffWithBranchDialog/0.23.1680.960@0.23.1680.960" timestamp="1596649832134" />
+    <state x="440" y="221" key="Vcs.Push.Dialog.v2" timestamp="1596649556353">
+      <screen x="0" y="23" width="1680" height="960" />
+    </state>
+    <state x="440" y="221" key="Vcs.Push.Dialog.v2/0.23.1680.960@0.23.1680.960" timestamp="1596649556353" />
     <state x="281" y="242" width="1200" height="740" key="com.android.tools.idea.avdmanager.AvdListDialog" timestamp="1596648439960">
       <screen x="0" y="23" width="1680" height="960" />
     </state>
     <state x="281" y="242" width="1200" height="740" key="com.android.tools.idea.avdmanager.AvdListDialog/0.23.1680.960@0.23.1680.960" timestamp="1596648439960" />
-    <state x="240" y="123" width="1200" height="740" key="com.intellij.dvcs.ui.CompareBranchesDialog" timestamp="1596647961117">
+    <state x="240" y="123" width="1200" height="740" key="com.intellij.dvcs.ui.CompareBranchesDialog" timestamp="1596649832134">
       <screen x="0" y="23" width="1680" height="960" />
     </state>
-    <state x="240" y="123" width="1200" height="740" key="com.intellij.dvcs.ui.CompareBranchesDialog/0.23.1680.960@0.23.1680.960" timestamp="1596647961117" />
+    <state x="240" y="123" width="1200" height="740" key="com.intellij.dvcs.ui.CompareBranchesDialog/0.23.1680.960@0.23.1680.960" timestamp="1596649832134" />
     <state x="510" y="325" key="com.intellij.ide.util.TipDialog" timestamp="1596647779025">
       <screen x="0" y="23" width="1680" height="960" />
     </state>
     <state x="510" y="325" key="com.intellij.ide.util.TipDialog/0.23.1680.960@0.23.1680.960" timestamp="1596647779025" />
+    <state x="620" y="417" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1596650163379">
+      <screen x="0" y="23" width="1680" height="960" />
+    </state>
+    <state x="620" y="417" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.23.1680.960@0.23.1680.960" timestamp="1596650163379" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

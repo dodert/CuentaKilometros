@@ -5,4 +5,4 @@
 .DS_Store
 /build
 /captures
-**/.idea/workspace.xml **/.idea/tasks.xml
+/.idea/workspace.xml
