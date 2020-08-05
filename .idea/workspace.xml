@@ -1,0 +1,406 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AndroidLayouts">
+    <shared>
+      <config />
+    </shared>
+  </component>
+  <component name="AndroidLogFilters">
+    <option name="TOOL_WINDOW_CUSTOM_FILTER" value="Monitor Location" />
+    <option name="TOOL_WINDOW_CONFIGURED_FILTER" value="No Filters" />
+  </component>
+  <component name="CMakeSettings">
+    <configurations>
+      <configuration PROFILE_NAME="Debug" CONFIG_NAME="Debug" />
+    </configurations>
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="806372f6-42c9-40b9-985d-4f2a16f013fe" name="Default" comment="some refactor&#10;Update Gradle to 4.0.1">
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/gradle/wrapper/gradle-wrapper.properties" beforeDir="false" afterPath="$PROJECT_DIR$/gradle/wrapper/gradle-wrapper.properties" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ExecutionTargetManager" SELECTED_TARGET="Nexus_5X_API_28_x86" />
+  <component name="ExternalProjectsData">
+    <projectState path="$PROJECT_DIR$">
+      <ProjectState />
+    </projectState>
+  </component>
+  <component name="ExternalProjectsManager">
+    <system id="GRADLE">
+      <state>
+        <projects_view />
+      </state>
+    </system>
+  </component>
+  <component name="FindInProjectRecents">
+    <findStrings>
+      <find>rerefreshLayaout</find>
+      <find>resetButton</find>
+      <find>onResetDistance</find>
+      <find>activity_kilometros</find>
+      <find>reset</find>
+      <find>onChangeSpeed</find>
+      <find>DistanceChangeListener</find>
+      <find>@Overri</find>
+      <find>save</find>
+      <find>1_7</find>
+      <find>buildToolsVersion</find>
+      <find>setTextSizeBenja</find>
+      <find>UpdateCounter</find>
+      <find>onreset</find>
+      <find>setMinValue</find>
+      <find>_distanceHistoryTextView</find>
+      <find>_areLocationUpdatesEnabled</find>
+      <find>IsProviderEnable</find>
+      <find>TotalDistance</find>
+      <find>distanceChangeListeners</find>
+      <find>_gpsListener</find>
+      <find>for</find>
+      <find>onChangeHistoryDistance</find>
+      <find>onChange</find>
+      <find>addListener</find>
+      <find>settings</find>
+      <find>requestLocationUpdates</find>
+      <find>CheckPermissionsWhenStartListening</find>
+      <find>onChangeDistance</find>
+      <find>RESET</find>
+    </findStrings>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="master" />
+      </map>
+    </option>
+  </component>
+  <component name="ProjectId" id="1fgleTsWXhKvUCGnZIcMTO1IDkJ" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showExcludedFiles" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="DeviceAndSnapshotComboBoxAction.selectedDevice" value="Pixel_3a_API_24" />
+    <property name="DeviceAndSnapshotComboBoxAction.selectionTime" value="2020-08-05T17:23:26.565Z" />
+    <property name="android.profiler.active" value="true" />
+    <property name="android.project.structure.last.selected" value="app" />
+    <property name="android.project.structure.proportion" value="0.15" />
+    <property name="device.picker.selection" value="8DM0218C07000967" />
+    <property name="memory.settings.postsync.last.time.stamp" value="1596647754522" />
+    <property name="project.structure.last.edited" value="Modules" />
+    <property name="project.structure.proportion" value="0.17" />
+    <property name="project.structure.side.proportion" value="0.2" />
+    <property name="run.code.analysis.last.selected.profile" value="pProject Default" />
+    <property name="settings.editor.selected.configurable" value="preferences.intellij-touch" />
+    <property name="sync.plugin.last.upgrade.timestamp" value="1539366238347" />
+  </component>
+  <component name="RunManager">
+    <configuration name="&lt;template&gt;" type="Applet" default="true" selected="false">
+      <option name="MAIN_CLASS_NAME" />
+      <option name="HTML_FILE_NAME" />
+      <option name="HTML_USED" value="false" />
+      <option name="WIDTH" value="400" />
+      <option name="HEIGHT" value="300" />
+      <option name="POLICY_FILE" value="$APPLICATION_HOME_DIR$/bin/appletviewer.policy" />
+      <option name="VM_PARAMETERS" />
+    </configuration>
+    <configuration name="&lt;template&gt;" type="JUnit" default="true" selected="false">
+      <option name="MAIN_CLASS_NAME" />
+      <option name="VM_PARAMETERS" value="-ea" />
+      <option name="PARAMETERS" />
+      <option name="WORKING_DIRECTORY" value="%MODULE_WORKING_DIR%" />
+    </configuration>
+    <configuration name="&lt;template&gt;" type="#org.jetbrains.idea.devkit.run.PluginConfigurationType" default="true" selected="false">
+      <option name="VM_PARAMETERS" value="-Xmx512m -Xms256m -XX:MaxPermSize=250m -ea" />
+    </configuration>
+    <configuration default="true" type="AndroidJUnit" factoryName="Android JUnit">
+      <option name="TEST_OBJECT" value="class" />
+      <option name="WORKING_DIRECTORY" value="$MODULE_DIR$" />
+      <method v="2">
+        <option name="Android.Gradle.BeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="app" type="AndroidRunConfigurationType" factoryName="Android App" activateToolWindowBeforeRun="false">
+      <module name="app" />
+      <option name="DEPLOY" value="true" />
+      <option name="DEPLOY_APK_FROM_BUNDLE" value="false" />
+      <option name="DEPLOY_AS_INSTANT" value="false" />
+      <option name="ARTIFACT_NAME" value="" />
+      <option name="PM_INSTALL_OPTIONS" value="" />
+      <option name="DYNAMIC_FEATURES_DISABLED_LIST" value="" />
+      <option name="ACTIVITY_EXTRA_FLAGS" value="" />
+      <option name="MODE" value="default_activity" />
+      <option name="CLEAR_LOGCAT" value="false" />
+      <option name="SHOW_LOGCAT_AUTOMATICALLY" value="false" />
+      <option name="SKIP_NOOP_APK_INSTALLATIONS" value="true" />
+      <option name="FORCE_STOP_RUNNING_APP" value="true" />
+      <option name="TARGET_SELECTION_MODE" value="SHOW_DIALOG" />
+      <option name="SELECTED_CLOUD_MATRIX_CONFIGURATION_ID" value="-1" />
+      <option name="SELECTED_CLOUD_MATRIX_PROJECT_ID" value="" />
+      <option name="DEBUGGER_TYPE" value="Auto" />
+      <Auto>
+        <option name="USE_JAVA_AWARE_DEBUGGER" value="false" />
+        <option name="SHOW_STATIC_VARS" value="true" />
+        <option name="WORKING_DIR" value="" />
+        <option name="TARGET_LOGGING_CHANNELS" value="lldb process:gdb-remote packets" />
+        <option name="SHOW_OPTIMIZED_WARNING" value="true" />
+      </Auto>
+      <Hybrid>
+        <option name="USE_JAVA_AWARE_DEBUGGER" value="false" />
+        <option name="SHOW_STATIC_VARS" value="true" />
+        <option name="WORKING_DIR" value="" />
+        <option name="TARGET_LOGGING_CHANNELS" value="lldb process:gdb-remote packets" />
+        <option name="SHOW_OPTIMIZED_WARNING" value="true" />
+      </Hybrid>
+      <Java />
+      <Native>
+        <option name="USE_JAVA_AWARE_DEBUGGER" value="false" />
+        <option name="SHOW_STATIC_VARS" value="true" />
+        <option name="WORKING_DIR" value="" />
+        <option name="TARGET_LOGGING_CHANNELS" value="lldb process:gdb-remote packets" />
+        <option name="SHOW_OPTIMIZED_WARNING" value="true" />
+      </Native>
+      <Profilers>
+        <option name="ADVANCED_PROFILING_ENABLED" value="false" />
+        <option name="STARTUP_CPU_PROFILING_ENABLED" value="false" />
+        <option name="STARTUP_CPU_PROFILING_CONFIGURATION_NAME" value="Sampled (Java)" />
+      </Profilers>
+      <option name="DEEP_LINK" value="" />
+      <option name="ACTIVITY_CLASS" value="" />
+      <method v="2">
+        <option name="Android.Gradle.BeforeRunTask" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="Application" factoryName="Application">
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="KotlinStandaloneScriptRunConfigurationType">
+      <module name="tools" />
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
+      <option name="filePath" />
+      <option name="vmParameters" />
+      <option name="alternativeJrePath" />
+      <option name="programParameters" />
+      <option name="passParentEnvs" value="true" />
+      <option name="workingDirectory" />
+      <option name="isAlternativeJrePathEnabled" value="false" />
+      <option name="VM_PARAMETERS" />
+      <option name="PROGRAM_PARAMETERS" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <option name="MAIN_CLASS_NAME" />
+      <option name="WORKING_DIRECTORY" />
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
+      <option name="filePath" />
+      <option name="vmParameters" />
+      <option name="alternativeJrePath" />
+      <option name="programParameters" />
+      <option name="passParentEnvs" value="true" />
+      <option name="workingDirectory" />
+      <option name="isAlternativeJrePathEnabled" value="false" />
+      <option name="VM_PARAMETERS" />
+      <option name="PROGRAM_PARAMETERS" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <option name="MAIN_CLASS_NAME" />
+      <option name="WORKING_DIRECTORY" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="TestNG">
+      <option name="TEST_OBJECT" value="CLASS" />
+      <option name="WORKING_DIRECTORY" value="%MODULE_WORKING_DIR%" />
+      <properties />
+      <listeners />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="806372f6-42c9-40b9-985d-4f2a16f013fe" name="Default" comment="" />
+      <created>1537558648111</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1537558648111</updated>
+    </task>
+    <task id="LOCAL-00001" summary="add Miles support">
+      <created>1537625081170</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1537625081170</updated>
+    </task>
+    <task id="LOCAL-00002" summary="update pligns and tools&#10;add miles labels">
+      <created>1537703837708</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1537703837708</updated>
+    </task>
+    <task id="LOCAL-00003" summary="Code Cleaning and refactor">
+      <created>1537706444662</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1537706444662</updated>
+    </task>
+    <task id="LOCAL-00004" summary="update listener after each rotation to avoid lose the instance">
+      <created>1537711428871</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1537711428871</updated>
+    </task>
+    <task id="LOCAL-00005" summary="some refactor">
+      <created>1537712695490</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1537712695490</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
+    <servers />
+  </component>
+  <component name="TodoView">
+    <todo-panel id="selected-file">
+      <is-autoscroll-to-source value="true" />
+    </todo-panel>
+    <todo-panel id="all">
+      <are-packages-shown value="true" />
+      <is-autoscroll-to-source value="true" />
+    </todo-panel>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="add Miles support" />
+    <MESSAGE value="update pligns and tools&#10;add miles labels" />
+    <MESSAGE value="Code Cleaning and refactor" />
+    <MESSAGE value="update listener after each rotation to avoid lose the instance" />
+    <MESSAGE value="some refactor" />
+    <option name="LAST_COMMIT_MESSAGE" value="some refactor" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="365" y="232" key="#PSD" timestamp="1596648370226">
+      <screen x="0" y="23" width="1680" height="960" />
+    </state>
+    <state x="365" y="232" key="#PSD/0.23.1680.960@0.23.1680.960" timestamp="1596648370226" />
+    <state x="30" y="23" width="1608" height="903" key="CommitChangelistDialog2" timestamp="1596649467884">
+      <screen x="0" y="23" width="1680" height="960" />
+    </state>
+    <state x="30" y="23" width="1608" height="903" key="CommitChangelistDialog2/0.23.1680.960@0.23.1680.960" timestamp="1596649467884" />
+    <state width="1358" height="251" key="GridCell.Tab.0.bottom" timestamp="1596648492030">
+      <screen x="0" y="23" width="1680" height="960" />
+    </state>
+    <state width="1358" height="251" key="GridCell.Tab.0.bottom/0.23.1680.960@0.23.1680.960" timestamp="1596648492030" />
+    <state width="1358" height="251" key="GridCell.Tab.0.center" timestamp="1596648492029">
+      <screen x="0" y="23" width="1680" height="960" />
+    </state>
+    <state width="1358" height="251" key="GridCell.Tab.0.center/0.23.1680.960@0.23.1680.960" timestamp="1596648492029" />
+    <state width="1358" height="251" key="GridCell.Tab.0.left" timestamp="1596648492029">
+      <screen x="0" y="23" width="1680" height="960" />
+    </state>
+    <state width="1358" height="251" key="GridCell.Tab.0.left/0.23.1680.960@0.23.1680.960" timestamp="1596648492029" />
+    <state width="1358" height="251" key="GridCell.Tab.0.right" timestamp="1596648492029">
+      <screen x="0" y="23" width="1680" height="960" />
+    </state>
+    <state width="1358" height="251" key="GridCell.Tab.0.right/0.23.1680.960@0.23.1680.960" timestamp="1596648492029" />
+    <state x="568" y="192" key="RollbackChangesDialog" timestamp="1596649399143">
+      <screen x="0" y="23" width="1680" height="960" />
+    </state>
+    <state x="568" y="192" key="RollbackChangesDialog/0.23.1680.960@0.23.1680.960" timestamp="1596649399143" />
+    <state x="281" y="242" width="1200" height="740" key="com.android.tools.idea.avdmanager.AvdListDialog" timestamp="1596648439960">
+      <screen x="0" y="23" width="1680" height="960" />
+    </state>
+    <state x="281" y="242" width="1200" height="740" key="com.android.tools.idea.avdmanager.AvdListDialog/0.23.1680.960@0.23.1680.960" timestamp="1596648439960" />
+    <state x="240" y="123" width="1200" height="740" key="com.intellij.dvcs.ui.CompareBranchesDialog" timestamp="1596647961117">
+      <screen x="0" y="23" width="1680" height="960" />
+    </state>
+    <state x="240" y="123" width="1200" height="740" key="com.intellij.dvcs.ui.CompareBranchesDialog/0.23.1680.960@0.23.1680.960" timestamp="1596647961117" />
+    <state x="510" y="325" key="com.intellij.ide.util.TipDialog" timestamp="1596647779025">
+      <screen x="0" y="23" width="1680" height="960" />
+    </state>
+    <state x="510" y="325" key="com.intellij.ide.util.TipDialog/0.23.1680.960@0.23.1680.960" timestamp="1596647779025" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint type="java-line">
+          <url>file://$PROJECT_DIR$/app/src/main/java/dodert/cuentakilometros3/MyLocationListener.java</url>
+          <line>48</line>
+          <option name="timeStamp" value="2" />
+        </line-breakpoint>
+        <line-breakpoint type="java-line">
+          <url>file://$PROJECT_DIR$/app/src/main/java/dodert/cuentakilometros3/MyLocationListener.java</url>
+          <line>61</line>
+          <option name="timeStamp" value="6" />
+        </line-breakpoint>
+        <line-breakpoint type="java-line">
+          <url>file://$PROJECT_DIR$/app/src/main/java/dodert/cuentakilometros3/MyLocationListener.java</url>
+          <line>147</line>
+          <option name="timeStamp" value="18" />
+        </line-breakpoint>
+        <line-breakpoint type="java-line">
+          <url>file://$PROJECT_DIR$/app/src/main/java/dodert/cuentakilometros3/DistanceActivity.java</url>
+          <line>56</line>
+          <option name="timeStamp" value="25" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/app/src/main/java/dodert/cuentakilometros3/DistanceActivity.java</url>
+          <line>422</line>
+          <option name="timeStamp" value="35" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/app/src/main/java/dodert/cuentakilometros3/MyLocationListener.java</url>
+          <line>222</line>
+          <option name="timeStamp" value="44" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/app/src/main/java/dodert/cuentakilometros3/DistanceActivity.java</url>
+          <line>71</line>
+          <option name="timeStamp" value="49" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+    <watches-manager>
+      <configuration name="app">
+        <watch expression="test" />
+        <watch expression="_distanceHistoryTextView.getText()" language="JAVA" />
+      </configuration>
+    </watches-manager>
+  </component>
+  <component name="debuggerHistoryManager">
+    <expressions id="watch">
+      <expression>
+        <expression-string>_distanceHistoryTextView.getText()</expression-string>
+        <language-id>JAVA</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+    </expressions>
+    <expressions id="setValue">
+      <expression>
+        <expression-string>true</expression-string>
+        <language-id>JAVA</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+    </expressions>
+  </component>
+</project>
