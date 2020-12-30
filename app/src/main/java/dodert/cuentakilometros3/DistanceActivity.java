@@ -498,4 +498,9 @@ public class DistanceActivity extends AppCompatActivity implements DistanceChang
 
     }
 
+    private void onReverseCount(View view)
+    {
+        Log("stest nuevo");
+    }
+
 }

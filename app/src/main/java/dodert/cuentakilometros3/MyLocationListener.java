@@ -29,6 +29,7 @@ public class MyLocationListener implements LocationListener {
     private Context _context;
     private TrackingSaver _trakingFile;
     private List<DistanceChangeListener> distanceChangeListeners = new ArrayList<DistanceChangeListener>();
+    //private boolean _reverse = false;
 
     private void Initialize(Context context) {
         _context = context;
@@ -77,7 +78,7 @@ public class MyLocationListener implements LocationListener {
         Location currentLocation = location;
         if (_previousLocation != null) {
             distanceTo = _previousLocation.distanceTo(currentLocation);
-
+            //if (_reverse == true) distanceTo = -distanceTo;
             SumTotalMeters(distanceTo);
             SumTotalHistoryMeters(distanceTo);
 
