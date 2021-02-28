@@ -35,10 +35,12 @@
         android:id="@+id/LogTextView"
         android:layout_width="228dp"
         android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
         android:layout_alignStart="@+id/VelocityTextView"
-        android:layout_below="@+id/resetButton"
-        android:layout_marginStart="-127dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="-98dp"
+        android:layout_marginTop="131dp"
+        android:layout_marginEnd="19dp"
         android:layout_toEndOf="@+id/DistanceTotalTextView"
         android:width="500dp"
         android:maxLines="300"
@@ -47,13 +49,24 @@
         android:textAppearance="?android:attr/textAppearanceSmall" />
 
     <Button
+        android:id="@+id/resetButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/button_reset"
-        android:id="@+id/resetButton"
-        android:onClick="onResetDistance"
+        android:layout_below="@+id/VelocityTextView"
         android:layout_alignParentEnd="true"
-        android:layout_below="@+id/VelocityTextView" />
+        android:onClick="onResetDistance"
+        android:text="@string/button_reset" />
+
+    <Button
+        android:id="@+id/reverseButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/resetButton"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="-48dp"
+        android:layout_marginEnd="117dp"
+        android:onClick="onReverseCount"
+        android:text="Reversa" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -164,5 +177,7 @@
             android:layout_row="0"
             android:layout_column="6" />
     </GridLayout>
+
+
 
 </RelativeLayout>

@@ -40,6 +40,7 @@ public class DistanceActivity extends AppCompatActivity implements DistanceChang
     public static final String IS_PROVIDER_ENABLE = "IsProviderEnable";
     public static final String TOTAL_HISTORY_DISTANCE = "TotalHistoryDistance";
     public static final String TOTAL_DISTANCE = "TotalDistance";
+    public static final String IS_REVERSE = "IsReverse";
     final String _logTag = "Monitor Location";
     public TextView _logTextView, _speedTextView, _distanceHistoryTextView;
     public TextView _speedLabelTextView, _distanceLabelTextView;
@@ -82,6 +83,8 @@ public class DistanceActivity extends AppCompatActivity implements DistanceChang
             }
             UpdateCounter(0, savedInstanceState.getString(TOTAL_DISTANCE));
             _distanceHistoryTextView.setText(savedInstanceState.getString(TOTAL_HISTORY_DISTANCE));
+            //_reverseCount = savedInstanceState.getBoolean(IS_REVERSE);
+            setReversCount(savedInstanceState.getBoolean(IS_REVERSE));
         }
 
 
@@ -93,6 +96,9 @@ public class DistanceActivity extends AppCompatActivity implements DistanceChang
         outState.putBoolean(IS_PROVIDER_ENABLE, _areLocationUpdatesEnabled);
         outState.putString(TOTAL_DISTANCE, GetCurrentDistanceFormatted());
         outState.putString(TOTAL_HISTORY_DISTANCE, _distanceHistoryTextView.getText().toString());
+
+        outState.putBoolean(IS_REVERSE, _reverseCount);
+
         super.onSaveInstanceState(outState);
     }
 
@@ -445,20 +451,26 @@ public class DistanceActivity extends AppCompatActivity implements DistanceChang
             Log("gpsListener null");
     }
 
-    public void onReverseCount(View view){
+    private void setReversCount(boolean isReversCount){
+        _reverseCount = isReversCount;
+        _gpsListener._reversados = isReversCount;
+        setTextReverseButton(!isReversCount);
+    }
 
+    private void setTextReverseButton(boolean isReversCount)
+    {
         Button buttonReverseForward = (Button)findViewById(R.id.reverseButton);
-        if (!_reverseCount){
+        if (!isReversCount){
             buttonReverseForward.setText("Forward");
-            _reverseCount = true;
-            _gpsListener._reversados = true;
         }
         else
         {
             buttonReverseForward.setText("Reverse");
-            _reverseCount = false;
-            _gpsListener._reversados = false;
         }
+    }
+    public void onReverseCount(View view){
+
+        setReversCount(!_reverseCount);
 
         Log("test onreverse");
     }
