@@ -241,8 +241,8 @@ public class DistanceActivity extends AppCompatActivity implements DistanceChang
                 float currentCounter = GetCounter();
 
                 //problema con la distancia y la suma con decimales, depende de los decimas cambia un poco la distancia. ya lo arreglere
-                //TODO OverrideTotalMeters ver por que esto me jode  el contador cuando voy hacia atras
-                //_gpsListener.OverrideTotalMeters(currentCounter * 1000 + distanceToAdd);
+                //TODO OverrideTotalMeters ver por que esto me jode  el contador cuando voy hacia atras, parece que ya. hay que pobarlo
+                _gpsListener.OverrideTotalMeters(currentCounter * 1000 + distanceToAdd);
                 float newcount = _gpsListener.GetDistance();
                 String newcountstring = _gpsListener.GetDistanceFormatted();
 
