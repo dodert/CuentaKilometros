@@ -1,5 +1,4 @@
 package dodert.cuentakilometros3;
-
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
@@ -22,11 +21,16 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.NumberPicker;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import java.util.Locale;
 import java.util.Set;
+
+import dodert.tools.Helpers;
+
 
 public class DistanceActivity extends AppCompatActivity implements DistanceChangeListener, NumberPicker.OnValueChangeListener {
     public static final int MY_PERMISSIONS_REQUEST_GPS = 111;
@@ -46,8 +50,9 @@ public class DistanceActivity extends AppCompatActivity implements DistanceChang
     final float _metersListener = 5;
     float _valueToAddOrSubtract = 100;
     RelativeLayout _relativeLayout;
+    private boolean _reverseCount = false;
 
-    int _logType = 10;
+    int _logType = 40;// 10;
     private Context _context;
 
     private SharedPreferences _sharedPreferences;
@@ -217,14 +222,27 @@ public class DistanceActivity extends AppCompatActivity implements DistanceChang
         boolean isFix = IsCounterFix();
         Log(String.format("%b", isFix));
         if (isFix) {
-            if (previousDistanceFormatted.compareTo(GetCounterString()) != 0) {
+            //todo quiero truncar no redondear!!!!!
+            //String sValue = (String) String.format("%.2f", previousDistance);
+            //float previousDistance_trucated = Float.parseFloat(sValue);
 
+            float previousDistance_trucated = Helpers.Truncate(previousDistance, 2);
+
+            if(previousDistance_trucated != GetCounter()){
+
+            //if (previousDistanceFormatted.compareTo(GetCounterString()) != 0) {
+                //TODO intentar usar float en GetCounterString para hacer las comparaciones mejor
+                /*if(_reverseCount)
+                {
+                    distanceToAdd = distanceToAdd * -1;
+                }*/
                 //System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
                 //Log("cambiar");
                 float currentCounter = GetCounter();
 
                 //problema con la distancia y la suma con decimales, depende de los decimas cambia un poco la distancia. ya lo arreglere
-                _gpsListener.OverrideTotalMeters(currentCounter * 1000 + distanceToAdd);
+                //TODO OverrideTotalMeters ver por que esto me jode  el contador cuando voy hacia atras
+                //_gpsListener.OverrideTotalMeters(currentCounter * 1000 + distanceToAdd);
                 float newcount = _gpsListener.GetDistance();
                 String newcountstring = _gpsListener.GetDistanceFormatted();
 
@@ -427,6 +445,24 @@ public class DistanceActivity extends AppCompatActivity implements DistanceChang
             Log("gpsListener null");
     }
 
+    public void onReverseCount(View view){
+
+        Button buttonReverseForward = (Button)findViewById(R.id.reverseButton);
+        if (!_reverseCount){
+            buttonReverseForward.setText("Forward");
+            _reverseCount = true;
+            _gpsListener._reversados = true;
+        }
+        else
+        {
+            buttonReverseForward.setText("Reverse");
+            _reverseCount = false;
+            _gpsListener._reversados = false;
+        }
+
+        Log("test onreverse");
+    }
+
     private void Log(String logText, int type) {
         //getApplicationContext();
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
@@ -472,11 +508,27 @@ public class DistanceActivity extends AppCompatActivity implements DistanceChang
     }
 
     private float GetCounter() {
-        return (_npThousands.getValue() * 1000)
+
+        //String sValue = (String) String.format("%.2f", previousDistance);
+        String sValue = String.format("%s%s%s%s.%s%s"
+                ,_npThousands.getValue(), _npHundreds.getValue(), _npDozen.getValue()
+                ,_npUnit.getValue(), _npTenth.getValue(),_npHundredth.getValue());
+
+       // Utils.Truncate();
+
+        float counters = Float.parseFloat(sValue);
+/*
+        float counters = (_npThousands.getValue() * 1000)
                 + (_npHundreds.getValue() * 100)
                 + (_npDozen.getValue() * 10)
-                + (_npUnit.getValue()) + ((float) _npTenth.getValue() / 10)
+                + (_npUnit.getValue())
+                + ((float) _npTenth.getValue() / 10)
                 + ((float) _npHundredth.getValue() / 100);
+*/
+        if (_reverseCount)
+            counters = counters * -1;
+
+        return counters;
     }
 
     private String GetCounterString() {
@@ -484,23 +536,43 @@ public class DistanceActivity extends AppCompatActivity implements DistanceChang
     }
 
     private void UpdateCounter(float distance, String distanceString) {
-        String test = _gpsListener.GetDistanceFormatted();
-        String hundredthPart = "0";
-        hundredthPart = distanceString.substring(distanceString.length() - 1);
+        //distance = 123456.7890f;
+        //String test = _gpsListener.GetDistanceFormatted();
+        //String hundredthPart = "0";
+        //hundredthPart = distanceString.substring(distanceString.length() - 1);
         int distanceLenght = distanceString.length();
-        //TODO review context of labes to fix bug aobut missing update after rotate screen
-        _npHundredth.setValue(Integer.parseInt(distanceString.substring(distanceLenght - 1)));
+        int hundredth = 0, tenth = 0, unit = 0, dozen = 0, hundreds = 0, thousands = 0;
+
+        float distanceAbs = Math.abs(distance);
+        //Log(String.format("distanceAbs %s, distance %s, distanceString %s", distanceAbs, distance, distanceString), 20);
+        if (distanceAbs<=100)
+        {
+            Log("adfasdfas");
+        }
+        // 0.80
+        hundredth = (int) (distanceAbs/0.01) % 10;
+        tenth = (int) (distanceAbs/0.1) % 10;
+        unit =  (int) (distanceAbs/1) % 10;
+        dozen =  (int) (distanceAbs/10) % 10;
+        hundreds =  (int) (distanceAbs/100) % 10;
+        thousands =  (int) (distanceAbs/1000) % 10;
+        Log(String.format("distance %s, distanceString %s", distance, distanceString), 20);
+        Log(String.format("tenth %s unit %s", tenth, unit),10);
+        _npHundredth.setValue(hundredth);
+        _npTenth.setValue(tenth);
+        _npUnit.setValue(unit);
+        _npDozen.setValue(dozen);
+        _npHundreds.setValue(hundreds);
+        _npThousands.setValue(thousands);
+
+        //TODO review context of labes to fix bug aobut missing update after rotate screen, i thing this is already fixed
+        /*_npHundredth.setValue(Integer.parseInt(distanceString.substring(distanceLenght - 1)));
         _npTenth.setValue(Integer.parseInt(distanceString.substring(distanceLenght - 2, distanceLenght - 1)));
         _npUnit.setValue(Integer.parseInt(distanceString.substring(distanceLenght - 4, distanceLenght - 3)));
         _npDozen.setValue(Integer.parseInt(distanceString.substring(distanceLenght - 5, distanceLenght - 4)));
         _npHundreds.setValue(Integer.parseInt(distanceString.substring(distanceLenght - 6, distanceLenght - 5)));
         _npThousands.setValue(Integer.parseInt(distanceString.substring(distanceLenght - 7, distanceLenght - 6)));
-
-    }
-
-    private void onReverseCount(View view)
-    {
-        Log("stest nuevo");
+*/
     }
 
 }

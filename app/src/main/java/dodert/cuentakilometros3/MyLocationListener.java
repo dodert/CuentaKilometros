@@ -29,6 +29,7 @@ public class MyLocationListener implements LocationListener {
     private Context _context;
     private TrackingSaver _trakingFile;
     private List<DistanceChangeListener> distanceChangeListeners = new ArrayList<DistanceChangeListener>();
+    public boolean _reversados = false;
     //private boolean _reverse = false;
 
     private void Initialize(Context context) {
@@ -78,9 +79,12 @@ public class MyLocationListener implements LocationListener {
         Location currentLocation = location;
         if (_previousLocation != null) {
             distanceTo = _previousLocation.distanceTo(currentLocation);
-            //if (_reverse == true) distanceTo = -distanceTo;
+            if (_reversados) distanceTo = distanceTo * -1;
+
             SumTotalMeters(distanceTo);
+            //Log(String.format("Normal: %s", distanceTo), 40);
             SumTotalHistoryMeters(distanceTo);
+            //Log(String.format("Hist: %s", distanceTo), 40);
 
             float speed = currentLocation.getSpeed();
             ChangeSpeed(speed);
@@ -140,7 +144,7 @@ public class MyLocationListener implements LocationListener {
     }
 
     public void OverrideTotalMeters(float meters) { //se llama una vez mas cada vez qeu se recrea la actividad distance
-        Log("OTM: " + _currentTotalMeters + " - " + meters, 10);
+        Log("OTM: " + _currentTotalMeters + " || " + meters, 40);
 
         _currentTotalMeters = meters;
     }
@@ -154,13 +158,15 @@ public class MyLocationListener implements LocationListener {
 
         if (meters == 0) {
             _currentTotalMeters = 0.0F;
-            Log("Reseted");
-        } else if (_currentTotalMeters + meters >= 0) {
+            Log("Reseted", 40);
+        //} else if (_currentTotalMeters + meters >= 0) {
+        } else {
             _currentTotalMeters += meters;
-            Log("STM: " + meters + " B " + previous + " A " + _currentTotalMeters, 10);
+            Log("STM: " + meters + " B " + previous + " A " + _currentTotalMeters, 20);
         }
 
         for (DistanceChangeListener hl : distanceChangeListeners) {
+            Log(String.format("Nor: %s", _currentTotalMeters), 40);
             hl.onChangeDistance((_currentTotalMeters / 1000), (previous / 1000), GetDistanceFormatted(_currentTotalMeters), GetDistanceFormatted(previous), meters);
         }
     }
@@ -178,6 +184,7 @@ public class MyLocationListener implements LocationListener {
         Log("STHM: " + meters + " B " + previous + " A " + _totalHistoryMeters, 10);
 
         for (DistanceChangeListener hl : distanceChangeListeners) {
+            Log(String.format("hist: %s", _totalHistoryMeters), 40);
             hl.onChangeHistoryDistance((_totalHistoryMeters / 1000), 0.0F, GetDistanceFormatted(_totalHistoryMeters));
         }
     }
