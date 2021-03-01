@@ -79,7 +79,12 @@ public class MyLocationListener implements LocationListener {
         Location currentLocation = location;
         if (_previousLocation != null) {
             distanceTo = _previousLocation.distanceTo(currentLocation);
-            if (_reversados) distanceTo = distanceTo * -1;
+            if (_reversados){
+                distanceTo = Math.abs(distanceTo) * -1;
+            }
+            else{
+                distanceTo = Math.abs(distanceTo);
+            }
 
             SumTotalMeters(distanceTo);
             //Log(String.format("Normal: %s", distanceTo), 40);

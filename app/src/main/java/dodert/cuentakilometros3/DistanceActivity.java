@@ -228,26 +228,22 @@ public class DistanceActivity extends AppCompatActivity implements DistanceChang
         boolean isFix = IsCounterFix();
         Log(String.format("%b", isFix));
         if (isFix) {
-            //todo quiero truncar no redondear!!!!!
-            //String sValue = (String) String.format("%.2f", previousDistance);
-            //float previousDistance_trucated = Float.parseFloat(sValue);
 
             float previousDistance_trucated = Helpers.Truncate(previousDistance, 2);
 
+            //new to convert to the same symbol to compare.
+            if (_reverseCount){
+                previousDistance_trucated = Math.abs(previousDistance_trucated) * -1;
+            }
+            else
+            {
+                previousDistance_trucated = Math.abs(previousDistance_trucated);
+            }
+
             if(previousDistance_trucated != GetCounter()){
 
-            //if (previousDistanceFormatted.compareTo(GetCounterString()) != 0) {
-                //TODO intentar usar float en GetCounterString para hacer las comparaciones mejor
-                /*if(_reverseCount)
-                {
-                    distanceToAdd = distanceToAdd * -1;
-                }*/
-                //System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
-                //Log("cambiar");
                 float currentCounter = GetCounter();
 
-                //problema con la distancia y la suma con decimales, depende de los decimas cambia un poco la distancia. ya lo arreglere
-                //TODO OverrideTotalMeters ver por que esto me jode  el contador cuando voy hacia atras, parece que ya. hay que pobarlo
                 _gpsListener.OverrideTotalMeters(currentCounter * 1000 + distanceToAdd);
                 float newcount = _gpsListener.GetDistance();
                 String newcountstring = _gpsListener.GetDistanceFormatted();
@@ -537,8 +533,15 @@ public class DistanceActivity extends AppCompatActivity implements DistanceChang
                 + ((float) _npTenth.getValue() / 10)
                 + ((float) _npHundredth.getValue() / 100);
 */
-        if (_reverseCount)
-            counters = counters * -1;
+        if (_reverseCount){
+            counters = Math.abs(counters) * -1;
+        }
+        else
+        {
+            counters = Math.abs(counters);
+        }
+
+
 
         return counters;
     }
