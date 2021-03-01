@@ -45,6 +45,7 @@ public class DistanceActivity extends AppCompatActivity implements DistanceChang
     public TextView _logTextView, _speedTextView, _distanceHistoryTextView;
     public TextView _speedLabelTextView, _distanceLabelTextView;
     public CustomNumberPicker _npHundreds, _npThousands, _npDozen, _npUnit, _npTenth, _npHundredth;
+    public View _minus_signView;
     private MyLocationListener _gpsListener;
     protected LocationManager _lm;
     private boolean _areLocationUpdatesEnabled;
@@ -308,6 +309,9 @@ public class DistanceActivity extends AppCompatActivity implements DistanceChang
         _logTextView = findViewById(R.id.LogTextView);
         _speedTextView = findViewById(R.id.VelocityTextView);
         _logTextView.setMovementMethod(new ScrollingMovementMethod());
+
+        _minus_signView = findViewById(R.id.minus_sign);
+
         //InitializeListenersDistanceCounter();
     }
 
@@ -454,8 +458,7 @@ public class DistanceActivity extends AppCompatActivity implements DistanceChang
         if (!isReversCount){
             buttonReverseForward.setText("Forward");
         }
-        else
-        {
+        else{
             buttonReverseForward.setText("Reverse");
         }
     }
@@ -532,6 +535,13 @@ public class DistanceActivity extends AppCompatActivity implements DistanceChang
 
     private void UpdateCounter(float distance) {
         int hundredth = 0, tenth = 0, unit = 0, dozen = 0, hundreds = 0, thousands = 0;
+        if (distance>=0){
+            _minus_signView.setVisibility(View.INVISIBLE);
+        }
+        else{
+            _minus_signView.setVisibility(View.VISIBLE);
+        }
+
 
         float distanceAbs = Math.abs(distance);
 

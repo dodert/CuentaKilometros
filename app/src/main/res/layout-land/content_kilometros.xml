@@ -107,77 +107,92 @@
         android:layout_toEndOf="@+id/DistanceTotalTextView" />
 
     <GridLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:id="@+id/gridLayout"
+        android:layout_width="335dp"
+        android:layout_height="183dp"
         android:layout_below="@+id/DistanceTotalTextView"
-        android:layout_alignParentStart="true">
-
-        <dodert.cuentakilometros3.CustomNumberPicker xmlns:customNS="http://schemas.android.com/apk/res/dodert.cuentakilometros3"
-            customNS:aaaaaatextSize="60dp"
-            android:layout_width="50dp"
-            android:layout_height="wrap_content"
-            android:id="@+id/npThousands"
-            android:orientation="horizontal"
-            android:layout_row="0"
-            android:layout_column="0" />
-
-        <dodert.cuentakilometros3.CustomNumberPicker xmlns:customNS="http://schemas.android.com/apk/res/dodert.cuentakilometros3"
-            customNS:aaaaaatextSize="60dp"
-            android:layout_width="50dp"
-            android:layout_height="wrap_content"
-            android:id="@+id/npHundreds"
-            android:orientation="horizontal"
-            android:layout_row="0"
-            android:layout_column="1" />
-
-        <dodert.cuentakilometros3.CustomNumberPicker xmlns:customNS="http://schemas.android.com/apk/res/dodert.cuentakilometros3"
-            customNS:aaaaaatextSize="60dp"
-            android:layout_width="50dp"
-            android:layout_height="wrap_content"
-            android:id="@+id/npDozens"
-            android:orientation="horizontal"
-            android:layout_row="0"
-            android:layout_column="2" />
-
-        <dodert.cuentakilometros3.CustomNumberPicker xmlns:customNS="http://schemas.android.com/apk/res/dodert.cuentakilometros3"
-            customNS:aaaaaatextSize="60dp"
-            android:layout_width="50dp"
-            android:layout_height="wrap_content"
-            android:id="@+id/npUnits"
-            android:orientation="horizontal"
-            android:layout_row="0"
-            android:layout_column="3" />
+        android:layout_alignParentStart="true"
+        android:layout_centerVertical="true"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="2dp">
 
         <TextView
+            android:id="@+id/textView4"
             android:layout_width="wrap_content"
             android:layout_height="182dp"
+            android:layout_row="0"
+            android:layout_column="5"
             android:text="."
-            android:id="@+id/textView4"
+            android:textIsSelectable="false"
+            android:textSize="80sp" />
+
+        <View
+            android:id="@+id/minus_sign"
+            android:layout_width="15dp"
+            android:layout_height="2dp"
+            android:layout_row="0"
+            android:layout_column="0"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:layout_marginTop="90dp"
+            android:background="@drawable/minus_sign"
+            android:visibility="invisible" />
+
+        <dodert.cuentakilometros3.CustomNumberPicker xmlns:customNS="http://schemas.android.com/apk/res/dodert.cuentakilometros3"
+            android:id="@+id/npHundreds"
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:layout_row="0"
+            android:layout_column="2"
+            android:orientation="horizontal"
+            customNS:aaaaaatextSize="60dp" />
+
+        <dodert.cuentakilometros3.CustomNumberPicker xmlns:customNS="http://schemas.android.com/apk/res/dodert.cuentakilometros3"
+            android:id="@+id/npDozens"
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:layout_row="0"
+            android:layout_column="3"
+            android:orientation="horizontal"
+            customNS:aaaaaatextSize="60dp" />
+
+        <dodert.cuentakilometros3.CustomNumberPicker xmlns:customNS="http://schemas.android.com/apk/res/dodert.cuentakilometros3"
+            android:id="@+id/npUnits"
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
             android:layout_row="0"
             android:layout_column="4"
-            android:textSize="80sp"
-            android:textIsSelectable="false" />
+            android:orientation="horizontal"
+            customNS:aaaaaatextSize="60dp" />
 
         <dodert.cuentakilometros3.CustomNumberPicker xmlns:customNS="http://schemas.android.com/apk/res/dodert.cuentakilometros3"
-            customNS:aaaaaatextSize="60dp"
+            android:id="@+id/npThousands"
             android:layout_width="50dp"
             android:layout_height="wrap_content"
+            android:layout_row="0"
+            android:layout_column="1"
+            android:orientation="horizontal"
+            customNS:aaaaaatextSize="60dp" />
+
+        <dodert.cuentakilometros3.CustomNumberPicker xmlns:customNS="http://schemas.android.com/apk/res/dodert.cuentakilometros3"
             android:id="@+id/npTenths"
-            android:orientation="horizontal"
-            android:layout_row="0"
-            android:layout_column="5" />
-
-        <dodert.cuentakilometros3.CustomNumberPicker xmlns:customNS="http://schemas.android.com/apk/res/dodert.cuentakilometros3"
-            customNS:aaaaaatextSize="60dp"
             android:layout_width="50dp"
             android:layout_height="wrap_content"
-            android:id="@+id/npHundredth"
-            android:orientation="horizontal"
             android:layout_row="0"
-            android:layout_column="6" />
-    </GridLayout>
+            android:layout_column="6"
+            android:orientation="horizontal"
+            customNS:aaaaaatextSize="60dp" />
 
+        <dodert.cuentakilometros3.CustomNumberPicker xmlns:customNS="http://schemas.android.com/apk/res/dodert.cuentakilometros3"
+            android:id="@+id/npHundredth"
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:layout_row="0"
+            android:layout_column="7"
+            android:orientation="horizontal"
+            customNS:aaaaaatextSize="60dp" />
+
+    </GridLayout>
 
 
 </RelativeLayout>

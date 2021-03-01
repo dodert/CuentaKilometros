@@ -194,4 +194,15 @@
         android:scrollbars="vertical"
         android:textAppearance="?android:attr/textAppearanceSmall" />
 
+    <View
+        android:id="@+id/minus_sign"
+        android:layout_width="15dp"
+        android:layout_height="2dp"
+        android:layout_marginStart="50dp"
+        android:layout_marginTop="145dp"
+        android:layout_marginEnd="10dp"
+        android:layout_toStartOf="@+id/gridLayout"
+        android:background="@drawable/minus_sign"
+        android:visibility="invisible" />
+
 </RelativeLayout>
