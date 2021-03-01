@@ -7,6 +7,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.content.res.Resources;
 import android.location.LocationManager;
 import android.media.AudioManager;
 import android.os.Bundle;
@@ -25,8 +26,6 @@ import android.widget.Button;
 import android.widget.NumberPicker;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
-import java.util.Locale;
 import java.util.Set;
 
 import dodert.tools.Helpers;
@@ -455,11 +454,12 @@ public class DistanceActivity extends AppCompatActivity implements DistanceChang
     private void setTextReverseButton(boolean isReversCount)
     {
         Button buttonReverseForward = (Button)findViewById(R.id.reverseButton);
+        Resources res = getResources();
         if (!isReversCount){
-            buttonReverseForward.setText("Forward");
+            buttonReverseForward.setText(res.getString(R.string.forward));
         }
         else{
-            buttonReverseForward.setText("Reverse");
+            buttonReverseForward.setText(res.getString(R.string.revers));
         }
     }
     public void onReverseCount(View view){

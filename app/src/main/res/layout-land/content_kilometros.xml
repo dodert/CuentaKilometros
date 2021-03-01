@@ -66,7 +66,7 @@
         android:layout_marginTop="-48dp"
         android:layout_marginEnd="117dp"
         android:onClick="onReverseCount"
-        android:text="Reversa" />
+        android:text="@string/revers" />
 
     <TextView
         android:layout_width="wrap_content"
