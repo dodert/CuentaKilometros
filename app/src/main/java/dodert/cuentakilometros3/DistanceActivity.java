@@ -355,8 +355,10 @@ public class DistanceActivity extends AppCompatActivity implements DistanceChang
     @SuppressLint("MissingPermission")
     private void StartListening() {
 
+        ColorDrawable colorDrawable  = new ColorDrawable(Color.parseColor("#0F9D58"));
         boolean test = false;
         if (_areLocationUpdatesEnabled || test == true) {
+            _actionBar.setBackgroundDrawable(colorDrawable);
             Log("Already started.");
             return;
         }
@@ -373,7 +375,6 @@ public class DistanceActivity extends AppCompatActivity implements DistanceChang
                 _lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, _metersListener, _gpsListener);
                 _areLocationUpdatesEnabled = true;
                 this.setTitle(this.getTitle());
-                ColorDrawable colorDrawable  = new ColorDrawable(Color.parseColor("#0F9D58"));
                 _actionBar.setBackgroundDrawable(colorDrawable);
                 Log("success on requestLocationUpdates");
             }
