@@ -504,10 +504,6 @@ public class DistanceActivity extends AppCompatActivity implements DistanceChang
         alert.show();
     }
 
-    private String GetCurrentDistanceFormatted() {
-        return _gpsListener.GetDistanceFormatted();
-    }
-
     private boolean IsCounterFix() {
         return _npThousands.putoflag && _npHundreds.putoflag && _npDozen.putoflag && _npUnit.putoflag && _npTenth.putoflag && _npHundredth.putoflag;
     }

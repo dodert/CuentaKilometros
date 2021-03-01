@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import org.xml.sax.SAXException;
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -20,9 +21,6 @@ import dodert.tools.Helpers;
  */
 public class MyLocationListener implements LocationListener {
     private static MyLocationListener instance;
-
-    final int _maxLengthForKilometers = 7;
-    final String _maskForKilometers = "0000000000000000000000";
     private float _currentTotalMeters = 0.0F;
     private float _totalHistoryMeters = 0.0F;
     private Location _previousLocation;
@@ -186,17 +184,9 @@ public class MyLocationListener implements LocationListener {
     }
 
     public String GetDistanceFormatted(float meters) {
-        String number = String.format("%.2f", (float) (meters / 1000));
-        String mask = _maskForKilometers;
-        mask += number;
-        return mask.substring(mask.length() - _maxLengthForKilometers);
-    }
-
-    public String GetDistanceFormatted() {
-        String number = String.format("%.2f", (float) (_currentTotalMeters / 1000));
-        String mask = _maskForKilometers;
-        mask += number;
-        return mask.substring(mask.length() - _maxLengthForKilometers);
+        DecimalFormat df = new DecimalFormat("0000.00");
+        String formatted = df.format((float) (meters / 1000));
+        return formatted;
     }
 
     public float GetDistance() {
