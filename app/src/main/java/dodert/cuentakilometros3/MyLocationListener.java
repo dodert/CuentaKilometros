@@ -172,7 +172,7 @@ public class MyLocationListener implements LocationListener {
 
         for (DistanceChangeListener hl : distanceChangeListeners) {
             Log(String.format("Nor: %s", _currentTotalMeters), 40);
-            hl.onChangeDistance((_currentTotalMeters / 1000), (previous / 1000), GetDistanceFormatted(_currentTotalMeters), GetDistanceFormatted(previous), meters);
+            hl.onChangeDistance((_currentTotalMeters / 1000), (previous / 1000), meters);
         }
     }
 

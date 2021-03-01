@@ -81,7 +81,10 @@ public class DistanceActivity extends AppCompatActivity implements DistanceChang
             if (_areLocationUpdatesEnabled) {
                 onStartListening(null);
             }
-            UpdateCounter(0, savedInstanceState.getString(TOTAL_DISTANCE));
+
+            //todo: revisar si pasar la distancia guardad o no
+            //UpdateCounter(0, savedInstanceState.getString(TOTAL_DISTANCE));
+            UpdateCounter(savedInstanceState.getFloat(TOTAL_DISTANCE));
             _distanceHistoryTextView.setText(savedInstanceState.getString(TOTAL_HISTORY_DISTANCE));
             //_reverseCount = savedInstanceState.getBoolean(IS_REVERSE);
             setReversCount(savedInstanceState.getBoolean(IS_REVERSE));
@@ -94,7 +97,8 @@ public class DistanceActivity extends AppCompatActivity implements DistanceChang
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putBoolean(IS_PROVIDER_ENABLE, _areLocationUpdatesEnabled);
-        outState.putString(TOTAL_DISTANCE, GetCurrentDistanceFormatted());
+        //outState.putString(TOTAL_DISTANCE, GetCurrentDistanceFormatted());
+        outState.putFloat(TOTAL_DISTANCE, _gpsListener.GetDistance());
         outState.putString(TOTAL_HISTORY_DISTANCE, _distanceHistoryTextView.getText().toString());
 
         outState.putBoolean(IS_REVERSE, _reverseCount);
@@ -224,38 +228,35 @@ public class DistanceActivity extends AppCompatActivity implements DistanceChang
     }
 
     @Override
-    public void onChangeDistance(float totalDistance, float previousDistance, String totalDistanceFormatted, String previousDistanceFormatted, float distanceToAdd) {
+    public void onChangeDistance(float totalDistance, float previousDistance, float distanceToAdd) {
         boolean isFix = IsCounterFix();
         Log(String.format("%b", isFix));
         if (isFix) {
 
-            float previousDistance_trucated = Helpers.Truncate(previousDistance, 2);
+            float previousDistance_truncated = Helpers.Truncate(previousDistance, 2);
 
             //new to convert to the same symbol to compare.
             if (_reverseCount){
-                previousDistance_trucated = Math.abs(previousDistance_trucated) * -1;
+                previousDistance_truncated = Math.abs(previousDistance_truncated) * -1;
             }
             else
             {
-                previousDistance_trucated = Math.abs(previousDistance_trucated);
+                previousDistance_truncated = Math.abs(previousDistance_truncated);
             }
 
-            if(previousDistance_trucated != GetCounter()){
+            if(previousDistance_truncated != GetCounter()){
 
                 float currentCounter = GetCounter();
 
-                _gpsListener.OverrideTotalMeters(currentCounter * 1000 + distanceToAdd);
-                float newcount = _gpsListener.GetDistance();
-                String newcountstring = _gpsListener.GetDistanceFormatted();
+                _gpsListener.OverrideTotalMeters((currentCounter * 1000) + distanceToAdd);
 
-                totalDistance = newcount;
-                totalDistanceFormatted = newcountstring;
+                totalDistance = _gpsListener.GetDistance();
             }
         } else {
             System.out.println("tocando counter");
         }
 
-        UpdateCounter(totalDistance, totalDistanceFormatted);
+        UpdateCounter(totalDistance);
     }
 
     @Override
@@ -550,12 +551,12 @@ public class DistanceActivity extends AppCompatActivity implements DistanceChang
         return _gpsListener.GetDistanceFormatted(GetCounter() * 1000);
     }
 
-    private void UpdateCounter(float distance, String distanceString) {
+    private void UpdateCounter(float distance) {
         //distance = 123456.7890f;
         //String test = _gpsListener.GetDistanceFormatted();
         //String hundredthPart = "0";
         //hundredthPart = distanceString.substring(distanceString.length() - 1);
-        int distanceLenght = distanceString.length();
+        //int distanceLenght = distanceString.length();
         int hundredth = 0, tenth = 0, unit = 0, dozen = 0, hundreds = 0, thousands = 0;
 
         float distanceAbs = Math.abs(distance);
@@ -571,7 +572,7 @@ public class DistanceActivity extends AppCompatActivity implements DistanceChang
         dozen =  (int) (distanceAbs/10) % 10;
         hundreds =  (int) (distanceAbs/100) % 10;
         thousands =  (int) (distanceAbs/1000) % 10;
-        Log(String.format("distance %s, distanceString %s", distance, distanceString), 20);
+        Log(String.format("distance %s", distance), 20);
         Log(String.format("tenth %s unit %s", tenth, unit),10);
         _npHundredth.setValue(hundredth);
         _npTenth.setValue(tenth);
