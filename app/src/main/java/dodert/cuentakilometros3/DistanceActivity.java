@@ -1,6 +1,10 @@
 package dodert.cuentakilometros3;
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.support.v4.content.ContextCompat;
+import android.support.v7.app.ActionBar;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -44,6 +48,7 @@ public class DistanceActivity extends AppCompatActivity implements DistanceChang
     public TextView _logTextView, _speedTextView, _distanceHistoryTextView;
     public TextView _speedLabelTextView, _distanceLabelTextView;
     public CustomNumberPicker _npHundreds, _npThousands, _npDozen, _npUnit, _npTenth, _npHundredth;
+    private ActionBar _actionBar;
     public View _minus_signView;
     private MyLocationListener _gpsListener;
     protected LocationManager _lm;
@@ -71,6 +76,8 @@ public class DistanceActivity extends AppCompatActivity implements DistanceChang
         InitializeDistanceCounter();
         InitializeLocationListener();
         InitializeFromSharedSettings();
+
+        _actionBar = getSupportActionBar();
     }
 
     @Override
@@ -86,8 +93,6 @@ public class DistanceActivity extends AppCompatActivity implements DistanceChang
             _distanceHistoryTextView.setText(savedInstanceState.getString(TOTAL_HISTORY_DISTANCE));
             setReversCount(savedInstanceState.getBoolean(IS_REVERSE));
         }
-
-
     }
 
     @Override
@@ -133,8 +138,7 @@ public class DistanceActivity extends AppCompatActivity implements DistanceChang
     }
 
     @Override
-    protected void onDestroy ()
-    {
+    protected void onDestroy () {
         super.onDestroy();
     }
 
@@ -369,6 +373,8 @@ public class DistanceActivity extends AppCompatActivity implements DistanceChang
                 _lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, _metersListener, _gpsListener);
                 _areLocationUpdatesEnabled = true;
                 this.setTitle(this.getTitle());
+                ColorDrawable colorDrawable  = new ColorDrawable(Color.parseColor("#0F9D58"));
+                _actionBar.setBackgroundDrawable(colorDrawable);
                 Log("success on requestLocationUpdates");
             }
 
@@ -433,6 +439,10 @@ public class DistanceActivity extends AppCompatActivity implements DistanceChang
             test.Stop();
 
             _areLocationUpdatesEnabled = false;
+
+            int colordefault = ContextCompat.getColor(_context, R.color.colorPrimary);
+            ColorDrawable colorDrawable  = new ColorDrawable(colordefault);
+            _actionBar.setBackgroundDrawable(colorDrawable);
             //_gpsListener = null;
         }
     }
