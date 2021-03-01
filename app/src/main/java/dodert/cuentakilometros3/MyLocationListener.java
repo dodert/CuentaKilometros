@@ -30,7 +30,6 @@ public class MyLocationListener implements LocationListener {
     private TrackingSaver _trakingFile;
     private List<DistanceChangeListener> distanceChangeListeners = new ArrayList<DistanceChangeListener>();
     public boolean _reversados = false;
-    //private boolean _reverse = false;
 
     private void Initialize(Context context) {
         _context = context;
@@ -55,10 +54,6 @@ public class MyLocationListener implements LocationListener {
 
         return instance;
     }
-
-//    public static MyLocationListener GetInstance() {
-//        return instance;
- //   }
 
     private void ChangeSpeed(float speed) {
         String speedString;
@@ -87,9 +82,7 @@ public class MyLocationListener implements LocationListener {
             }
 
             SumTotalMeters(distanceTo);
-            //Log(String.format("Normal: %s", distanceTo), 40);
             SumTotalHistoryMeters(distanceTo);
-            //Log(String.format("Hist: %s", distanceTo), 40);
 
             float speed = currentLocation.getSpeed();
             ChangeSpeed(speed);
@@ -164,7 +157,6 @@ public class MyLocationListener implements LocationListener {
         if (meters == 0) {
             _currentTotalMeters = 0.0F;
             Log("Reseted", 40);
-        //} else if (_currentTotalMeters + meters >= 0) {
         } else {
             _currentTotalMeters += meters;
             Log("STM: " + meters + " B " + previous + " A " + _currentTotalMeters, 20);
@@ -180,7 +172,6 @@ public class MyLocationListener implements LocationListener {
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(_context);
         boolean useMiles = settings.getBoolean("use_miles", false);
         if(useMiles) meters = convertToMiles(meters);
-
 
         float previous = _totalHistoryMeters;
         if (meters == 0) _totalHistoryMeters = 0;

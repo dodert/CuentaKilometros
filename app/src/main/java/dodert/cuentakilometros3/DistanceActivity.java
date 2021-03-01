@@ -53,7 +53,7 @@ public class DistanceActivity extends AppCompatActivity implements DistanceChang
     RelativeLayout _relativeLayout;
     private boolean _reverseCount = false;
 
-    int _logType = 40;// 10;
+    int _logType = 10;// 10;
     private Context _context;
 
     private SharedPreferences _sharedPreferences;
@@ -82,11 +82,8 @@ public class DistanceActivity extends AppCompatActivity implements DistanceChang
                 onStartListening(null);
             }
 
-            //todo: revisar si pasar la distancia guardad o no
-            //UpdateCounter(0, savedInstanceState.getString(TOTAL_DISTANCE));
             UpdateCounter(savedInstanceState.getFloat(TOTAL_DISTANCE));
             _distanceHistoryTextView.setText(savedInstanceState.getString(TOTAL_HISTORY_DISTANCE));
-            //_reverseCount = savedInstanceState.getBoolean(IS_REVERSE);
             setReversCount(savedInstanceState.getBoolean(IS_REVERSE));
         }
 
@@ -97,10 +94,8 @@ public class DistanceActivity extends AppCompatActivity implements DistanceChang
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putBoolean(IS_PROVIDER_ENABLE, _areLocationUpdatesEnabled);
-        //outState.putString(TOTAL_DISTANCE, GetCurrentDistanceFormatted());
         outState.putFloat(TOTAL_DISTANCE, _gpsListener.GetDistance());
         outState.putString(TOTAL_HISTORY_DISTANCE, _distanceHistoryTextView.getText().toString());
-
         outState.putBoolean(IS_REVERSE, _reverseCount);
 
         super.onSaveInstanceState(outState);
@@ -330,7 +325,6 @@ public class DistanceActivity extends AppCompatActivity implements DistanceChang
     }
 
     private void InitializeFromSharedSettings() {
-        // SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(_context);
         String pref_meters_step = _sharedPreferences.getString("meters_steps", "100");
         _valueToAddOrSubtract = Float.parseFloat(pref_meters_step);
     }
@@ -473,7 +467,6 @@ public class DistanceActivity extends AppCompatActivity implements DistanceChang
     }
 
     private void Log(String logText, int type) {
-        //getApplicationContext();
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
         boolean logEnabled = settings.getBoolean("enable_log", false);
 
@@ -518,31 +511,17 @@ public class DistanceActivity extends AppCompatActivity implements DistanceChang
 
     private float GetCounter() {
 
-        //String sValue = (String) String.format("%.2f", previousDistance);
         String sValue = String.format("%s%s%s%s.%s%s"
                 ,_npThousands.getValue(), _npHundreds.getValue(), _npDozen.getValue()
                 ,_npUnit.getValue(), _npTenth.getValue(),_npHundredth.getValue());
 
-       // Utils.Truncate();
-
         float counters = Float.parseFloat(sValue);
-/*
-        float counters = (_npThousands.getValue() * 1000)
-                + (_npHundreds.getValue() * 100)
-                + (_npDozen.getValue() * 10)
-                + (_npUnit.getValue())
-                + ((float) _npTenth.getValue() / 10)
-                + ((float) _npHundredth.getValue() / 100);
-*/
         if (_reverseCount){
             counters = Math.abs(counters) * -1;
         }
-        else
-        {
+        else{
             counters = Math.abs(counters);
         }
-
-
 
         return counters;
     }
@@ -552,28 +531,20 @@ public class DistanceActivity extends AppCompatActivity implements DistanceChang
     }
 
     private void UpdateCounter(float distance) {
-        //distance = 123456.7890f;
-        //String test = _gpsListener.GetDistanceFormatted();
-        //String hundredthPart = "0";
-        //hundredthPart = distanceString.substring(distanceString.length() - 1);
-        //int distanceLenght = distanceString.length();
         int hundredth = 0, tenth = 0, unit = 0, dozen = 0, hundreds = 0, thousands = 0;
 
         float distanceAbs = Math.abs(distance);
-        //Log(String.format("distanceAbs %s, distance %s, distanceString %s", distanceAbs, distance, distanceString), 20);
-        if (distanceAbs<=100)
-        {
-            Log("adfasdfas");
-        }
-        // 0.80
+
         hundredth = (int) (distanceAbs/0.01) % 10;
         tenth = (int) (distanceAbs/0.1) % 10;
         unit =  (int) (distanceAbs/1) % 10;
         dozen =  (int) (distanceAbs/10) % 10;
         hundreds =  (int) (distanceAbs/100) % 10;
         thousands =  (int) (distanceAbs/1000) % 10;
-        Log(String.format("distance %s", distance), 20);
-        Log(String.format("tenth %s unit %s", tenth, unit),10);
+
+        Log(String.format("distance %s", distance), 40);
+        Log(String.format("tenth %s unit %s", tenth, unit),40);
+
         _npHundredth.setValue(hundredth);
         _npTenth.setValue(tenth);
         _npUnit.setValue(unit);
@@ -581,14 +552,6 @@ public class DistanceActivity extends AppCompatActivity implements DistanceChang
         _npHundreds.setValue(hundreds);
         _npThousands.setValue(thousands);
 
-        //TODO review context of labes to fix bug aobut missing update after rotate screen, i thing this is already fixed
-        /*_npHundredth.setValue(Integer.parseInt(distanceString.substring(distanceLenght - 1)));
-        _npTenth.setValue(Integer.parseInt(distanceString.substring(distanceLenght - 2, distanceLenght - 1)));
-        _npUnit.setValue(Integer.parseInt(distanceString.substring(distanceLenght - 4, distanceLenght - 3)));
-        _npDozen.setValue(Integer.parseInt(distanceString.substring(distanceLenght - 5, distanceLenght - 4)));
-        _npHundreds.setValue(Integer.parseInt(distanceString.substring(distanceLenght - 6, distanceLenght - 5)));
-        _npThousands.setValue(Integer.parseInt(distanceString.substring(distanceLenght - 7, distanceLenght - 6)));
-*/
     }
 
 }
