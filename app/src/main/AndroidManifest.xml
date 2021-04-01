@@ -32,6 +32,9 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".DistanceActivity" />
         </activity>
+        <meta-data
+            android:name="com.google.android.gms.ads.APPLICATION_ID"
+            android:value="ca-app-pub-7361015951751643~2733083704"/>
     </application>
 
 </manifest>

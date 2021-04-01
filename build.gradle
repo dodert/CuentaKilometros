@@ -23,6 +23,7 @@ allprojects {
             url 'https://maven.google.com/'
             name 'Google'
         }
+        google()
     }
     tasks.withType(JavaCompile) {
         sourceCompatibility = 1.8
