@@ -80,6 +80,8 @@
     <string name="pref_distanceLabel_miles">mi</string>
     <string name="pref_speedLabel_kilometres">km/h</string>
     <string name="pref_distanceLabel_kilometres">km</string>
+    <string name="revers">Reverse</string>
+    <string name="forward">Forward</string>
     <string-array name="pref_meters_steps_titles" translatable="false">
         <item>100 meters</item>
         <item>200 meters</item>

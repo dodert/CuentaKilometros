@@ -22,6 +22,8 @@
     <string name="pref_distanceLabel_miles">mi</string>
     <string name="pref_speedLabel_kilometres">km/h</string>
     <string name="pref_distanceLabel_kilometres">km</string>
+    <string name="revers">Reversa</string>
+    <string name="forward">Adelante</string>
     <string-array name="pref_control_types_titles">
         <item>Por las teclas de volumne</item>
         <item>Por las teclas de siguiente y previa cancion</item>

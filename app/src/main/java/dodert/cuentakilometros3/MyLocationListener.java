@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import org.xml.sax.SAXException;
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -20,15 +21,13 @@ import dodert.tools.Helpers;
  */
 public class MyLocationListener implements LocationListener {
     private static MyLocationListener instance;
-
-    final int _maxLengthForKilometers = 7;
-    final String _maskForKilometers = "0000000000000000000000";
     private float _currentTotalMeters = 0.0F;
     private float _totalHistoryMeters = 0.0F;
     private Location _previousLocation;
     private Context _context;
     private TrackingSaver _trakingFile;
     private List<DistanceChangeListener> distanceChangeListeners = new ArrayList<DistanceChangeListener>();
+    public boolean _reversados = false;
 
     private void Initialize(Context context) {
         _context = context;
@@ -54,10 +53,6 @@ public class MyLocationListener implements LocationListener {
         return instance;
     }
 
-//    public static MyLocationListener GetInstance() {
-//        return instance;
- //   }
-
     private void ChangeSpeed(float speed) {
         String speedString;
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(_context);
@@ -77,6 +72,12 @@ public class MyLocationListener implements LocationListener {
         Location currentLocation = location;
         if (_previousLocation != null) {
             distanceTo = _previousLocation.distanceTo(currentLocation);
+            if (_reversados){
+                distanceTo = Math.abs(distanceTo) * -1;
+            }
+            else{
+                distanceTo = Math.abs(distanceTo);
+            }
 
             SumTotalMeters(distanceTo);
             SumTotalHistoryMeters(distanceTo);
@@ -139,7 +140,7 @@ public class MyLocationListener implements LocationListener {
     }
 
     public void OverrideTotalMeters(float meters) { //se llama una vez mas cada vez qeu se recrea la actividad distance
-        Log("OTM: " + _currentTotalMeters + " - " + meters, 10);
+        Log("OTM: " + _currentTotalMeters + " || " + meters, 40);
 
         _currentTotalMeters = meters;
     }
@@ -153,14 +154,15 @@ public class MyLocationListener implements LocationListener {
 
         if (meters == 0) {
             _currentTotalMeters = 0.0F;
-            Log("Reseted");
-        } else if (_currentTotalMeters + meters >= 0) {
+            Log("Reseted", 40);
+        } else {
             _currentTotalMeters += meters;
-            Log("STM: " + meters + " B " + previous + " A " + _currentTotalMeters, 10);
+            Log("STM: " + meters + " B " + previous + " A " + _currentTotalMeters, 20);
         }
 
         for (DistanceChangeListener hl : distanceChangeListeners) {
-            hl.onChangeDistance((_currentTotalMeters / 1000), (previous / 1000), GetDistanceFormatted(_currentTotalMeters), GetDistanceFormatted(previous), meters);
+            Log(String.format("Nor: %s", _currentTotalMeters), 40);
+            hl.onChangeDistance((_currentTotalMeters / 1000), (previous / 1000), meters);
         }
     }
 
@@ -169,7 +171,6 @@ public class MyLocationListener implements LocationListener {
         boolean useMiles = settings.getBoolean("use_miles", false);
         if(useMiles) meters = convertToMiles(meters);
 
-
         float previous = _totalHistoryMeters;
         if (meters == 0) _totalHistoryMeters = 0;
         else _totalHistoryMeters += meters;
@@ -177,22 +178,15 @@ public class MyLocationListener implements LocationListener {
         Log("STHM: " + meters + " B " + previous + " A " + _totalHistoryMeters, 10);
 
         for (DistanceChangeListener hl : distanceChangeListeners) {
+            Log(String.format("hist: %s", _totalHistoryMeters), 40);
             hl.onChangeHistoryDistance((_totalHistoryMeters / 1000), 0.0F, GetDistanceFormatted(_totalHistoryMeters));
         }
     }
 
     public String GetDistanceFormatted(float meters) {
-        String number = String.format("%.2f", (float) (meters / 1000));
-        String mask = _maskForKilometers;
-        mask += number;
-        return mask.substring(mask.length() - _maxLengthForKilometers);
-    }
-
-    public String GetDistanceFormatted() {
-        String number = String.format("%.2f", (float) (_currentTotalMeters / 1000));
-        String mask = _maskForKilometers;
-        mask += number;
-        return mask.substring(mask.length() - _maxLengthForKilometers);
+        DecimalFormat df = new DecimalFormat("0000.00");
+        String formatted = df.format((float) (meters / 1000));
+        return formatted;
     }
 
     public float GetDistance() {

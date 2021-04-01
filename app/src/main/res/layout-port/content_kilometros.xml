@@ -22,37 +22,6 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="0000.00"
-        android:id="@+id/DistanceTotalTextView"
-        android:textSize="40sp"
-        android:gravity="end"
-        android:layout_alignTop="@+id/resetButton"
-        android:layout_alignParentStart="true" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:id="@+id/LogTextView"
-        android:maxLines="300"
-        android:scrollbars="vertical"
-        android:layout_below="@+id/DistanceTotalTextView"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentEnd="true" />
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/button_reset"
-        android:id="@+id/resetButton"
-        android:onClick="onResetDistance"
-        android:layout_marginTop="38dp"
-        android:layout_below="@+id/gridLayout"
-        android:layout_alignParentEnd="true" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:text="000"
         android:id="@+id/VelocityTextView"
         android:textSize="40sp"
@@ -61,13 +30,16 @@
         android:layout_toStartOf="@+id/speedLabel" />
 
     <TextClock
+        android:id="@+id/textClock"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/textClock"
-        android:enabled="true"
-        android:textSize="40sp"
         android:layout_above="@+id/gridLayout"
-        android:layout_toStartOf="@+id/distanceLabel" />
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="26dp"
+        android:layout_marginEnd="27dp"
+        android:layout_toStartOf="@+id/VelocityTextView"
+        android:enabled="true"
+        android:textSize="40sp" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -78,14 +50,6 @@
         android:layout_alignBottom="@+id/VelocityTextView"
         android:layout_alignParentEnd="true" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:text="Km"
-        android:id="@+id/distanceLabel"
-        android:layout_alignBottom="@+id/DistanceTotalTextView"
-        android:layout_centerHorizontal="true" />
 
     <GridLayout
         android:layout_width="wrap_content"
@@ -159,5 +123,86 @@
             android:layout_column="6" />
     </GridLayout>
 
+    <TableLayout
+        android:id="@+id/tableButtons"
+        android:layout_width="395dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/gridLayout"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="5dp"
+        android:stretchColumns="*">
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/DistanceTotalTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="0000.00"
+                android:textSize="40sp" />
+            <TextView
+                android:id="@+id/distanceLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:text="Km"
+                android:textAppearance="?android:attr/textAppearanceSmall" />
+            <Button
+                android:id="@+id/resetButton"
+                android:layout_width="105dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="0dp"
+                android:layout_weight="1"
+                android:onClick="onResetDistance"
+                android:text="@string/button_reset" />
+
+        </TableRow>
+
+        <TableRow
+
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <Space />
+
+            <Space />
+            <Button
+                android:id="@+id/reverseButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:onClick="onReverseCount"
+                android:text="@string/revers" />
+
+
+
+        </TableRow>
+
+    </TableLayout>
+
+    <TextView
+        android:id="@+id/LogTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tableButtons"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="5dp"
+        android:maxLines="300"
+        android:scrollbars="vertical"
+        android:textAppearance="?android:attr/textAppearanceSmall" />
+
+    <View
+        android:id="@+id/minus_sign"
+        android:layout_width="15dp"
+        android:layout_height="2dp"
+        android:layout_marginStart="50dp"
+        android:layout_marginTop="145dp"
+        android:layout_marginEnd="10dp"
+        android:layout_toStartOf="@+id/gridLayout"
+        android:background="@drawable/minus_sign"
+        android:visibility="invisible" />
 
 </RelativeLayout>

@@ -4,7 +4,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
-public class Helpers {
+public final class Helpers {
 
     private static final String DateFormatForGxTrack = "yyyy-MM-dd'T'HH:mm:ss.SSSZZZZZ";
 
@@ -43,4 +43,31 @@ public class Helpers {
 
         return LogHelper.FormatLocationInfo(provider, lat, lng, alt, accuracy, time);
     }*/
+
+    public static float Truncate(float source,int decimalsToRoundto)
+    {
+        int thousands, hundreds, dozen, unit, tenth, hundredth;
+        boolean isNegative = source < 0;
+
+        source = Math.abs(source);
+        hundredth = (int) (source/0.01) % 10;
+        tenth = (int) (source/0.1) % 10;
+        unit =  (int) (source/1) % 10;
+        dozen =  (int) (source/10) % 10;
+        hundreds =  (int) (source/100) % 10;
+        thousands =  (int) (source/1000) % 10;
+
+        String sValue = String.format("%s%s%s%s.%s%s"
+                ,thousands, hundreds, dozen, unit, tenth, hundredth);
+
+        // Utils.Truncate();
+
+        float jaja = Float.parseFloat(sValue);
+
+        if(isNegative){
+            jaja = jaja * -1;
+        }
+        //float jaja = thousands + hundreds + dozen + unit + tenth + hundredth;
+        return jaja;
+    }
 }
